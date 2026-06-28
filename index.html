@@ -257,8 +257,8 @@ select:focus,input:focus{outline:none;border-color:var(--oro)}
     </div>
 
     <div class="note" style="margin-top:6px">
-      <b>¿Querés pasarle la app a un amigo en blanco?</b><br>
-      Descargá tu <b>Backup</b> primero. Después usá la versión sin datos para regalársela, y cuando quieras volver a los tuyos, entrá acá y tocá <b>Restaurar desde backup</b>.
+      <b>Tu app arranca vacía.</b><br>
+      Cargá tus partidos desde el botón (+) y tus goleadores en la pestaña Goles. Hacé un <b>Backup</b> cada tanto para no perder nada.
     </div>
 
     <input type="file" id="fileXls" accept=".xlsx,.xls" class="hide" onchange="importarXls(event)">
@@ -331,9 +331,7 @@ select:focus,input:focus{outline:none;border-color:var(--oro)}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 /* ============================================================
-   STORAGE: localStorage con fallback a memoria (mismo criterio
-   que en "Dividir Gastos"). En GitHub Pages / archivo local
-   persiste; en un entorno que lo bloquee, igual funciona.
+   STORAGE: localStorage con fallback a memoria.
    ============================================================ */
 const mem={};
 const store={
@@ -344,71 +342,11 @@ const store={
 function logoFallback(){ document.getElementById("logoImg").style.display="none"; document.getElementById("logoSvg").classList.remove("hide"); }
 
 /* ============================================================
-   DATOS SEMILLA — transcriptos de tu Excel madre, con la grafía
-   tal cual tu planilla. gf/ga = goles en los 90'. Los partidos
-   por penales llevan resultado manual (r) para reproducir EXACTO
-   tu resumen: Lanús (ganó por penales) = G; Alianza (empate en
-   los 90', perdió por penales) = E.
+   DATOS SEMILLA — VACÍOS. La app arranca en blanco; cada quien
+   carga sus propios partidos y goleadores.
    ============================================================ */
-const SEMILLA_PARTIDOS=[
-  {fecha:"07/03/2012",anio:2012,cancha:"La Bombonera",rival:"Fluminense",torneo:"Copa Libertadores",instancia:"Fase de Grupos",tecnico:"Julio César Falconi",gf:1,ga:2},
-  {fecha:"17/01/2012",anio:2012,cancha:"Estadio José Maria Minella",rival:"San Lorenzo",torneo:"Torneo de Verano",instancia:"Fase de Grupos",tecnico:"Julio César Falconi",gf:0,ga:0},
-  {fecha:"13/02/2022",anio:2022,cancha:"La Bombonera",rival:"Colón",torneo:"Primera División",instancia:"Fecha",tecnico:"Sebastián Battaglia",gf:1,ga:1},
-  {fecha:"05/03/2022",anio:2022,cancha:"La Bombonera",rival:"Huracán",torneo:"Primera División",instancia:"Fecha",tecnico:"Sebastián Battaglia",gf:0,ga:1},
-  {fecha:"12/04/2022",anio:2022,cancha:"La Bombonera",rival:"Always Ready",torneo:"Copa Libertadores",instancia:"Fase de Grupos",tecnico:"Sebastián Battaglia",gf:2,ga:0},
-  {fecha:"20/04/2022",anio:2022,cancha:"La Bombonera",rival:"Godoy Cruz",torneo:"Primera División",instancia:"Fecha",tecnico:"Sebastián Battaglia",gf:1,ga:1},
-  {fecha:"17/05/2022",anio:2022,cancha:"La Bombonera",rival:"Corinthians",torneo:"Copa Libertadores",instancia:"Fase de Grupos",tecnico:"Sebastián Battaglia",gf:1,ga:1},
-  {fecha:"22/05/2022",anio:2022,cancha:"Estadio Mario Alberto Kempes",rival:"Tigre",torneo:"Copa de la Liga",instancia:"Final",tecnico:"Sebastián Battaglia",gf:3,ga:0},
-  {fecha:"05/06/2022",anio:2022,cancha:"La Bombonera",rival:"Arsenal",torneo:"Primera División",instancia:"Fecha",tecnico:"Sebastián Battaglia",gf:2,ga:1},
-  {fecha:"15/06/2022",anio:2022,cancha:"La Bombonera",rival:"Tigre",torneo:"Primera División",instancia:"Fecha",tecnico:"Sebastián Battaglia",gf:5,ga:3},
-  {fecha:"24/06/2022",anio:2022,cancha:"La Bombonera",rival:"Unión",torneo:"Primera División",instancia:"Fecha",tecnico:"Sebastián Battaglia",gf:1,ga:2},
-  {fecha:"24/07/2022",anio:2022,cancha:"La Bombonera",rival:"Estudiantes",torneo:"Primera División",instancia:"Fecha",tecnico:"Hugo Ibarra",gf:3,ga:1},
-  {fecha:"17/08/2022",anio:2022,cancha:"La Bombonera",rival:"Rosario Central",torneo:"Primera División",instancia:"Fecha",tecnico:"Hugo Ibarra",gf:0,ga:0},
-  {fecha:"28/08/2022",anio:2022,cancha:"La Bombonera",rival:"Atlético Tucumán",torneo:"Primera División",instancia:"Fecha",tecnico:"Hugo Ibarra",gf:2,ga:1},
-  {fecha:"29/01/2023",anio:2023,cancha:"La Bombonera",rival:"Atlético Tucumán",torneo:"Primera División",instancia:"Fecha",tecnico:"Hugo Ibarra",gf:1,ga:0},
-  {fecha:"19/02/2023",anio:2023,cancha:"La Bombonera",rival:"Platense",torneo:"Primera División",instancia:"Fecha",tecnico:"Hugo Ibarra",gf:3,ga:1},
-  {fecha:"06/03/2023",anio:2023,cancha:"La Bombonera",rival:"Defensa y Justicia",torneo:"Primera División",instancia:"Fecha",tecnico:"Hugo Ibarra",gf:0,ga:0},
-  {fecha:"10/07/2023",anio:2023,cancha:"La Bombonera",rival:"Huracán",torneo:"Primera División",instancia:"Fecha",tecnico:"Jorge Almirón",gf:1,ga:0},
-  {fecha:"23/08/2023",anio:2023,cancha:"La Bombonera",rival:"Racing",torneo:"Copa Libertadores",instancia:"Cuartos de final",tecnico:"Jorge Almirón",gf:0,ga:0},
-  {fecha:"10/03/2024",anio:2024,cancha:"La Bombonera",rival:"Racing",torneo:"Primera División",instancia:"Fecha",tecnico:"Jorge Almirón",gf:4,ga:2},
-  {fecha:"09/04/2024",anio:2024,cancha:"La Bombonera",rival:"Sportivo Trinidense",torneo:"Copa Sudamericana",instancia:"Fase de Grupos",tecnico:"Diego Martínez",gf:1,ga:0},
-  {fecha:"16/04/2024",anio:2024,cancha:"La Bombonera",rival:"Godoy Cruz",torneo:"Primera División",instancia:"Fecha",tecnico:"Diego Martínez",gf:1,ga:0},
-  {fecha:"21/04/2024",anio:2024,cancha:"Estadio Mario Alberto Kempes",rival:"River",torneo:"Copa de la Liga",instancia:"Cuartos de final",tecnico:"Diego Martínez",gf:3,ga:2},
-  {fecha:"15/05/2024",anio:2024,cancha:"La Bombonera",rival:"Fortaleza",torneo:"Copa Sudamericana",instancia:"Fase de Grupos",tecnico:"Diego Martínez",gf:1,ga:1},
-  {fecha:"29/05/2024",anio:2024,cancha:"La Bombonera",rival:"Nacional Potosí",torneo:"Copa Sudamericana",instancia:"Fase de Grupos",tecnico:"Diego Martínez",gf:4,ga:0},
-  {fecha:"24/07/2024",anio:2024,cancha:"La Bombonera",rival:"Independiente del Valle",torneo:"Copa Sudamericana",instancia:"Repechaje",tecnico:"Diego Martínez",gf:1,ga:0},
-  {fecha:"06/10/2024",anio:2024,cancha:"La Bombonera",rival:"Argentinos Juniors",torneo:"Primera División",instancia:"Fecha",tecnico:"Mariano Herrón",gf:1,ga:0},
-  {fecha:"27/10/2024",anio:2024,cancha:"La Bombonera",rival:"Deportivo Riestra",torneo:"Primera División",instancia:"Fecha",tecnico:"Fernando Gago",gf:1,ga:1},
-  {fecha:"06/11/2024",anio:2024,cancha:"La Bombonera",rival:"Godoy Cruz",torneo:"Primera División",instancia:"Fecha",tecnico:"Fernando Gago",gf:4,ga:1},
-  {fecha:"20/11/2024",anio:2024,cancha:"La Bombonera",rival:"Unión",torneo:"Primera División",instancia:"Fecha",tecnico:"Fernando Gago",gf:1,ga:0},
-  {fecha:"01/12/2024",anio:2024,cancha:"La Bombonera",rival:"Gimnasia LP",torneo:"Primera División",instancia:"Fecha",tecnico:"Fernando Gago",gf:1,ga:0},
-  {fecha:"14/12/2024",anio:2024,cancha:"La Bombonera",rival:"Independiente",torneo:"Primera División",instancia:"Fecha",tecnico:"Fernando Gago",gf:0,ga:0},
-  {fecha:"26/01/2025",anio:2025,cancha:"La Bombonera",rival:"Argentinos Juniors",torneo:"Primera División",instancia:"Fecha",tecnico:"Fernando Gago",gf:0,ga:0},
-  {fecha:"02/02/2025",anio:2025,cancha:"La Bombonera",rival:"Huracán",torneo:"Primera División",instancia:"Fecha",tecnico:"Fernando Gago",gf:2,ga:1},
-  {fecha:"26/02/2025",anio:2025,cancha:"La Bombonera",rival:"Alianza Lima",torneo:"Copa Libertadores",instancia:"Fase Preliminar",tecnico:"Fernando Gago",gf:2,ga:2,r:"E",nota:"Empate en los 90' · perdió por penales (4-5) · planilla: 2 (4) - 1 (5)"},
-  {fecha:"28/02/2025",anio:2025,cancha:"La Bombonera",rival:"Rosario Central",torneo:"Primera División",instancia:"Fecha",tecnico:"Fernando Gago",gf:1,ga:0},
-  {fecha:"10/05/2025",anio:2025,cancha:"La Bombonera",rival:"Lanús",torneo:"Primera División",instancia:"Octavos de Final",tecnico:"Mariano Herrón",gf:0,ga:0,r:"G",nota:"Empate en los 90' · ganó por penales (4-2) · planilla: 0 (4) - 0 (2)"},
-  {fecha:"19/05/2025",anio:2025,cancha:"La Bombonera",rival:"Independiente",torneo:"Primera División",instancia:"Cuartos de final",tecnico:"Mariano Herrón",gf:0,ga:1},
-  {fecha:"16/06/2025",anio:2025,cancha:"Hard Rock Stadium",rival:"Benfica",torneo:"Mundial de Clubes",instancia:"Fase de Grupos",tecnico:"Miguel Angel Russo",gf:2,ga:2},
-  {fecha:"20/06/2025",anio:2025,cancha:"Hard Rock Stadium",rival:"Bayer Munich",torneo:"Mundial de Clubes",instancia:"Fase de Grupos",tecnico:"Miguel Angel Russo",gf:1,ga:2},
-  {fecha:"21/09/2025",anio:2025,cancha:"La Bombonera",rival:"Central Córdoba (SE)",torneo:"Primera División",instancia:"Fecha",tecnico:"Miguel Angel Russo",gf:2,ga:2},
-  {fecha:"05/10/2025",anio:2025,cancha:"La Bombonera",rival:"Newells",torneo:"Primera División",instancia:"Fecha",tecnico:"Miguel Angel Russo",gf:5,ga:0},
-  {fecha:"09/11/2025",anio:2025,cancha:"La Bombonera",rival:"River",torneo:"Primera División",instancia:"Fecha",tecnico:"Claudio Úbeda",gf:2,ga:0},
-  {fecha:"22/03/2026",anio:2026,cancha:"La Bombonera",rival:"Instituto",torneo:"Primera División",instancia:"Fecha",tecnico:"Claudio Úbeda",gf:2,ga:0}
-];
-
-const SEMILLA_GOLEADORES=[
-  {nombre:"Edinson Cavani",goles:9},{nombre:"Dario Benedetto",goles:7},{nombre:"Miguel Merentiel",goles:7},
-  {nombre:"Milton Gimenez",goles:5},{nombre:"GEC",goles:4},{nombre:"Exequiel Zeballos",goles:4},
-  {nombre:"Marcos Rojo",goles:3},{nombre:"Luis Vazquez",goles:2},{nombre:"Sebastián Villa",goles:2},
-  {nombre:"Luca Langoni",goles:2},{nombre:"Marcelo Saracchi",goles:2},{nombre:"Kevin Zenón",goles:2},
-  {nombre:"Rodrigo Battaglia",goles:2},{nombre:"Brian Aguirre",goles:2},{nombre:"Lucas Blondel",goles:1},
-  {nombre:"Frank Fabra",goles:1},{nombre:"Agustin Sández",goles:1},{nombre:"Eduardo Salvio",goles:1},
-  {nombre:"Pol Fernández",goles:1},{nombre:"Óscar Romero",goles:1},{nombre:"Nicolás Figal",goles:1},
-  {nombre:"Norberto Briasco",goles:1},{nombre:"Nicolás Valentini",goles:1},{nombre:"Aaron Anselmino",goles:1},
-  {nombre:"Leandro Somoza",goles:1},{nombre:"Carlos Palacios",goles:1},{nombre:"Ayrton Costa",goles:1},
-  {nombre:"Lautaro Blanco",goles:1},{nombre:"Tomas Aranda",goles:1},{nombre:"Adam Bareiro",goles:1}
-];
+const SEMILLA_PARTIDOS=[];
+const SEMILLA_GOLEADORES=[];
 
 /* ============================================================ ESTADO ============================================================ */
 let partidos=[],goleadores=[],ordenCol="fechaSort",ordenDir=-1,editIdx=-1,editGolIdx=-1;
@@ -428,7 +366,7 @@ function stats(lista){
   let g=0,e=0,p=0,gf=0,gc=0;
   lista.forEach(m=>{const r=resultadoDe(m);if(r==="G")g++;else if(r==="E")e++;else p++;gf+=+m.gf;gc+=+m.ga;});
   const pj=lista.length;
-  const efe=pj?Math.round((3*g+e)/(3*pj)*100):0; // efectividad AFA: pts cosechados / pts posibles
+  const efe=pj?Math.round((3*g+e)/(3*pj)*100):0;
   return {pj,g,e,p,gf,gc,dif:gf-gc,efe,prom:pj?gf/pj:0};
 }
 
@@ -446,17 +384,19 @@ function renderDash(){
     <div class="kpi efe"><div class="lbl">Efectividad</div><div class="val">${s.efe}%</div><div class="sub">${3*s.g+s.e} de ${3*s.pj} pts</div></div>`;
   const fb=document.getElementById("formbar");fb.innerHTML="";
   [["g",s.g,"G"],["e",s.e,"E"],["p",s.p,"P"]].forEach(([c,n,l])=>{if(n>0){const d=document.createElement("div");d.className=c;d.style.flex=n;d.textContent=`${l} ${n}`;fb.appendChild(d);}});
+  if(!partidos.length){fb.innerHTML='<div style="background:#eef1f7;color:var(--txt3);flex:1">Todavía no cargaste partidos</div>';}
   agrupar("anio","porAnio");agrupar("torneo","porTorneo");agrupar("tecnico","porTecnico");
 }
 function agrupar(campo,destino){
   const map={};partidos.forEach(m=>{(map[m[campo]]=map[m[campo]]||[]).push(m);});
   const filas=Object.keys(map).map(k=>({k,s:stats(map[k])}));
   if(campo==="anio")filas.sort((a,b)=>a.k-b.k);else filas.sort((a,b)=>b.s.pj-a.s.pj);
-  document.getElementById(destino).innerHTML=filas.map(f=>{
+  const cols=destino==="porTorneo"?6:8;
+  document.getElementById(destino).innerHTML=filas.length?filas.map(f=>{
     const base=`<td>${f.k}</td><td>${f.s.pj}</td><td style="color:var(--gana-t)">${f.s.g}</td><td style="color:var(--empata-t)">${f.s.e}</td><td style="color:var(--pierde-t)">${f.s.p}</td>`;
     if(destino==="porTorneo")return`<tr>${base}<td><b>${f.s.efe}%</b></td></tr>`;
     return`<tr>${base}<td>${f.s.gf}</td><td>${f.s.gc}</td><td><b>${f.s.efe}%</b></td></tr>`;
-  }).join("");
+  }).join(""):`<tr><td colspan="${cols}" class="empty">Sin datos</td></tr>`;
 }
 function llenarFiltros(){
   const anios=[...new Set(partidos.map(m=>m.anio))].sort((a,b)=>b-a);
@@ -477,7 +417,7 @@ function renderPartidos(){
   });
   lista.sort((a,b)=>{let va=a[ordenCol],vb=b[ordenCol];if(typeof va==="string"){va=va.toLowerCase();vb=(vb||"").toLowerCase();}return va<vb?-ordenDir:va>vb?ordenDir:0;});
   const tb=document.getElementById("cuerpoP");
-  if(!lista.length)tb.innerHTML='<tr><td colspan="9" class="empty">No hay partidos con esos filtros.</td></tr>';
+  if(!lista.length)tb.innerHTML='<tr><td colspan="9" class="empty">'+(partidos.length?'No hay partidos con esos filtros.':'Todavía no cargaste partidos. Tocá "+ Cargar partido".')+'</td></tr>';
   else tb.innerHTML=lista.map(m=>{
     const marc=m.r?`${m.gf}-${m.ga} <span style="color:var(--txt3);font-size:11px">(pen.)</span>`:`${m.gf}-${m.ga}`;
     return`<tr ondblclick="abrirEdicion(${m._i})" style="cursor:pointer" title="${(m.nota||'').replace(/"/g,'&quot;')}">
@@ -529,12 +469,12 @@ function renderGol(){
   const max=goleadores.length?goleadores[0].goles:1;
   const total=goleadores.reduce((s,g)=>s+(+g.goles),0);
   document.getElementById("totalGoles").textContent=`${goleadores.length} goleadores · ${total} goles`;
-  document.getElementById("listaGol").innerHTML=goleadores.map((g,i)=>`
+  document.getElementById("listaGol").innerHTML=goleadores.length?goleadores.map((g,i)=>`
     <div class="gol-row" ondblclick="abrirEdicionGol(${i})">
       <div class="gol-pos">${i+1}</div><div class="gol-name">${g.nombre}</div>
       <div class="gol-bar ${g.goles===max?'top':''}" style="width:${Math.max(4,(g.goles/max)*170)}px"></div>
       <div class="gol-num">${g.goles}</div>
-      <button class="btn ghost sm" onclick="event.stopPropagation();abrirEdicionGol(${i})">✎</button></div>`).join("");
+      <button class="btn ghost sm" onclick="event.stopPropagation();abrirEdicionGol(${i})">✎</button></div>`).join(""):'<div class="empty">Todavía no cargaste goleadores. Tocá "+ Agregar".</div>';
 }
 function abrirAltaGol(){editGolIdx=-1;document.getElementById("modalGTitulo").textContent="Agregar goleador";document.getElementById("btnBorrarG").classList.add("hide");document.getElementById("gNombre").value="";document.getElementById("gGoles").value="1";document.getElementById("modalG").classList.add("on");}
 function abrirEdicionGol(i){editGolIdx=i;document.getElementById("modalGTitulo").textContent="Editar goleador";document.getElementById("btnBorrarG").classList.remove("hide");document.getElementById("gNombre").value=goleadores[i].nombre;document.getElementById("gGoles").value=goleadores[i].goles;document.getElementById("modalG").classList.add("on");}
