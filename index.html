@@ -40,7 +40,6 @@ body{font-family:var(--body);background:var(--bg);color:var(--txt);line-height:1
 .wrap{max-width:920px;margin:0 auto;padding:0 16px}
 .hide{display:none!important}
 
-/* HEADER */
 header{background:var(--navy);padding:16px 0 18px;padding-top:max(16px,env(safe-area-inset-top))}
 .hdr{display:flex;align-items:center;gap:13px}
 .logo{width:46px;height:46px;object-fit:contain;flex-shrink:0}
@@ -48,13 +47,11 @@ header{background:var(--navy);padding:16px 0 18px;padding-top:max(16px,env(safe-
 .title h1 span{color:var(--oro)}
 .title p{font-size:12.5px;color:#aeb9d2;margin-top:4px;font-weight:400}
 
-/* SCREENS */
 .screen{padding-top:18px}
 .scr-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;flex-wrap:wrap}
 .scr-title{font-family:var(--disp);font-size:22px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--navy)}
 .section-title{font-family:var(--disp);font-size:17px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--navy);margin:22px 0 11px;display:flex;align-items:center;gap:8px}
 
-/* BOTONES */
 .btn{font-family:var(--body);background:var(--card);color:var(--navy);border:1px solid var(--line);padding:10px 16px;border-radius:10px;font-size:13.5px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:.15s}
 .btn:hover{background:#f6f8fc;border-color:#cfd6e4}
 .btn.primary{background:var(--navy);color:var(--oro);border-color:var(--navy);text-transform:uppercase;letter-spacing:.5px}
@@ -63,7 +60,6 @@ header{background:var(--navy);padding:16px 0 18px;padding-top:max(16px,env(safe-
 .btn.ghost{background:transparent;border:none;color:var(--txt2)}
 .btn.danger{color:var(--pierde-t)}
 
-/* KPIS */
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:11px}
 .kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 15px;position:relative;overflow:hidden}
 .kpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--oro)}
@@ -75,17 +71,14 @@ header{background:var(--navy);padding:16px 0 18px;padding-top:max(16px,env(safe-
 .kpi.pierde::before{background:var(--pierde-t)} .kpi.pierde .val{color:var(--pierde-t)}
 .kpi.efe{background:var(--navy)} .kpi.efe::before{background:var(--oro)} .kpi.efe .lbl{color:#aeb9d2} .kpi.efe .val{color:var(--oro)} .kpi.efe .sub{color:#aeb9d2}
 
-/* FORM BAR */
 .formbar{display:flex;height:30px;border-radius:10px;overflow:hidden;margin:14px 0 4px;border:1px solid var(--line)}
 .formbar div{display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;color:#fff}
 .formbar .g{background:var(--gana-t)} .formbar .e{background:#d9b43f;color:#3a2e02} .formbar .p{background:var(--pierde-t)}
 
-/* CARDS / GRID */
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:760px){.grid2{grid-template-columns:1fr}}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
 
-/* TABLAS */
 .tbl-wrap{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:auto}
 table{width:100%;border-collapse:collapse;font-size:13.5px}
 th{background:var(--navy);color:var(--oro);text-align:left;padding:11px 12px;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;cursor:pointer;user-select:none;position:sticky;top:0}
@@ -99,13 +92,11 @@ tbody tr:hover{background:#f6f8fc}
 .res-P{background:var(--pierde-b);color:var(--pierde-t);border:1px solid var(--pierde-bd)}
 .pill{display:inline-block;padding:3px 9px;border-radius:7px;background:#eef1f7;color:var(--txt2);font-size:12px;font-weight:500}
 
-/* FILTROS */
 .filtros{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:13px}
-select,input[type=text],input[type=number]{font-family:var(--body);background:var(--card);color:var(--txt);border:1px solid var(--line);border-radius:9px;padding:9px 11px;font-size:13px}
+select,input[type=text],input[type=number],input[type=date]{font-family:var(--body);background:var(--card);color:var(--txt);border:1px solid var(--line);border-radius:9px;padding:9px 11px;font-size:13px}
 select:focus,input:focus{outline:none;border-color:var(--oro)}
 
-/* GOLEADORES */
-.gol-row{display:flex;align-items:center;gap:11px;padding:9px 0;border-top:1px solid var(--line);cursor:pointer}
+.gol-row{display:flex;align-items:center;gap:11px;padding:9px 0;border-top:1px solid var(--line)}
 .gol-row:first-child{border-top:none}
 .gol-pos{width:24px;text-align:right;font-family:var(--disp);font-weight:600;color:var(--txt3);font-size:15px}
 .gol-name{flex:1;font-size:14px;font-weight:500}
@@ -113,7 +104,6 @@ select:focus,input:focus{outline:none;border-color:var(--oro)}
 .gol-bar.top{background:var(--oro)}
 .gol-num{width:30px;text-align:right;font-family:var(--disp);font-weight:600;font-size:16px;color:var(--navy)}
 
-/* DATOS */
 .dcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;align-items:center;gap:14px;margin-bottom:12px}
 .dcard .ic{width:42px;height:42px;border-radius:11px;background:#eef1f7;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--navy)}
 .dcard .tx{flex:1}
@@ -122,19 +112,38 @@ select:focus,input:focus{outline:none;border-color:var(--oro)}
 .note{background:#fff8e6;border:1px solid #f0e0a6;border-radius:14px;padding:15px;font-size:13px;color:#6b5710}
 .note b{color:#8a6d0c}
 
-/* MODAL */
 .modal-bg{position:fixed;inset:0;background:rgba(15,29,58,.55);display:none;align-items:flex-end;justify-content:center;z-index:100}
 .modal-bg.on{display:flex}
 .modal{background:var(--card);border-radius:18px 18px 0 0;max-width:560px;width:100%;max-height:92vh;overflow:auto;padding:22px 18px calc(22px + env(safe-area-inset-bottom))}
 @media(min-width:600px){.modal-bg{align-items:center}.modal{border-radius:18px;margin:16px}}
-.modal h3{font-family:var(--disp);font-size:21px;font-weight:600;text-transform:uppercase;color:var(--navy);margin-bottom:16px}
+.modal h3{font-family:var(--disp);font-size:21px;font-weight:600;text-transform:uppercase;color:var(--navy);margin-bottom:14px}
 .frm{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .frm .full{grid-column:1/-1}
 .frm label{display:block;font-size:11.5px;color:var(--txt2);margin-bottom:4px;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
 .frm input,.frm select{width:100%}
 .modal-foot{display:flex;align-items:center;gap:8px;margin-top:18px}
 
-/* NAV INFERIOR */
+/* AUTOCOMPLETE (desplegable propio) */
+.ac{position:relative}
+.ac-list{position:absolute;top:calc(100% + 2px);left:0;right:0;background:var(--card);border:1px solid var(--line);border-radius:9px;box-shadow:0 8px 22px rgba(15,29,58,.18);max-height:188px;overflow:auto;z-index:30;display:none}
+.ac-list.on{display:block}
+.ac-item{padding:9px 11px;font-size:13.5px;cursor:pointer}
+.ac-item:hover{background:#f1f5fb}
+
+/* STEPPER (+/-) */
+.stepper{display:inline-flex;align-items:stretch;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.stepper button{width:40px;border:none;background:#f1f4fa;color:var(--navy);font-size:21px;font-weight:700;cursor:pointer;font-family:var(--body);line-height:1}
+.stepper button:active{background:#e3e8f2}
+.stepper input{width:56px;text-align:center;border:none;border-left:1px solid var(--line);border-right:1px solid var(--line);border-radius:0;font-size:15px;font-weight:600;-moz-appearance:textfield}
+.stepper input::-webkit-outer-spin-button,.stepper input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.stepper.sm button{width:34px;font-size:18px}
+.stepper.sm input{width:44px;font-size:14px}
+
+/* GOLEADORES DEL PARTIDO */
+.anot-sec{border-top:1px solid var(--line);margin-top:4px;padding-top:14px}
+.anot-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.anot-del{width:32px;height:32px;border:none;background:#fbe4e4;color:var(--pierde-t);border-radius:8px;font-size:18px;cursor:pointer;flex-shrink:0;line-height:1}
+
 .bnav{position:fixed;left:0;right:0;bottom:0;background:var(--navy);display:flex;justify-content:space-around;padding-bottom:env(safe-area-inset-bottom);z-index:50;border-top:1px solid #24365e}
 .bnav button{flex:1;background:none;border:none;color:#8a96b5;padding:9px 4px 11px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font-family:var(--body);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;position:relative}
 .bnav button svg{width:23px;height:23px}
@@ -144,7 +153,7 @@ select:focus,input:focus{outline:none;border-color:var(--oro)}
 .empty{text-align:center;padding:38px;color:var(--txt3)}
 .fab{position:fixed;right:18px;bottom:calc(94px + env(safe-area-inset-bottom));width:58px;height:58px;border-radius:50%;background:var(--oro);color:var(--navy);border:none;font-family:var(--disp);font-size:38px;font-weight:600;line-height:0;cursor:pointer;box-shadow:0 6px 18px rgba(15,29,58,.4);display:flex;align-items:center;justify-content:center;z-index:60;padding-bottom:5px}
 .fab:active{transform:scale(.94)}
-.dl-hint{font-size:11.5px;color:var(--txt3);margin:-4px 0 4px}
+.dl-hint{font-size:11.5px;color:var(--txt3);margin:-2px 0 4px}
 .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--navy);color:var(--oro);padding:11px 20px;border-radius:11px;font-weight:700;font-size:13.5px;z-index:200;opacity:0;transition:.3s;pointer-events:none;border:1px solid var(--oro)}
 .toast.on{opacity:1}
 </style>
@@ -219,13 +228,10 @@ select:focus,input:focus{outline:none;border-color:var(--oro)}
 
   <!-- ===== GOLEADORES ===== -->
   <div id="goleadores" class="screen hide">
-    <div class="scr-head">
-      <div class="scr-title">Goleadores</div>
-      <button class="btn primary" onclick="abrirAltaGol()">+ Agregar</button>
-    </div>
+    <div class="scr-head"><div class="scr-title">Goleadores</div></div>
     <div class="pill" id="totalGoles" style="margin-bottom:12px"></div>
     <div class="card" id="listaGol"></div>
-    <p style="font-size:12.5px;color:var(--txt2);margin-top:12px"><b>GEC</b> = goles en contra del rival (en propia) que cuentan a tu favor.</p>
+    <p style="font-size:12.5px;color:var(--txt2);margin-top:12px">Se calcula solo desde los goleadores que cargás en cada partido — no se edita acá. <b>GEC</b> = goles en contra del rival (en propia) que cuentan a tu favor.</p>
   </div>
 
   <!-- ===== DATOS ===== -->
@@ -234,7 +240,7 @@ select:focus,input:focus{outline:none;border-color:var(--oro)}
 
     <div class="dcard">
       <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></div>
-      <div class="tx"><b>Backup completo</b><span>Descargá un archivo .json con todos tus partidos y goleadores.</span></div>
+      <div class="tx"><b>Backup completo</b><span>Descargá un archivo .json con todos tus partidos.</span></div>
       <button class="btn primary sm" onclick="backup()">Descargar</button>
     </div>
 
@@ -246,19 +252,19 @@ select:focus,input:focus{outline:none;border-color:var(--oro)}
 
     <div class="dcard">
       <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h6"/></svg></div>
-      <div class="tx"><b>Importar Excel</b><span>Levantá tu archivo .xlsx (hojas Partidos y Goleadores).</span></div>
+      <div class="tx"><b>Importar Excel</b><span>Levantá un .xlsx con la hoja Partidos (columna Goleadores opcional).</span></div>
       <button class="btn sm" onclick="document.getElementById('fileXls').click()">Importar</button>
     </div>
 
     <div class="dcard">
       <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/></svg></div>
-      <div class="tx"><b>Exportar a Excel</b><span>Bajá tus datos a .xlsx con hojas Partidos y Goleadores.</span></div>
+      <div class="tx"><b>Exportar a Excel</b><span>Bajá tus datos a .xlsx (Partidos + ranking de Goleadores).</span></div>
       <button class="btn sm" onclick="exportarXls()">Exportar</button>
     </div>
 
     <div class="note" style="margin-top:6px">
       <b>Tu app arranca vacía.</b><br>
-      Cargá tus partidos desde el botón (+) y tus goleadores en la pestaña Goles. Hacé un <b>Backup</b> cada tanto para no perder nada.
+      Cargá tus partidos desde el botón (+) e indicá quién hizo los goles; la pestaña Goles se arma sola. Hacé un <b>Backup</b> cada tanto para no perder nada.
     </div>
 
     <input type="file" id="fileXls" accept=".xlsx,.xls" class="hide" onchange="importarXls(event)">
@@ -278,19 +284,24 @@ select:focus,input:focus{outline:none;border-color:var(--oro)}
 <div class="modal-bg" id="modalP">
   <div class="modal">
     <h3 id="modalPTitulo">Cargar partido</h3>
-    <p class="dl-hint">Empezá a escribir en Rival, Torneo, etc. y elegí de las sugerencias para no duplicar.</p>
+    <p class="dl-hint">En Rival, Torneo, etc. se abre una lista con coincidencias para que elijas y no dupliques.</p>
     <div class="frm">
-      <div><label>Fecha</label><input type="text" id="mFecha" placeholder="22/03/2026"></div>
-      <div><label>Año</label><input type="number" id="mAnio" placeholder="2026"></div>
-      <div class="full"><label>Cancha</label><input type="text" id="mCancha" list="dlCancha"></div>
-      <div><label>Rival</label><input type="text" id="mRival" list="dlRival"></div>
-      <div><label>Torneo</label><input type="text" id="mTorneo" list="dlTorneo"></div>
-      <div><label>Instancia</label><input type="text" id="mInstancia" list="dlInstancia"></div>
-      <div><label>Técnico</label><input type="text" id="mTecnico" list="dlTecnico"></div>
-      <div><label>Goles a favor</label><input type="number" id="mGf" min="0"></div>
-      <div><label>Goles en contra</label><input type="number" id="mGc" min="0"></div>
+      <div class="full"><label>Fecha</label><input type="date" id="mFecha"></div>
+      <div class="full"><label>Cancha</label><div class="ac"><input type="text" id="mCancha" autocomplete="off"><div class="ac-list"></div></div></div>
+      <div><label>Rival</label><div class="ac"><input type="text" id="mRival" autocomplete="off"><div class="ac-list"></div></div></div>
+      <div><label>Torneo</label><div class="ac"><input type="text" id="mTorneo" autocomplete="off"><div class="ac-list"></div></div></div>
+      <div><label>Instancia</label><div class="ac"><input type="text" id="mInstancia" autocomplete="off"><div class="ac-list"></div></div></div>
+      <div><label>Técnico</label><div class="ac"><input type="text" id="mTecnico" autocomplete="off"><div class="ac-list"></div></div></div>
+      <div><label>Goles a favor</label><div class="stepper"><button type="button" onclick="stepBtn(this,-1)">−</button><input type="number" id="mGf" min="0" inputmode="numeric" value="0" oninput="if(this.value<0||this.value==='')this.value=0;syncGolesHint()"><button type="button" onclick="stepBtn(this,1)">+</button></div></div>
+      <div><label>Goles en contra</label><div class="stepper"><button type="button" onclick="stepBtn(this,-1)">−</button><input type="number" id="mGc" min="0" inputmode="numeric" value="0" oninput="if(this.value<0||this.value==='')this.value=0"><button type="button" onclick="stepBtn(this,1)">+</button></div></div>
       <div class="full"><label>Resultado manual (solo si fue por penales)</label><select id="mR"><option value="">Automático (según goles)</option><option value="G">Ganado</option><option value="E">Empatado</option><option value="P">Perdido</option></select></div>
       <div class="full"><label>Nota</label><input type="text" id="mNota" placeholder="Ganó por penales 4-2"></div>
+      <div class="full anot-sec">
+        <label>Goleadores del partido</label>
+        <div id="anotadores"></div>
+        <button type="button" class="btn sm" onclick="addAnotRow()">+ Agregar goleador</button>
+        <div id="golesHint" class="dl-hint" style="margin-top:9px"></div>
+      </div>
     </div>
     <div class="modal-foot">
       <button class="btn ghost danger" id="btnBorrarP" onclick="borrarPartido()">Borrar</button>
@@ -300,33 +311,9 @@ select:focus,input:focus{outline:none;border-color:var(--oro)}
   </div>
 </div>
 
-<!-- MODAL GOLEADOR -->
-<div class="modal-bg" id="modalG">
-  <div class="modal" style="max-width:420px">
-    <h3 id="modalGTitulo">Agregar goleador</h3>
-    <p class="dl-hint">Escribí el nombre y elegí de la lista si ya existe (suma los goles).</p>
-    <div class="frm">
-      <div class="full"><label>Jugador</label><input type="text" id="gNombre" list="dlGol"></div>
-      <div class="full"><label>Goles</label><input type="number" id="gGoles" min="0"></div>
-    </div>
-    <div class="modal-foot">
-      <button class="btn ghost danger" id="btnBorrarG" onclick="borrarGol()">Borrar</button>
-      <button class="btn ghost" style="margin-left:auto" onclick="cerrarModal('modalG')">Cancelar</button>
-      <button class="btn primary" onclick="guardarGol()">Guardar</button>
-    </div>
-  </div>
-</div>
-
 <div class="toast" id="toast"></div>
 
 <button class="fab" id="fab" onclick="abrirAlta()" aria-label="Cargar partido" title="Cargar partido">+</button>
-
-<datalist id="dlRival"></datalist>
-<datalist id="dlTorneo"></datalist>
-<datalist id="dlInstancia"></datalist>
-<datalist id="dlTecnico"></datalist>
-<datalist id="dlCancha"></datalist>
-<datalist id="dlGol"></datalist>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
@@ -338,28 +325,28 @@ const store={
   get(k){ try{return localStorage.getItem(k);}catch(e){return mem[k]??null;} },
   set(k,v){ try{localStorage.setItem(k,v);}catch(e){mem[k]=v;} }
 };
-
 function logoFallback(){ document.getElementById("logoImg").style.display="none"; document.getElementById("logoSvg").classList.remove("hide"); }
 
 /* ============================================================
-   DATOS SEMILLA — VACÍOS. La app arranca en blanco; cada quien
-   carga sus propios partidos y goleadores.
+   MODELO: "partidos" es la única fuente de verdad. Cada partido
+   puede tener "anotadores": [{nombre, goles}]. La pestaña Goles
+   se calcula sumando los anotadores de todos los partidos.
    ============================================================ */
 const SEMILLA_PARTIDOS=[];
-const SEMILLA_GOLEADORES=[];
 
-/* ============================================================ ESTADO ============================================================ */
-let partidos=[],goleadores=[],ordenCol="fechaSort",ordenDir=-1,editIdx=-1,editGolIdx=-1;
+let partidos=[],ordenCol="fechaSort",ordenDir=-1,editIdx=-1;
+
+function norm(s){return String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();}
 function fechaSort(f){const p=String(f).split("/");return p.length===3?p[2]+p[1].padStart(2,"0")+p[0].padStart(2,"0"):"0";}
 function resultadoDe(m){if(m.r)return m.r;if(m.gf>m.ga)return"G";if(m.gf<m.ga)return"P";return"E";}
 function nf(n,d){return Number(n).toLocaleString("es-AR",{minimumFractionDigits:d||0,maximumFractionDigits:d||0});}
+function aISO(ddmm){const p=String(ddmm).split("/");return p.length===3?`${p[2]}-${p[1].padStart(2,"0")}-${p[0].padStart(2,"0")}`:"";}
+function aDDMM(iso){const p=String(iso).split("-");return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:String(iso);}
+function uniq(arr){return [...new Set(arr.map(x=>String(x||"").trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));}
+function uniqNombres(){return uniq(partidos.flatMap(p=>(p.anotadores||[]).map(a=>a.nombre)));}
 
-function cargar(){
-  const p=store.get("bostero_partidos"),g=store.get("bostero_goleadores");
-  partidos=p?JSON.parse(p):JSON.parse(JSON.stringify(SEMILLA_PARTIDOS));
-  goleadores=g?JSON.parse(g):JSON.parse(JSON.stringify(SEMILLA_GOLEADORES));
-}
-function guardar(){store.set("bostero_partidos",JSON.stringify(partidos));store.set("bostero_goleadores",JSON.stringify(goleadores));}
+function cargar(){const p=store.get("bostero_partidos");partidos=p?JSON.parse(p):JSON.parse(JSON.stringify(SEMILLA_PARTIDOS));}
+function guardar(){store.set("bostero_partidos",JSON.stringify(partidos));}
 
 /* ============================================================ CÁLCULOS ============================================================ */
 function stats(lista){
@@ -368,6 +355,15 @@ function stats(lista){
   const pj=lista.length;
   const efe=pj?Math.round((3*g+e)/(3*pj)*100):0;
   return {pj,g,e,p,gf,gc,dif:gf-gc,efe,prom:pj?gf/pj:0};
+}
+function goleadoresAgg(){
+  const map={};
+  partidos.forEach(p=>(p.anotadores||[]).forEach(a=>{
+    const k=norm(a.nombre);if(!k)return;
+    if(!map[k])map[k]={nombre:a.nombre,goles:0};
+    map[k].goles+=(+a.goles||0);
+  }));
+  return Object.values(map).sort((x,y)=>y.goles-x.goles||x.nombre.localeCompare(y.nombre,"es"));
 }
 
 /* ============================================================ RENDER ============================================================ */
@@ -384,7 +380,7 @@ function renderDash(){
     <div class="kpi efe"><div class="lbl">Efectividad</div><div class="val">${s.efe}%</div><div class="sub">${3*s.g+s.e} de ${3*s.pj} pts</div></div>`;
   const fb=document.getElementById("formbar");fb.innerHTML="";
   [["g",s.g,"G"],["e",s.e,"E"],["p",s.p,"P"]].forEach(([c,n,l])=>{if(n>0){const d=document.createElement("div");d.className=c;d.style.flex=n;d.textContent=`${l} ${n}`;fb.appendChild(d);}});
-  if(!partidos.length){fb.innerHTML='<div style="background:#eef1f7;color:var(--txt3);flex:1">Todavía no cargaste partidos</div>';}
+  if(!partidos.length)fb.innerHTML='<div style="background:#eef1f7;color:var(--txt3);flex:1">Todavía no cargaste partidos</div>';
   agrupar("anio","porAnio");agrupar("torneo","porTorneo");agrupar("tecnico","porTecnico");
 }
 function agrupar(campo,destino){
@@ -429,72 +425,120 @@ function renderPartidos(){
   document.getElementById("contadorP").textContent=`${lista.length} partidos · ${s.g}G ${s.e}E ${s.p}P · ${s.efe}% efectividad`;
 }
 function ordenar(c){if(ordenCol===c)ordenDir*=-1;else{ordenCol=c;ordenDir=1;}renderPartidos();}
+function renderGoles(){
+  const lista=goleadoresAgg();
+  const max=lista.length?lista[0].goles:1;
+  const total=lista.reduce((s,g)=>s+g.goles,0);
+  document.getElementById("totalGoles").textContent=`${lista.length} goleadores · ${total} goles`;
+  document.getElementById("listaGol").innerHTML=lista.length?lista.map((g,i)=>`
+    <div class="gol-row">
+      <div class="gol-pos">${i+1}</div><div class="gol-name">${g.nombre}</div>
+      <div class="gol-bar ${g.goles===max?'top':''}" style="width:${Math.max(4,(g.goles/max)*170)}px"></div>
+      <div class="gol-num">${g.goles}</div></div>`).join(""):'<div class="empty">Todavía no hay goleadores. Se cargan al indicar quién hizo los goles en cada partido.</div>';
+}
+
+/* ============================================================ AUTOCOMPLETE ============================================================ */
+function setupAC(input,optsFn){
+  const list=input.parentElement.querySelector(".ac-list");
+  function render(){
+    const v=norm(input.value);
+    const opts=optsFn().filter(o=>norm(o).includes(v)).slice(0,8);
+    if(!opts.length||(opts.length===1&&norm(opts[0])===v&&v!=="")){list.classList.remove("on");return;}
+    list.innerHTML=opts.map(o=>`<div class="ac-item">${String(o).replace(/</g,"&lt;")}</div>`).join("");
+    list.classList.add("on");
+  }
+  input.addEventListener("input",render);
+  input.addEventListener("focus",render);
+  input.addEventListener("blur",()=>setTimeout(()=>list.classList.remove("on"),160));
+  list.addEventListener("mousedown",e=>{
+    const it=e.target.closest(".ac-item");if(!it)return;
+    e.preventDefault();
+    input.value=it.textContent;list.classList.remove("on");
+    input.dispatchEvent(new Event("input"));
+  });
+}
+
+/* ============================================================ STEPPERS ============================================================ */
+function stepBtn(btn,d){const inp=btn.parentElement.querySelector("input");let v=(parseInt(inp.value)||0)+d;if(v<0)v=0;inp.value=v;syncGolesHint();}
+
+/* ============================================================ GOLEADORES DEL PARTIDO (filas) ============================================================ */
+function addAnotRow(nombre,goles){
+  const cont=document.getElementById("anotadores");
+  const row=document.createElement("div");row.className="anot-row";
+  row.innerHTML=`
+    <div class="ac" style="flex:1"><input type="text" class="anot-nombre" placeholder="Jugador (o GEC)" autocomplete="off"><div class="ac-list"></div></div>
+    <div class="stepper sm"><button type="button" onclick="stepBtn(this,-1)">−</button><input type="number" class="anot-goles" min="1" inputmode="numeric" value="${goles||1}"><button type="button" onclick="stepBtn(this,1)">+</button></div>
+    <button type="button" class="anot-del" title="Quitar" onclick="this.closest('.anot-row').remove();syncGolesHint()">×</button>`;
+  cont.appendChild(row);
+  const inp=row.querySelector(".anot-nombre");inp.value=nombre||"";
+  setupAC(inp,uniqNombres);
+  inp.addEventListener("input",syncGolesHint);
+  row.querySelector(".anot-goles").addEventListener("input",syncGolesHint);
+  syncGolesHint();
+}
+function syncGolesHint(){
+  const h=document.getElementById("golesHint");if(!h)return;
+  const gf=parseInt(document.getElementById("mGf").value)||0;
+  let suma=0;document.querySelectorAll("#anotadores .anot-goles").forEach(i=>suma+=parseInt(i.value)||0);
+  h.textContent=`Goles asignados: ${suma} · goles a favor del partido: ${gf}`;
+  h.style.color=(suma===gf)?"var(--txt3)":"#b07d12";
+}
 
 /* ============================================================ MODAL PARTIDO ============================================================ */
 function abrirAlta(){
   editIdx=-1;document.getElementById("modalPTitulo").textContent="Cargar partido";
   document.getElementById("btnBorrarP").classList.add("hide");
-  ["mFecha","mAnio","mRival","mTecnico","mGf","mGc","mNota"].forEach(id=>document.getElementById(id).value="");
-  document.getElementById("mR").value="";
+  document.getElementById("mFecha").value="";
+  document.getElementById("mRival").value="";document.getElementById("mTecnico").value="";document.getElementById("mNota").value="";
+  document.getElementById("mGf").value="0";document.getElementById("mGc").value="0";document.getElementById("mR").value="";
   document.getElementById("mCancha").value="La Bombonera";document.getElementById("mTorneo").value="Primera División";document.getElementById("mInstancia").value="Fecha";
+  document.getElementById("anotadores").innerHTML="";syncGolesHint();
   document.getElementById("modalP").classList.add("on");
 }
 function abrirEdicion(i){
   editIdx=i;const m=partidos[i];
   document.getElementById("modalPTitulo").textContent="Editar partido";
   document.getElementById("btnBorrarP").classList.remove("hide");
-  document.getElementById("mFecha").value=m.fecha;document.getElementById("mAnio").value=m.anio;document.getElementById("mCancha").value=m.cancha;
-  document.getElementById("mRival").value=m.rival;document.getElementById("mTorneo").value=m.torneo;document.getElementById("mInstancia").value=m.instancia;
+  document.getElementById("mFecha").value=aISO(m.fecha);
+  document.getElementById("mCancha").value=m.cancha;document.getElementById("mRival").value=m.rival;
+  document.getElementById("mTorneo").value=m.torneo;document.getElementById("mInstancia").value=m.instancia;
   document.getElementById("mTecnico").value=m.tecnico;document.getElementById("mGf").value=m.gf;document.getElementById("mGc").value=m.ga;
   document.getElementById("mR").value=m.r||"";document.getElementById("mNota").value=m.nota||"";
+  document.getElementById("anotadores").innerHTML="";
+  (m.anotadores||[]).forEach(a=>addAnotRow(a.nombre,a.goles));
+  syncGolesHint();
   document.getElementById("modalP").classList.add("on");
 }
 function guardarPartido(){
-  const fecha=document.getElementById("mFecha").value.trim(),rival=document.getElementById("mRival").value.trim();
-  if(!fecha||!rival){toast("Falta fecha o rival");return;}
-  const anio=parseInt(document.getElementById("mAnio").value)||(fecha.split("/")[2]?+fecha.split("/")[2]:new Date().getFullYear());
-  const m={fecha,anio,cancha:document.getElementById("mCancha").value.trim()||"La Bombonera",rival,
+  const iso=document.getElementById("mFecha").value,rival=document.getElementById("mRival").value.trim();
+  if(!iso){toast("Elegí la fecha");return;}
+  if(!rival){toast("Falta el rival");return;}
+  const m={fecha:aDDMM(iso),anio:parseInt(iso.split("-")[0]),
+    cancha:document.getElementById("mCancha").value.trim()||"La Bombonera",rival,
     torneo:document.getElementById("mTorneo").value.trim()||"Primera División",instancia:document.getElementById("mInstancia").value.trim()||"Fecha",
     tecnico:document.getElementById("mTecnico").value.trim(),gf:parseInt(document.getElementById("mGf").value)||0,ga:parseInt(document.getElementById("mGc").value)||0};
   const r=document.getElementById("mR").value;if(r)m.r=r;
   const nota=document.getElementById("mNota").value.trim();if(nota)m.nota=nota;
+  const anot=[];
+  document.querySelectorAll("#anotadores .anot-row").forEach(row=>{
+    const n=row.querySelector(".anot-nombre").value.trim();const g=parseInt(row.querySelector(".anot-goles").value)||0;
+    if(n&&g>0)anot.push({nombre:n,goles:g});
+  });
+  if(anot.length)m.anotadores=anot;
   if(editIdx>=0)partidos[editIdx]=m;else partidos.push(m);
   guardar();cerrarModal("modalP");refrescar();toast(editIdx>=0?"Partido actualizado":"¡Partido cargado! Dale Boca");
 }
 function borrarPartido(){if(editIdx<0)return;if(confirm("¿Borrar este partido?")){partidos.splice(editIdx,1);guardar();cerrarModal("modalP");refrescar();toast("Partido borrado");}}
 
-/* ============================================================ GOLEADORES ============================================================ */
-function renderGol(){
-  goleadores.sort((a,b)=>b.goles-a.goles);
-  const max=goleadores.length?goleadores[0].goles:1;
-  const total=goleadores.reduce((s,g)=>s+(+g.goles),0);
-  document.getElementById("totalGoles").textContent=`${goleadores.length} goleadores · ${total} goles`;
-  document.getElementById("listaGol").innerHTML=goleadores.length?goleadores.map((g,i)=>`
-    <div class="gol-row" ondblclick="abrirEdicionGol(${i})">
-      <div class="gol-pos">${i+1}</div><div class="gol-name">${g.nombre}</div>
-      <div class="gol-bar ${g.goles===max?'top':''}" style="width:${Math.max(4,(g.goles/max)*170)}px"></div>
-      <div class="gol-num">${g.goles}</div>
-      <button class="btn ghost sm" onclick="event.stopPropagation();abrirEdicionGol(${i})">✎</button></div>`).join(""):'<div class="empty">Todavía no cargaste goleadores. Tocá "+ Agregar".</div>';
-}
-function abrirAltaGol(){editGolIdx=-1;document.getElementById("modalGTitulo").textContent="Agregar goleador";document.getElementById("btnBorrarG").classList.add("hide");document.getElementById("gNombre").value="";document.getElementById("gGoles").value="1";document.getElementById("modalG").classList.add("on");}
-function abrirEdicionGol(i){editGolIdx=i;document.getElementById("modalGTitulo").textContent="Editar goleador";document.getElementById("btnBorrarG").classList.remove("hide");document.getElementById("gNombre").value=goleadores[i].nombre;document.getElementById("gGoles").value=goleadores[i].goles;document.getElementById("modalG").classList.add("on");}
-function guardarGol(){
-  const nombre=document.getElementById("gNombre").value.trim(),goles=parseInt(document.getElementById("gGoles").value)||0;
-  if(!nombre){toast("Falta el nombre");return;}
-  let msg="Goleador guardado";
-  if(editGolIdx>=0){
-    goleadores[editGolIdx]={nombre,goles};
-  }else{
-    const idx=goleadores.findIndex(g=>norm(g.nombre)===norm(nombre));
-    if(idx>=0){ goleadores[idx].goles=(+goleadores[idx].goles)+goles; msg=`Sumé ${goles} a ${goleadores[idx].nombre} (ya existía)`; }
-    else goleadores.push({nombre,goles});
-  }
-  guardar();cerrarModal("modalG");renderGol();toast(msg);
-}
-function borrarGol(){if(editGolIdx<0)return;if(confirm("¿Borrar este goleador?")){goleadores.splice(editGolIdx,1);guardar();cerrarModal("modalG");renderGol();}}
-
 /* ============================================================ IMPORT / EXPORT EXCEL ============================================================ */
-function norm(s){return String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();}
+function parseAnot(s){
+  if(!s)return[];
+  return String(s).split(/[;,]/).map(x=>x.trim()).filter(Boolean).map(x=>{
+    const m=x.match(/^(.*?)[:\-]\s*(\d+)$/);
+    return m?{nombre:m[1].trim(),goles:parseInt(m[2])||1}:{nombre:x,goles:1};
+  });
+}
+function fmtFecha(v){if(typeof v==="number"){const d=new Date(Math.round((v-25569)*86400*1000));return`${String(d.getUTCDate()).padStart(2,"0")}/${String(d.getUTCMonth()+1).padStart(2,"0")}/${d.getUTCFullYear()}`;}return String(v).trim();}
 function parseMarcador(s){
   s=String(s);const pens=[...s.matchAll(/\((\d+)\)/g)].map(m=>+m[1]);
   const reg=s.replace(/\([^)]*\)/g,"").split("-").map(x=>parseInt(x.trim(),10));
@@ -502,45 +546,43 @@ function parseMarcador(s){
   if(pens.length>=2){nota=`Penales (${pens[0]}-${pens[1]}) · planilla: ${s.trim()}`;if(gf===ga)r=pens[0]>pens[1]?"G":"E";}
   return{gf,ga,r,nota};
 }
-function fmtFecha(v){if(typeof v==="number"){const d=new Date(Math.round((v-25569)*86400*1000));return`${String(d.getUTCDate()).padStart(2,"0")}/${String(d.getUTCMonth()+1).padStart(2,"0")}/${d.getUTCFullYear()}`;}return String(v).trim();}
 function importarXls(ev){
   const file=ev.target.files[0];if(!file)return;
   const reader=new FileReader();
   reader.onload=e=>{
     try{
       const wb=XLSX.read(new Uint8Array(e.target.result),{type:"array"});
-      let nP=[],nG=[];
+      let nP=[];
       wb.SheetNames.forEach(sn=>{
         const rows=XLSX.utils.sheet_to_json(wb.Sheets[sn],{defval:""});if(!rows.length)return;
         const cols=Object.keys(rows[0]).map(norm);
-        if(cols.includes("jugador")&&cols.includes("goles")){
-          rows.forEach(row=>{const o={};Object.keys(row).forEach(k=>o[norm(k)]=row[k]);if(String(o.jugador).trim())nG.push({nombre:String(o.jugador).trim(),goles:parseInt(o.goles)||0});});
-        }else if(cols.includes("rival")){
+        if(cols.includes("rival")){
           rows.forEach(row=>{const o={};Object.keys(row).forEach(k=>o[norm(k)]=row[k]);if(!String(o.rival).trim())return;
             const mk=parseMarcador(o.resultado||o.marcador||"0-0");
             const m={fecha:fmtFecha(o.fecha),anio:parseInt(o.ano||o.anio)||(+(String(fmtFecha(o.fecha)).split("/")[2])||0),cancha:String(o.cancha||"").trim(),rival:String(o.rival).trim(),torneo:String(o.torneo||"").trim(),instancia:String(o.instancia||"").trim(),tecnico:String(o.tecnico||"").trim(),gf:mk.gf,ga:mk.ga};
-            if(mk.r)m.r=mk.r;if(mk.nota)m.nota=mk.nota;nP.push(m);});
+            if(mk.r)m.r=mk.r;if(mk.nota)m.nota=mk.nota;
+            const anot=parseAnot(o.goleadores||o.goleador||"");if(anot.length)m.anotadores=anot;
+            nP.push(m);});
         }
       });
-      if(!nP.length&&!nG.length){toast("No encontré columnas conocidas (Rival / Jugador)");return;}
-      if(nP.length)partidos=nP;if(nG.length)goleadores=nG;
-      guardar();refrescar();renderGol();toast(`Importado: ${nP.length} partidos, ${nG.length} goleadores`);
+      if(!nP.length){toast("No encontré una hoja con columna Rival");return;}
+      partidos=nP;guardar();refrescar();toast(`Importado: ${nP.length} partidos`);
     }catch(err){console.error(err);toast("Error leyendo el Excel");}
   };
   reader.readAsArrayBuffer(file);ev.target.value="";
 }
 function exportarXls(){
-  const dP=partidos.map(m=>({Fecha:m.fecha,"Año":m.anio,Cancha:m.cancha,Resultado:m.r?`${m.gf}-${m.ga} (pen.)`:`${m.gf}-${m.ga}`,Rival:m.rival,Torneo:m.torneo,Instancia:m.instancia,"Técnico":m.tecnico,GF:m.gf,GC:m.ga,Resultado_GEP:resultadoDe(m),Nota:m.nota||""}));
-  const dG=goleadores.map(g=>({Jugador:g.nombre,Goles:g.goles}));
+  const dP=partidos.map(m=>({Fecha:m.fecha,"Año":m.anio,Cancha:m.cancha,Resultado:m.r?`${m.gf}-${m.ga} (pen.)`:`${m.gf}-${m.ga}`,Rival:m.rival,Torneo:m.torneo,Instancia:m.instancia,"Técnico":m.tecnico,GF:m.gf,GC:m.ga,Goleadores:(m.anotadores||[]).map(a=>`${a.nombre}:${a.goles}`).join("; "),Resultado_GEP:resultadoDe(m),Nota:m.nota||""}));
+  const dG=goleadoresAgg().map(g=>({Jugador:g.nombre,Goles:g.goles}));
   const wb=XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(dP),"Partidos");
   XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(dG),"Goleadores");
   XLSX.writeFile(wb,"SOY_BOSTERO.xlsx");toast("Excel descargado");
 }
 
-/* ============================================================ BACKUP / RESTAURAR (JSON) ============================================================ */
+/* ============================================================ BACKUP / RESTAURAR ============================================================ */
 function backup(){
-  const data={app:"soy-bostero",version:1,exportado:new Date().toISOString(),partidos,goleadores};
+  const data={app:"soy-bostero",version:2,exportado:new Date().toISOString(),partidos};
   const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
   const a=document.createElement("a");const f=new Date().toISOString().slice(0,10);
   a.href=URL.createObjectURL(blob);a.download=`soy-bostero-backup-${f}.json`;a.click();URL.revokeObjectURL(a.href);
@@ -552,25 +594,12 @@ function restaurar(ev){
   r.onload=e=>{
     try{
       const d=JSON.parse(e.target.result);
-      if(!Array.isArray(d.partidos)||!Array.isArray(d.goleadores)){toast("El archivo no parece un backup válido");return;}
+      if(!Array.isArray(d.partidos)){toast("El archivo no parece un backup válido");return;}
       if(!confirm("Esto reemplaza TODOS los datos actuales por los del backup. ¿Seguir?"))return;
-      partidos=d.partidos;goleadores=d.goleadores;guardar();refrescar();renderGol();
-      toast(`Restaurado: ${partidos.length} partidos, ${goleadores.length} goleadores`);
+      partidos=d.partidos;guardar();refrescar();toast(`Restaurado: ${partidos.length} partidos`);
     }catch(err){toast("No pude leer el backup");}
   };
   r.readAsText(file);ev.target.value="";
-}
-
-/* ============================================================ BUSCADORES (datalist) ============================================================ */
-function uniq(arr){return [...new Set(arr.map(x=>String(x||"").trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));}
-function fillDL(id,vals){document.getElementById(id).innerHTML=vals.map(v=>`<option value="${v.replace(/"/g,"&quot;")}">`).join("");}
-function buildDatalists(){
-  fillDL("dlRival",uniq(partidos.map(m=>m.rival)));
-  fillDL("dlTorneo",uniq(partidos.map(m=>m.torneo)));
-  fillDL("dlInstancia",uniq(partidos.map(m=>m.instancia)));
-  fillDL("dlTecnico",uniq(partidos.map(m=>m.tecnico)));
-  fillDL("dlCancha",uniq(partidos.map(m=>m.cancha)));
-  fillDL("dlGol",uniq(goleadores.map(g=>g.nombre)));
 }
 
 /* ============================================================ UI ============================================================ */
@@ -581,12 +610,19 @@ function tab(t){
   window.scrollTo(0,0);
 }
 function cerrarModal(id){document.getElementById(id).classList.remove("on");}
-function refrescar(){renderDash();llenarFiltros();renderPartidos();buildDatalists();}
+function refrescar(){renderDash();llenarFiltros();renderPartidos();renderGoles();}
 let toastTimer;
 function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("on");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("on"),2600);}
 document.querySelectorAll(".modal-bg").forEach(bg=>bg.addEventListener("click",e=>{if(e.target===bg)bg.classList.remove("on");}));
 
-cargar();refrescar();renderGol();
+/* AC de los campos fijos del modal */
+setupAC(document.getElementById("mCancha"),()=>uniq(partidos.map(m=>m.cancha)));
+setupAC(document.getElementById("mRival"),()=>uniq(partidos.map(m=>m.rival)));
+setupAC(document.getElementById("mTorneo"),()=>uniq(partidos.map(m=>m.torneo)));
+setupAC(document.getElementById("mInstancia"),()=>uniq(partidos.map(m=>m.instancia)));
+setupAC(document.getElementById("mTecnico"),()=>uniq(partidos.map(m=>m.tecnico)));
+
+cargar();refrescar();
 </script>
 </body>
 </html>
