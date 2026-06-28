@@ -7,15 +7,16 @@
 <meta name="theme-color" content="#16294e">
 
 <!-- ============================================================
-     IMPORTANTE: en la raíz del repositorio tiene que existir un
-     archivo llamado "Logo app.png" (escudo con FONDO TRANSPARENTE).
-     Como el nombre tiene un espacio, en el código va como
-     "Logo%20app.png". Se usa como logo del header, favicon e ícono
-     del PWA (manifest.json). Si no está, se muestra un escudo
-     dibujado como respaldo.
+     IMPORTANTE: el repositorio usa DOS logos distintos:
+       - "Logo.png": ícono de la APP (favicon + ícono del PWA /
+         pantalla de inicio). Puede tener fondo.
+       - "Logo app.png": el que se ve ADENTRO, en el header sobre el
+         azul. Va con FONDO TRANSPARENTE. Como tiene un espacio, en el
+         código aparece como "Logo%20app.png".
+     Si "Logo app.png" no está, se muestra un escudo dibujado de respaldo.
      ============================================================ -->
-<link rel="icon" type="image/png" href="Logo%20app.png">
-<link rel="apple-touch-icon" href="Logo%20app.png">
+<link rel="icon" type="image/png" href="Logo.png">
+<link rel="apple-touch-icon" href="Logo.png">
 <link rel="manifest" href="manifest.json">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
