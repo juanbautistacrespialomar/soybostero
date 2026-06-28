@@ -561,4 +561,112 @@ function guardarPartido(){
   const iso=document.getElementById("mFecha").value,rival=document.getElementById("mRival").value.trim();
   if(!iso){toast("Elegí la fecha");return;}
   if(!rival){toast("Falta el rival");return;}
-  const
+  const m={fecha:aDDMM(iso),anio:parseInt(iso.split("-")[0]),
+    cancha:document.getElementById("mCancha").value.trim()||"La Bombonera",rival,
+    torneo:document.getElementById("mTorneo").value.trim()||"Primera División",instancia:document.getElementById("mInstancia").value.trim()||"Fecha",
+    tecnico:document.getElementById("mTecnico").value.trim(),gf:parseInt(document.getElementById("mGf").value)||0,ga:parseInt(document.getElementById("mGc").value)||0};
+  const r=document.getElementById("mR").value;if(r)m.r=r;
+  const nota=document.getElementById("mNota").value.trim();if(nota)m.nota=nota;
+  const anot=[];
+  document.querySelectorAll("#anotadores .anot-row").forEach(row=>{
+    const n=row.querySelector(".anot-nombre").value.trim();const g=parseInt(row.querySelector(".anot-goles").value)||0;
+    if(n&&g>0)anot.push({nombre:n,goles:g});
+  });
+  if(anot.length)m.anotadores=anot;
+  if(editIdx>=0)partidos[editIdx]=m;else partidos.push(m);
+  guardar();cerrarModal("modalP");refrescar();toast(editIdx>=0?"Partido actualizado":"¡Partido cargado! Dale Boca");
+}
+function borrarPartido(){if(editIdx<0)return;if(confirm("¿Borrar este partido?")){partidos.splice(editIdx,1);guardar();cerrarModal("modalP");refrescar();toast("Partido borrado");}}
+
+function parseAnot(s){
+  if(!s)return[];
+  return String(s).split(/[;,]/).map(x=>x.trim()).filter(Boolean).map(x=>{
+    const m=x.match(/^(.*?)[:\-]\s*(\d+)$/);
+    return m?{nombre:m[1].trim(),goles:parseInt(m[2])||1}:{nombre:x,goles:1};
+  });
+}
+function fmtFecha(v){if(typeof v==="number"){const d=new Date(Math.round((v-25569)*86400*1000));return`${String(d.getUTCDate()).padStart(2,"0")}/${String(d.getUTCMonth()+1).padStart(2,"0")}/${d.getUTCFullYear()}`;}return String(v).trim();}
+function parseMarcador(s){
+  s=String(s);const pens=[...s.matchAll(/\((\d+)\)/g)].map(m=>+m[1]);
+  const reg=s.replace(/\([^)]*\)/g,"").split("-").map(x=>parseInt(x.trim(),10));
+  let gf=reg[0]||0,ga=reg[1]||0,r=null,nota=null;
+  if(pens.length>=2){nota=`Penales (${pens[0]}-${pens[1]}) · planilla: ${s.trim()}`;if(gf===ga)r=pens[0]>pens[1]?"G":"E";}
+  return{gf,ga,r,nota};
+}
+function importarXls(ev){
+  const file=ev.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const wb=XLSX.read(new Uint8Array(e.target.result),{type:"array"});
+      let nP=[];
+      wb.SheetNames.forEach(sn=>{
+        const rows=XLSX.utils.sheet_to_json(wb.Sheets[sn],{defval:""});if(!rows.length)return;
+        const cols=Object.keys(rows[0]).map(norm);
+        if(cols.includes("rival")){
+          rows.forEach(row=>{const o={};Object.keys(row).forEach(k=>o[norm(k)]=row[k]);if(!String(o.rival).trim())return;
+            const mk=parseMarcador(o.resultado||o.marcador||"0-0");
+            const m={fecha:fmtFecha(o.fecha),anio:parseInt(o.ano||o.anio)||(+(String(fmtFecha(o.fecha)).split("/")[2])||0),cancha:String(o.cancha||"").trim(),rival:String(o.rival).trim(),torneo:String(o.torneo||"").trim(),instancia:String(o.instancia||"").trim(),tecnico:String(o.tecnico||"").trim(),gf:mk.gf,ga:mk.ga};
+            if(mk.r)m.r=mk.r;if(mk.nota)m.nota=mk.nota;
+            const anot=parseAnot(o.goleadores||o.goleador||"");if(anot.length)m.anotadores=anot;
+            nP.push(m);});
+        }
+      });
+      if(!nP.length){toast("No encontré una hoja con columna Rival");return;}
+      partidos=nP;guardar();refrescar();toast(`Importado: ${nP.length} partidos`);
+    }catch(err){console.error(err);toast("Error leyendo el Excel");}
+  };
+  reader.readAsArrayBuffer(file);ev.target.value="";
+}
+function exportarXls(){
+  const dP=partidos.map(m=>({Fecha:m.fecha,"Año":m.anio,Cancha:m.cancha,Resultado:m.r?`${m.gf}-${m.ga} (pen.)`:`${m.gf}-${m.ga}`,Rival:m.rival,Torneo:m.torneo,Instancia:m.instancia,"Técnico":m.tecnico,GF:m.gf,GC:m.ga,Goleadores:(m.anotadores||[]).map(a=>`${a.nombre}:${a.goles}`).join("; "),Resultado_GEP:resultadoDe(m),Nota:m.nota||""}));
+  const dG=goleadoresAgg().map(g=>({Jugador:g.nombre,Goles:g.goles}));
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(dP),"Partidos");
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(dG),"Goleadores");
+  XLSX.writeFile(wb,"SOY_BOSTERO.xlsx");toast("Excel descargado");
+}
+
+function backup(){
+  const data={app:"soy-bostero",version:3,exportado:new Date().toISOString(),partidos,historico};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const a=document.createElement("a");const f=new Date().toISOString().slice(0,10);
+  a.href=URL.createObjectURL(blob);a.download=`soy-bostero-backup-${f}.json`;a.click();URL.revokeObjectURL(a.href);
+  toast("Backup descargado");
+}
+function restaurar(ev){
+  const file=ev.target.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=e=>{
+    try{
+      const d=JSON.parse(e.target.result);
+      if(!Array.isArray(d.partidos)){toast("El archivo no parece un backup válido");return;}
+      if(!confirm("Esto reemplaza TODOS los datos actuales por los del backup. ¿Seguir?"))return;
+      partidos=d.partidos;historico=Array.isArray(d.historico)?d.historico:[];guardar();refrescar();toast(`Restaurado: ${partidos.length} partidos`);
+    }catch(err){toast("No pude leer el backup");}
+  };
+  r.readAsText(file);ev.target.value="";
+}
+
+function tab(t){
+  document.querySelectorAll(".bnav button").forEach(b=>b.classList.toggle("on",b.dataset.tab===t));
+  ["resumen","partidos","goleadores","datos"].forEach(id=>document.getElementById(id).classList.toggle("hide",id!==t));
+  document.getElementById("fab").style.display=(t==="resumen")?"flex":"none";
+  window.scrollTo(0,0);
+}
+function cerrarModal(id){document.getElementById(id).classList.remove("on");}
+function refrescar(){renderDash();llenarFiltros();renderPartidos();renderGoles();}
+let toastTimer;
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("on");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("on"),2600);}
+document.querySelectorAll(".modal-bg").forEach(bg=>bg.addEventListener("click",e=>{if(e.target===bg)bg.classList.remove("on");}));
+
+setupAC(document.getElementById("mCancha"),()=>uniq(partidos.map(m=>m.cancha)));
+setupAC(document.getElementById("mRival"),()=>uniq(partidos.map(m=>m.rival)));
+setupAC(document.getElementById("mTorneo"),()=>uniq(partidos.map(m=>m.torneo)));
+setupAC(document.getElementById("mInstancia"),()=>uniq(partidos.map(m=>m.instancia)));
+setupAC(document.getElementById("mTecnico"),()=>uniq(partidos.map(m=>m.tecnico)));
+
+cargar();refrescar();
+</script>
+</body>
+</html>
