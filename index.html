@@ -2,7 +2,8 @@
 <html lang="es-AR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>Soy Bostero</title>
 <meta name="theme-color" content="#16294e">
 
@@ -36,7 +37,8 @@
   --body:'Roboto',-apple-system,system-ui,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--body);background:var(--bg);color:var(--txt);line-height:1.45;-webkit-font-smoothing:antialiased;padding-bottom:84px}
+html,body{overflow-x:hidden;overscroll-behavior-x:none}
+body{font-family:var(--body);background:var(--bg);color:var(--txt);line-height:1.45;-webkit-font-smoothing:antialiased;padding-bottom:84px;touch-action:manipulation}
 .wrap{max-width:920px;margin:0 auto;padding:0 16px}
 .hide{display:none!important}
 
@@ -347,7 +349,7 @@ function nf(n,d){return Number(n).toLocaleString("es-AR",{minimumFractionDigits:
 function aISO(ddmm){const p=String(ddmm).split("/");return p.length===3?`${p[2]}-${p[1].padStart(2,"0")}-${p[0].padStart(2,"0")}`:"";}
 function aDDMM(iso){const p=String(iso).split("-");return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:String(iso);}
 function uniq(arr){return [...new Set(arr.map(x=>String(x||"").trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));}
-function uniqNombres(){return uniq(partidos.flatMap(p=>(p.anotadores||[]).map(a=>a.nombre)));}
+function uniqNombres(){return uniq([...(golHist||[]).map(a=>a.nombre),...partidos.flatMap(p=>(p.anotadores||[]).map(a=>a.nombre))]);}
 
 function cargar(){
   const p=store.get("bostero_partidos"),g=store.get("bostero_golhist");
