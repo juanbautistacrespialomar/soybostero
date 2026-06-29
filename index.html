@@ -231,7 +231,7 @@ select:focus,input:focus{outline:none;border-color:var(--oro)}
     <div class="scr-head"><div class="scr-title">Goleadores</div></div>
     <div class="pill" id="totalGoles" style="margin-bottom:12px"></div>
     <div class="card" id="listaGol"></div>
-    <p style="font-size:12.5px;color:var(--txt2);margin-top:12px">Se calcula solo desde los goleadores que cargás en cada partido — no se edita acá. <b>GEC</b> = goles en contra del rival (en propia) que cuentan a tu favor.</p>
+    <p style="font-size:12.5px;color:var(--txt2);margin-top:12px">Incluye el ranking histórico cargado + los goleadores que vayas sumando en cada partido nuevo. <b>GEC</b> = goles en contra del rival (en propia) que cuentan a tu favor.</p>
   </div>
 
   <!-- ===== DATOS ===== -->
@@ -262,9 +262,15 @@ select:focus,input:focus{outline:none;border-color:var(--oro)}
       <button class="btn sm" onclick="exportarXls()">Exportar</button>
     </div>
 
+    <div class="dcard">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9 9 0 0 0-6.36 2.64L3 8"/><path d="M3 3v5h5"/></svg></div>
+      <div class="tx"><b>Cargar histórico</b><span>Vuelve a los 44 partidos + goleadores de fábrica. Reemplaza lo que tengas cargado.</span></div>
+      <button class="btn sm" onclick="cargarHistorico()">Cargar</button>
+    </div>
+
     <div class="note" style="margin-top:6px">
-      <b>Tu app arranca vacía.</b><br>
-      Cargá tus partidos desde el botón (+) e indicá quién hizo los goles; la pestaña Goles se arma sola. Hacé un <b>Backup</b> cada tanto para no perder nada.
+      <b>La app arranca con tu histórico cargado</b> (44 partidos y el ranking de goleadores).<br>
+      Para sumar partidos nuevos usá el botón (+) e indicá quién hizo los goles: la pestaña Goles los suma arriba del histórico. <b>Ojo:</b> no le cargues goleadores a los 44 partidos viejos, porque ya están contados en el ranking (se duplicarían). Hacé un <b>Backup</b> cada tanto para no perder nada.
     </div>
 
     <input type="file" id="fileXls" accept=".xlsx,.xls" class="hide" onchange="importarXls(event)">
@@ -332,9 +338,89 @@ function logoFallback(){ document.getElementById("logoImg").style.display="none"
    puede tener "anotadores": [{nombre, goles}]. La pestaña Goles
    se calcula sumando los anotadores de todos los partidos.
    ============================================================ */
-const SEMILLA_PARTIDOS=[];
+const SEMILLA_PARTIDOS=[
+  {fecha:"07/03/2012",anio:2012,cancha:"La Bombonera",rival:"Fluminense",torneo:"Copa Libertadores",instancia:"Fase de Grupos",tecnico:"Julio César Falcioni",gf:1,ga:2},
+  {fecha:"17/01/2022",anio:2022,cancha:"Estadio José María Minella",rival:"San Lorenzo",torneo:"Torneo de Verano",instancia:"Fase de Grupos",tecnico:"Julio César Falcioni",gf:0,ga:0},
+  {fecha:"13/02/2022",anio:2022,cancha:"La Bombonera",rival:"Colón",torneo:"Primera División",instancia:"Fecha",tecnico:"Sebastián Battaglia",gf:1,ga:1},
+  {fecha:"06/03/2022",anio:2022,cancha:"La Bombonera",rival:"Huracán",torneo:"Primera División",instancia:"Fecha",tecnico:"Sebastián Battaglia",gf:0,ga:1},
+  {fecha:"12/04/2022",anio:2022,cancha:"La Bombonera",rival:"Always Ready",torneo:"Copa Libertadores",instancia:"Fase de Grupos",tecnico:"Sebastián Battaglia",gf:2,ga:0},
+  {fecha:"20/04/2022",anio:2022,cancha:"La Bombonera",rival:"Godoy Cruz",torneo:"Primera División",instancia:"Fecha",tecnico:"Sebastián Battaglia",gf:1,ga:1},
+  {fecha:"17/05/2022",anio:2022,cancha:"La Bombonera",rival:"Corinthians",torneo:"Copa Libertadores",instancia:"Fase de Grupos",tecnico:"Sebastián Battaglia",gf:1,ga:1},
+  {fecha:"22/05/2022",anio:2022,cancha:"Estadio Mario Alberto Kempes",rival:"Tigre",torneo:"Copa de la Liga",instancia:"Final",tecnico:"Sebastián Battaglia",gf:3,ga:0},
+  {fecha:"05/06/2022",anio:2022,cancha:"La Bombonera",rival:"Arsenal",torneo:"Primera División",instancia:"Fecha",tecnico:"Sebastián Battaglia",gf:2,ga:1},
+  {fecha:"15/06/2022",anio:2022,cancha:"La Bombonera",rival:"Tigre",torneo:"Primera División",instancia:"Fecha",tecnico:"Sebastián Battaglia",gf:5,ga:3},
+  {fecha:"24/06/2022",anio:2022,cancha:"La Bombonera",rival:"Unión",torneo:"Primera División",instancia:"Fecha",tecnico:"Sebastián Battaglia",gf:1,ga:2},
+  {fecha:"24/07/2022",anio:2022,cancha:"La Bombonera",rival:"Estudiantes",torneo:"Primera División",instancia:"Fecha",tecnico:"Hugo Ibarra",gf:3,ga:1},
+  {fecha:"17/08/2022",anio:2022,cancha:"La Bombonera",rival:"Rosario Central",torneo:"Primera División",instancia:"Fecha",tecnico:"Hugo Ibarra",gf:0,ga:0},
+  {fecha:"28/08/2022",anio:2022,cancha:"La Bombonera",rival:"Atlético Tucumán",torneo:"Primera División",instancia:"Fecha",tecnico:"Hugo Ibarra",gf:2,ga:1},
+  {fecha:"29/01/2023",anio:2023,cancha:"La Bombonera",rival:"Atlético Tucumán",torneo:"Primera División",instancia:"Fecha",tecnico:"Hugo Ibarra",gf:1,ga:0},
+  {fecha:"19/02/2023",anio:2023,cancha:"La Bombonera",rival:"Platense",torneo:"Primera División",instancia:"Fecha",tecnico:"Hugo Ibarra",gf:3,ga:1},
+  {fecha:"06/03/2023",anio:2023,cancha:"La Bombonera",rival:"Defensa y Justicia",torneo:"Primera División",instancia:"Fecha",tecnico:"Hugo Ibarra",gf:0,ga:0},
+  {fecha:"10/07/2023",anio:2023,cancha:"La Bombonera",rival:"Huracán",torneo:"Primera División",instancia:"Fecha",tecnico:"Jorge Almirón",gf:1,ga:0},
+  {fecha:"23/08/2023",anio:2023,cancha:"La Bombonera",rival:"Racing",torneo:"Copa Libertadores",instancia:"Cuartos de final",tecnico:"Jorge Almirón",gf:0,ga:0},
+  {fecha:"10/03/2024",anio:2024,cancha:"La Bombonera",rival:"Racing",torneo:"Primera División",instancia:"Fecha",tecnico:"Jorge Almirón",gf:4,ga:2},
+  {fecha:"09/04/2024",anio:2024,cancha:"La Bombonera",rival:"Sportivo Trinidense",torneo:"Copa Sudamericana",instancia:"Fase de Grupos",tecnico:"Diego Martínez",gf:1,ga:0},
+  {fecha:"16/04/2024",anio:2024,cancha:"La Bombonera",rival:"Godoy Cruz",torneo:"Primera División",instancia:"Fecha",tecnico:"Diego Martínez",gf:1,ga:0},
+  {fecha:"21/04/2024",anio:2024,cancha:"Estadio Mario Alberto Kempes",rival:"River",torneo:"Primera División",instancia:"Cuartos de final",tecnico:"Diego Martínez",gf:3,ga:2},
+  {fecha:"15/05/2024",anio:2024,cancha:"La Bombonera",rival:"Fortaleza",torneo:"Copa Sudamericana",instancia:"Fase de Grupos",tecnico:"Diego Martínez",gf:1,ga:1},
+  {fecha:"29/05/2024",anio:2024,cancha:"La Bombonera",rival:"Nacional Potosí",torneo:"Copa Sudamericana",instancia:"Fase de Grupos",tecnico:"Diego Martínez",gf:4,ga:0},
+  {fecha:"24/07/2024",anio:2024,cancha:"La Bombonera",rival:"Independiente del Valle",torneo:"Copa Sudamericana",instancia:"Repechaje",tecnico:"Diego Martínez",gf:1,ga:0},
+  {fecha:"06/10/2024",anio:2024,cancha:"La Bombonera",rival:"Argentinos Juniors",torneo:"Primera División",instancia:"Fecha",tecnico:"Mariano Herrón",gf:1,ga:0},
+  {fecha:"27/10/2024",anio:2024,cancha:"La Bombonera",rival:"Deportivo Riestra",torneo:"Primera División",instancia:"Fecha",tecnico:"Fernando Gago",gf:1,ga:1},
+  {fecha:"06/11/2024",anio:2024,cancha:"La Bombonera",rival:"Godoy Cruz",torneo:"Primera División",instancia:"Fecha",tecnico:"Fernando Gago",gf:4,ga:1},
+  {fecha:"20/11/2024",anio:2024,cancha:"La Bombonera",rival:"Unión",torneo:"Primera División",instancia:"Fecha",tecnico:"Fernando Gago",gf:1,ga:0},
+  {fecha:"01/12/2024",anio:2024,cancha:"La Bombonera",rival:"Gimnasia LP",torneo:"Primera División",instancia:"Fecha",tecnico:"Fernando Gago",gf:1,ga:0},
+  {fecha:"14/12/2024",anio:2024,cancha:"La Bombonera",rival:"Independiente",torneo:"Primera División",instancia:"Fecha",tecnico:"Fernando Gago",gf:0,ga:0},
+  {fecha:"26/01/2025",anio:2025,cancha:"La Bombonera",rival:"Argentinos Juniors",torneo:"Primera División",instancia:"Fecha",tecnico:"Fernando Gago",gf:0,ga:0},
+  {fecha:"02/02/2025",anio:2025,cancha:"La Bombonera",rival:"Huracán",torneo:"Primera División",instancia:"Fecha",tecnico:"Fernando Gago",gf:2,ga:1},
+  {fecha:"26/02/2025",anio:2025,cancha:"La Bombonera",rival:"Alianza Lima",torneo:"Copa Libertadores",instancia:"Fase Preliminar",tecnico:"Fernando Gago",gf:2,ga:2,r:"E",nota:"Eliminado por penales (4-5). Planilla: 2 (4) - 2 (5)"},
+  {fecha:"28/02/2025",anio:2025,cancha:"La Bombonera",rival:"Rosario Central",torneo:"Primera División",instancia:"Fecha",tecnico:"Fernando Gago",gf:1,ga:0},
+  {fecha:"10/05/2025",anio:2025,cancha:"La Bombonera",rival:"Lanús",torneo:"Primera División",instancia:"Octavos de Final",tecnico:"Mariano Herrón",gf:0,ga:0,r:"G",nota:"Ganó por penales (4-2). Planilla: 0 (4) - 0 (2)"},
+  {fecha:"19/05/2025",anio:2025,cancha:"La Bombonera",rival:"Independiente",torneo:"Primera División",instancia:"Cuartos de final",tecnico:"Mariano Herrón",gf:0,ga:1},
+  {fecha:"16/06/2025",anio:2025,cancha:"Hard Rock Stadium",rival:"Benfica",torneo:"Mundial de Clubes",instancia:"Fase de Grupos",tecnico:"Miguel Ángel Russo",gf:2,ga:2},
+  {fecha:"20/06/2025",anio:2025,cancha:"Hard Rock Stadium",rival:"Bayern Munich",torneo:"Mundial de Clubes",instancia:"Fase de Grupos",tecnico:"Miguel Ángel Russo",gf:1,ga:2},
+  {fecha:"21/09/2025",anio:2025,cancha:"La Bombonera",rival:"Central Córdoba (SE)",torneo:"Primera División",instancia:"Fecha",tecnico:"Miguel Ángel Russo",gf:2,ga:2},
+  {fecha:"05/10/2025",anio:2025,cancha:"La Bombonera",rival:"Newell's",torneo:"Primera División",instancia:"Fecha",tecnico:"Miguel Ángel Russo",gf:5,ga:0},
+  {fecha:"09/11/2025",anio:2025,cancha:"La Bombonera",rival:"River",torneo:"Primera División",instancia:"Fecha",tecnico:"Claudio Úbeda",gf:2,ga:0},
+  {fecha:"22/03/2026",anio:2026,cancha:"La Bombonera",rival:"Instituto",torneo:"Primera División",instancia:"Fecha",tecnico:"Claudio Úbeda",gf:2,ga:0}
+];
 
-let partidos=[],ordenCol="fechaSort",ordenDir=-1,editIdx=-1;
+/* Ranking histórico de goleadores (totales de tu planilla). Suma 69 = goles a favor.
+   "GEC" = goles en contra del rival (en propia) que cuentan a tu favor. */
+const SEMILLA_GOLEADORES=[
+  {nombre:"Edinson Cavani",goles:9},
+  {nombre:"Darío Benedetto",goles:7},
+  {nombre:"Miguel Merentiel",goles:7},
+  {nombre:"Milton Giménez",goles:5},
+  {nombre:"GEC",goles:4},
+  {nombre:"Exequiel Zeballos",goles:4},
+  {nombre:"Marcos Rojo",goles:3},
+  {nombre:"Luis Vázquez",goles:2},
+  {nombre:"Sebastián Villa",goles:2},
+  {nombre:"Luca Langoni",goles:2},
+  {nombre:"Marcelo Saracchi",goles:2},
+  {nombre:"Kevin Zenón",goles:2},
+  {nombre:"Rodrigo Battaglia",goles:2},
+  {nombre:"Brian Aguirre",goles:2},
+  {nombre:"Lucas Blondel",goles:1},
+  {nombre:"Frank Fabra",goles:1},
+  {nombre:"Agustín Sández",goles:1},
+  {nombre:"Eduardo Salvio",goles:1},
+  {nombre:"Pol Fernández",goles:1},
+  {nombre:"Óscar Romero",goles:1},
+  {nombre:"Nicolás Figal",goles:1},
+  {nombre:"Norberto Briasco",goles:1},
+  {nombre:"Nicolás Valentini",goles:1},
+  {nombre:"Aaron Anselmino",goles:1},
+  {nombre:"Leandro Somoza",goles:1},
+  {nombre:"Carlos Palacios",goles:1},
+  {nombre:"Ayrton Costa",goles:1},
+  {nombre:"Lautaro Blanco",goles:1},
+  {nombre:"Tomás Aranda",goles:1},
+  {nombre:"Adam Bareiro",goles:1}
+];
+
+let partidos=[],golHist=[],ordenCol="fechaSort",ordenDir=-1,editIdx=-1;
 
 function norm(s){return String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();}
 function fechaSort(f){const p=String(f).split("/");return p.length===3?p[2]+p[1].padStart(2,"0")+p[0].padStart(2,"0"):"0";}
@@ -345,8 +431,18 @@ function aDDMM(iso){const p=String(iso).split("-");return p.length===3?`${p[2]}/
 function uniq(arr){return [...new Set(arr.map(x=>String(x||"").trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));}
 function uniqNombres(){return uniq(partidos.flatMap(p=>(p.anotadores||[]).map(a=>a.nombre)));}
 
-function cargar(){const p=store.get("bostero_partidos");partidos=p?JSON.parse(p):JSON.parse(JSON.stringify(SEMILLA_PARTIDOS));}
-function guardar(){store.set("bostero_partidos",JSON.stringify(partidos));}
+function cargar(){
+  const p=store.get("bostero_partidos"),g=store.get("bostero_golhist");
+  if(p===null&&g===null){ // primer arranque: precargamos el histórico (44 partidos + goleadores)
+    partidos=JSON.parse(JSON.stringify(SEMILLA_PARTIDOS));
+    golHist=JSON.parse(JSON.stringify(SEMILLA_GOLEADORES));
+    guardar();
+  }else{
+    partidos=p?JSON.parse(p):[];
+    golHist=g?JSON.parse(g):[];
+  }
+}
+function guardar(){store.set("bostero_partidos",JSON.stringify(partidos));store.set("bostero_golhist",JSON.stringify(golHist));}
 
 /* ============================================================ CÁLCULOS ============================================================ */
 function stats(lista){
@@ -358,11 +454,9 @@ function stats(lista){
 }
 function goleadoresAgg(){
   const map={};
-  partidos.forEach(p=>(p.anotadores||[]).forEach(a=>{
-    const k=norm(a.nombre);if(!k)return;
-    if(!map[k])map[k]={nombre:a.nombre,goles:0};
-    map[k].goles+=(+a.goles||0);
-  }));
+  const sumar=a=>{const k=norm(a.nombre);if(!k)return;if(!map[k])map[k]={nombre:a.nombre,goles:0};map[k].goles+=(+a.goles||0);};
+  (golHist||[]).forEach(sumar);
+  partidos.forEach(p=>(p.anotadores||[]).forEach(sumar));
   return Object.values(map).sort((x,y)=>y.goles-x.goles||x.nombre.localeCompare(y.nombre,"es"));
 }
 
@@ -582,7 +676,7 @@ function exportarXls(){
 
 /* ============================================================ BACKUP / RESTAURAR ============================================================ */
 function backup(){
-  const data={app:"soy-bostero",version:2,exportado:new Date().toISOString(),partidos};
+  const data={app:"soy-bostero",version:3,exportado:new Date().toISOString(),partidos,golHist};
   const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
   const a=document.createElement("a");const f=new Date().toISOString().slice(0,10);
   a.href=URL.createObjectURL(blob);a.download=`soy-bostero-backup-${f}.json`;a.click();URL.revokeObjectURL(a.href);
@@ -596,10 +690,17 @@ function restaurar(ev){
       const d=JSON.parse(e.target.result);
       if(!Array.isArray(d.partidos)){toast("El archivo no parece un backup válido");return;}
       if(!confirm("Esto reemplaza TODOS los datos actuales por los del backup. ¿Seguir?"))return;
-      partidos=d.partidos;guardar();refrescar();toast(`Restaurado: ${partidos.length} partidos`);
+      partidos=d.partidos;if(Array.isArray(d.golHist))golHist=d.golHist;guardar();refrescar();toast(`Restaurado: ${partidos.length} partidos`);
     }catch(err){toast("No pude leer el backup");}
   };
   r.readAsText(file);ev.target.value="";
+}
+
+function cargarHistorico(){
+  if(!confirm("Esto carga los 44 partidos históricos y el ranking de goleadores, reemplazando todo lo que tengas guardado. ¿Seguir?"))return;
+  partidos=JSON.parse(JSON.stringify(SEMILLA_PARTIDOS));
+  golHist=JSON.parse(JSON.stringify(SEMILLA_GOLEADORES));
+  guardar();refrescar();toast("Histórico cargado: 44 partidos");
 }
 
 /* ============================================================ UI ============================================================ */
