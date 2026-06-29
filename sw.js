@@ -16,10 +16,15 @@ const ASSETS = [
 
 self.addEventListener("install", e => {
   e.waitUntil(
-    caches.open(CACHE)
-      .then(c => c.addAll(ASSETS))
-      .then(() => self.skipWaiting())
+    caches.open(CACHE).then(c => c.addAll(ASSETS))
+    // OJO: ya NO llamamos skipWaiting() acá.
+    // La versión nueva queda "en espera" hasta que el usuario toque "Actualizar".
   );
+});
+
+// El cliente (la app) nos avisa que el usuario quiere la versión nueva ya
+self.addEventListener("message", e => {
+  if (e.data && e.data.type === "SKIP_WAITING") self.skipWaiting();
 });
 
 self.addEventListener("activate", e => {

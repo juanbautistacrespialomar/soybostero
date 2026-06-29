@@ -644,14 +644,9 @@ cargar();refrescar();
 </script>
 
 <script>
-/* ===== PWA: Service Worker + prompt de instalación ===== */
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js")
-      .catch(err => console.warn("SW no registrado:", err));
-  });
-}
+/* ===== PWA: instalación + aviso de actualización ===== */
 
+// --- Botón "Instalar" (igual que antes) ---
 let deferredPrompt = null;
 const installBtn = document.getElementById("installBtn");
 
@@ -673,6 +668,70 @@ window.addEventListener("appinstalled", () => {
   if (installBtn) installBtn.style.display = "none";
   deferredPrompt = null;
 });
+
+// --- Service Worker + cartel de "nueva versión disponible" ---
+if ("serviceWorker" in navigator) {
+  let nuevoSW = null;       // referencia al SW en espera (la versión nueva)
+  let recargando = false;   // evita recargas en loop
+
+  navigator.serviceWorker.register("./sw.js").then(reg => {
+    // 1) Ya había una versión nueva esperando al abrir la app
+    if (reg.waiting && navigator.serviceWorker.controller) {
+      nuevoSW = reg.waiting;
+      mostrarCartelUpdate();
+    }
+    // 2) Aparece una versión nueva mientras la app está abierta
+    reg.addEventListener("updatefound", () => {
+      const sw = reg.installing;
+      if (!sw) return;
+      sw.addEventListener("statechange", () => {
+        // "installed" + ya hay un SW controlando = es una ACTUALIZACIÓN (no la 1ra instalación)
+        if (sw.state === "installed" && navigator.serviceWorker.controller) {
+          nuevoSW = sw;
+          mostrarCartelUpdate();
+        }
+      });
+    });
+  }).catch(err => console.warn("SW no registrado:", err));
+
+  // 3) Cuando la versión nueva toma control, recargamos UNA sola vez
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (recargando) return;
+    recargando = true;
+    window.location.reload();
+  });
+
+  // Al tocar "Actualizar": le pedimos al SW nuevo que se active ya
+  function aplicarUpdate() {
+    if (!nuevoSW) return;
+    const btn = document.getElementById("updBtn");
+    if (btn) { btn.textContent = "Actualizando…"; btn.disabled = true; }
+    nuevoSW.postMessage({ type: "SKIP_WAITING" });
+    // el evento controllerchange (arriba) disparará el reload solo
+  }
+
+  function mostrarCartelUpdate() {
+    if (document.getElementById("updateToast")) return; // no duplicar
+    const t = document.createElement("div");
+    t.id = "updateToast";
+    t.style.cssText = "position:fixed;left:50%;transform:translateX(-50%);" +
+      "bottom:calc(96px + env(safe-area-inset-bottom));z-index:9999;background:#16294e;" +
+      "color:#fff;border:1.5px solid #f6b51e;border-radius:14px;padding:12px 14px;" +
+      "display:flex;align-items:center;gap:12px;box-shadow:0 10px 30px rgba(0,0,0,.35);" +
+      "font-size:14px;max-width:92%";
+    const txt = document.createElement("span");
+    txt.textContent = "⚡ Hay una nueva versión";
+    const b = document.createElement("button");
+    b.id = "updBtn";
+    b.textContent = "Actualizar";
+    b.style.cssText = "background:#f6b51e;color:#16294e;border:none;border-radius:9px;" +
+      "padding:8px 14px;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap";
+    b.onclick = aplicarUpdate;
+    t.appendChild(txt);
+    t.appendChild(b);
+    document.body.appendChild(t);
+  }
+}
 </script>
 </body>
 </html>
