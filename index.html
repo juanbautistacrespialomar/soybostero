@@ -332,7 +332,21 @@ const store={
   get(k){ try{return localStorage.getItem(k);}catch(e){return mem[k]??null;} },
   set(k,v){ try{localStorage.setItem(k,v);}catch(e){mem[k]=v;} }
 };
-function logoFallback(){ document.getElementById("logoImg").style.display="none"; document.getElementById("logoSvg").classList.remove("hide"); }
+// Prueba varios nombres posibles del logo antes de caer al escudo dibujado.
+// Así anda tanto si el archivo se llama "Logo_app.png" como "Logo app.png".
+var LOGO_CANDIDATOS = ["Logo_app.png", "Logo%20app.png", "Logo.png"];
+function logoFallback(){
+  var img = document.getElementById("logoImg");
+  var i = parseInt(img.getAttribute("data-try") || "0", 10) + 1;
+  if (i < LOGO_CANDIDATOS.length){
+    img.setAttribute("data-try", i);
+    img.src = LOGO_CANDIDATOS[i];   // intenta el siguiente nombre
+    return;
+  }
+  // se agotaron los nombres -> escudo dibujado de respaldo
+  img.style.display = "none";
+  document.getElementById("logoSvg").classList.remove("hide");
+}
 
 /* ============================================================
    MODELO: "partidos" es la única fuente de verdad. Cada partido
