@@ -1,7 +1,14 @@
 {
-  "app": "soy-bostero",
-  "version": 3,
-  "exportado": "2026-06-29T02:06:21.284Z",
-  "partidos": [],
-  "golHist": []
+  "name": "Soy Bostero",
+  "short_name": "Bostero",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#eef1f6",
+  "theme_color": "#16294e",
+  "icons": [
+    { "src": "boca-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "boca-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "boca-icon-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
 }
