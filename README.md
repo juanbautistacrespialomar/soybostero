@@ -39,7 +39,7 @@ Son **dos logos distintos**: `Logo.png` es el ícono de la app (afuera) y
   editar.
 - **Goleadores:** ranking editable. "GEC" = goles en contra del rival (en
   propia) que cuentan a favor.
-- **Datos:** Backup (.json), Restaurar, Importar Excel y Exportar Excel.
+- **Datos:** Backup (.json), Restaurar y Exportar Excel.
 
 ## Escudos y ficha por rival
 
@@ -47,13 +47,13 @@ Son **dos logos distintos**: `Logo.png` es el ícono de la app (afuera) y
   de a uno cada ~2 s) y quedan guardados en el dispositivo. Prioriza clubes
   argentinos; el diccionario `ALIAS_CLUBES` en `index.html` traduce nombres
   cortos ("River", "Velez") al nombre con el que figuran en la base.
-- Si no aparece o aparece mal: abrí la ficha del club → **Cambiar escudo**
-  → buscalo por nombre, **Subir imagen** propia, o **Sin escudo**. Lo que
-  elegís a mano nunca se pisa.
+- Si un club no trae escudo, se muestran sus iniciales. Para corregirlo,
+  sumá su nombre al diccionario `ALIAS_CLUBES`.
 - Tocando un rival (en **Resumen → Por rival** o en la tabla de **Partidos**)
   se abre su ficha: G/E/P, efectividad, goles, últimos resultados, mayor
-  victoria, peor derrota, goleadores contra ese rival y todos los partidos
-  (tocando uno se edita).
+  victoria, peor derrota, goleadores contra ese rival (avisa si hay goles sin
+  goleador cargado) y todos los partidos (tocando uno se edita). Se cierra
+  con la cruz de arriba a la derecha.
 - Los escudos viajan en el **Backup** (.json).
 
 ## Buscadores anti-duplicados
@@ -84,4 +84,4 @@ existe (sin distinguir mayúsculas ni acentos), suma los goles al que ya está.
 ## Stack
 
 HTML + CSS + JavaScript vanilla. Única dependencia en runtime: SheetJS (CDN)
-para importar/exportar Excel. Fuentes: Oswald + Roboto (Google Fonts).
+para exportar Excel. Fuentes: Oswald + Roboto (Google Fonts).

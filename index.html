@@ -8,7 +8,7 @@
 <!-- Igual que Tu Contador: "black-translucent" hace que la app sea dueña de la franja de la
      hora/batería. Con el modo por defecto, iOS 26 le pone su propio vidrio borroso a esa franja
      (y un poco más abajo), que era el difuminado de arriba. La hora pasa a verse en BLANCO,
-     por eso abajo hay una franja azul fija (.statusbar-bg) para que siempre se lea. -->
+     por eso el header azul es fijo y cubre esa franja: siempre se lee. -->
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Soy Bostero</title>
 <script>try{(function(){var i=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);document.documentElement.classList.add(i?"ios":"no-ios");})();}catch(e){}</script>
@@ -58,21 +58,23 @@ body{font-family:var(--body);background:var(--bg);color:var(--txt);line-height:1
 /* #scroller va FIJO contra los bordes reales de la pantalla: arriba arranca justo debajo de la
    hora/batería y abajo llega hasta el borde. No depende de calcular el alto de la pantalla con
    JS (ese cálculo era el que fallaba en iPhone y mandaba la barra por debajo del borde). */
-/* Franja fija del alto EXACTO de la zona de la hora (en celus sin isla mide 0). Siempre azul
-   Boca: el texto blanco de iOS se lee bien y empalma con el header. */
-.statusbar-bg{position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top);background:var(--navy);z-index:55;pointer-events:none}
-#scroller{position:fixed;top:env(safe-area-inset-top);left:0;right:0;bottom:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+#scroller{position:fixed;top:var(--hdrH,calc(env(safe-area-inset-top) + 64px));left:0;right:0;bottom:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
   padding-bottom:calc(env(safe-area-inset-bottom) + 110px)}
 html.no-ios #scroller{padding-bottom:calc(max(env(safe-area-inset-bottom),12px) + 110px)}
 .wrap{max-width:920px;margin:0 auto;padding:0 16px}
 .hide{display:none!important}
 
-header{background:var(--navy);padding:16px 0 18px}
+/* HEADER FIJO arriba de todo, azul sólido, cubriendo también la zona de la hora.
+   iOS 26 difumina lo que pasa por arriba de la pantalla, SALVO que ahí haya un elemento FIJO
+   de color sólido: en ese caso toma su color y no difumina nada. (Por eso con la ficha del
+   club abierta se veía bien: su fondo oscuro es fijo.) Funciona con la app instalada en el
+   modo viejo de barra de estado y en el nuevo, sin necesidad de reinstalar. */
+header{position:fixed;top:0;left:0;right:0;z-index:40;background:var(--navy);padding:calc(env(safe-area-inset-top) + 10px) 0 12px}
 .hdr{display:flex;align-items:center;gap:13px}
-.logo{width:46px;height:46px;object-fit:contain;flex-shrink:0}
-.title h1{font-family:var(--disp);font-size:30px;font-weight:700;line-height:.95;letter-spacing:.5px;color:#fff;text-transform:uppercase}
+.logo{width:38px;height:38px;object-fit:contain;flex-shrink:0}
+.title h1{font-family:var(--disp);font-size:25px;font-weight:700;line-height:.95;letter-spacing:.5px;color:#fff;text-transform:uppercase}
 .title h1 span{color:var(--oro)}
-.title p{font-size:12.5px;color:#aeb9d2;margin-top:4px;font-weight:400}
+.title p{font-size:11.5px;color:#aeb9d2;margin-top:3px;font-weight:400}
 
 .screen{padding-top:18px}
 .scr-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;flex-wrap:wrap}
@@ -113,7 +115,10 @@ header{background:var(--navy);padding:16px 0 18px}
 table{width:100%;border-collapse:collapse;font-size:13.5px}
 th{background:var(--navy);color:var(--oro);text-align:left;padding:11px 12px;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;cursor:pointer;user-select:none;position:sticky;top:0}
 th:hover{background:var(--navy2)}
-th .arr{opacity:.55;font-size:9px;margin-left:3px}
+/* Flechita de orden (SVG): las dos apagadas; en la columna activa se prende la que corresponde */
+th .arr{width:8px;height:11px;margin-left:5px;vertical-align:-1px;fill:currentColor}
+th .arr path{opacity:.35}
+th.asc .arr .up,th.desc .arr .dn{opacity:1}
 td{padding:10px 12px;border-top:1px solid var(--line);white-space:nowrap;color:var(--txt)}
 tbody tr:hover{background:#f6f8fc}
 .res-badge{display:inline-block;min-width:48px;text-align:center;padding:3px 9px;border-radius:7px;font-weight:700;font-size:12.5px}
@@ -125,6 +130,10 @@ tbody tr:hover{background:#f6f8fc}
 .filtros{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:13px}
 select,input[type=text],input[type=number],input[type=date]{font-family:var(--body);background:var(--card);color:var(--txt);border:1px solid var(--line);border-radius:9px;padding:9px 11px;font-size:13px}
 select:focus,input:focus{outline:none;border-color:var(--oro)}
+/* Desplegables con flecha propia (SVG azul) en vez de la que dibuja cada celu */
+select{-webkit-appearance:none;appearance:none;padding-right:32px;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2316294e' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;background-size:14px}
 
 .gol-row{display:flex;align-items:center;gap:11px;padding:9px 0;border-top:1px solid var(--line)}
 .gol-row:first-child{border-top:none}
@@ -136,6 +145,7 @@ select:focus,input:focus{outline:none;border-color:var(--oro)}
 
 .dcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;align-items:center;gap:14px;margin-bottom:12px}
 .dcard .ic{width:42px;height:42px;border-radius:11px;background:#eef1f7;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--navy)}
+.dcard .ic svg{width:22px;height:22px;flex-shrink:0} /* sin tamaño fijo, Safari dibujaba el ícono en 0 px */
 .dcard .tx{flex:1}
 .dcard .tx b{font-size:14.5px;display:block}
 .dcard .tx span{font-size:12.5px;color:var(--txt2)}
@@ -162,7 +172,8 @@ select:focus,input:focus{outline:none;border-color:var(--oro)}
 
 /* STEPPER (+/-) */
 .stepper{display:inline-flex;align-items:stretch;border:1px solid var(--line);border-radius:9px;overflow:hidden}
-.stepper button{width:40px;border:none;background:#f1f4fa;color:var(--navy);font-size:21px;font-weight:700;cursor:pointer;font-family:var(--body);line-height:1}
+.stepper button{width:40px;border:none;background:#f1f4fa;color:var(--navy);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.stepper button svg{width:16px;height:16px}
 .stepper button:active{background:#e3e8f2}
 .stepper input{width:56px;text-align:center;border:none;border-left:1px solid var(--line);border-right:1px solid var(--line);border-radius:0;font-size:15px;font-weight:600;-moz-appearance:textfield}
 .stepper input::-webkit-outer-spin-button,.stepper input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
@@ -172,7 +183,8 @@ select:focus,input:focus{outline:none;border-color:var(--oro)}
 /* GOLEADORES DEL PARTIDO */
 .anot-sec{border-top:1px solid var(--line);margin-top:4px;padding-top:14px}
 .anot-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.anot-del{width:32px;height:32px;border:none;background:#fbe4e4;color:var(--pierde-t);border-radius:8px;font-size:18px;cursor:pointer;flex-shrink:0;line-height:1}
+.anot-del{width:32px;height:32px;border:none;background:#fbe4e4;color:var(--pierde-t);border-radius:8px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.anot-del svg{width:15px;height:15px}
 
 /* Barra flotante estilo isla (igual que Tu Contador): .bnav es transparente y da el aire
    alrededor; la píldora azul con vidrio esmerilado es .bnav-inner. */
@@ -192,7 +204,8 @@ html.no-ios .bnav{padding-bottom:calc(max(env(safe-area-inset-bottom),12px) + 10
 @media (prefers-reduced-motion:reduce){.tab svg{animation:none !important}}
 
 .empty{text-align:center;padding:38px;color:var(--txt3)}
-.fab{position:fixed;right:18px;bottom:calc(92px + env(safe-area-inset-bottom));width:58px;height:58px;border-radius:50%;background:var(--oro);color:var(--navy);border:none;font-family:var(--disp);font-size:38px;font-weight:600;line-height:0;cursor:pointer;box-shadow:0 6px 18px rgba(15,29,58,.4);display:flex;align-items:center;justify-content:center;z-index:60;padding-bottom:5px}
+.fab{position:fixed;right:18px;bottom:calc(92px + env(safe-area-inset-bottom));width:58px;height:58px;border-radius:50%;background:var(--oro);color:var(--navy);border:none;cursor:pointer;box-shadow:0 6px 18px rgba(15,29,58,.4);display:flex;align-items:center;justify-content:center;z-index:60}
+.fab svg{width:26px;height:26px}
 .fab:active{transform:scale(.94)}
 html.no-ios .fab{bottom:calc(92px + max(env(safe-area-inset-bottom),12px))}
 .dl-hint{font-size:11.5px;color:var(--txt3);margin:-2px 0 4px}
@@ -212,7 +225,8 @@ html.no-ios .fab{bottom:calc(92px + max(env(safe-area-inset-bottom),12px))}
 .upd-tx span{display:block;font-size:12.5px;color:#aeb9d2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .upd-btn{background:var(--oro);color:var(--navy);border:none;border-radius:11px;padding:10px 14px;font-family:var(--body);font-weight:700;font-size:13.5px;cursor:pointer;white-space:nowrap;flex-shrink:0}
 .upd-btn:disabled{opacity:.7}
-.upd-x{background:none;border:none;color:#93a0bf;font-size:22px;line-height:1;width:30px;height:30px;cursor:pointer;flex-shrink:0;margin-left:-4px}
+.upd-x{background:none;border:none;color:#93a0bf;width:30px;height:30px;cursor:pointer;flex-shrink:0;margin-left:-4px;display:flex;align-items:center;justify-content:center}
+.upd-x svg{width:18px;height:18px}
 .upd-btn:focus-visible,.upd-x:focus-visible{outline:2px solid var(--oro);outline-offset:2px}
 
 /* ESCUDOS */
@@ -256,21 +270,18 @@ html.no-ios .fab{bottom:calc(92px + max(env(safe-area-inset-bottom),12px))}
 .club-dest div{border:1px solid var(--line);border-radius:10px;padding:9px 11px;font-size:12.5px;color:var(--txt2)}
 .club-dest b{display:block;font-size:14px;color:var(--txt)}
 
-/* EDITOR DE ESCUDO */
-.esc-edit{background:#f4f6fa;border-radius:12px;padding:12px;margin-bottom:14px}
-.esc-edit .fila{display:flex;gap:8px;flex-wrap:wrap}
-.esc-edit input[type=text]{flex:1;min-width:150px}
-.esc-res{display:flex;flex-direction:column;gap:6px;margin-top:10px}
-.esc-res button{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:var(--card);cursor:pointer;text-align:left;font:inherit;color:inherit}
-.esc-res button:hover{border-color:var(--oro)}
-.esc-res .esc{width:32px;height:32px}
-.esc-res small{display:block;color:var(--txt3);font-size:11.5px}
+/* CRUZ PARA CERRAR LA FICHA (azul y oro, como el botón principal) */
+.mclose-wrap{position:sticky;top:0;height:0;z-index:5;display:flex;justify-content:flex-end}
+.mclose{width:36px;height:36px;border-radius:50%;border:none;background:var(--navy);color:var(--oro);display:flex;align-items:center;justify-content:center;cursor:pointer;margin:-6px -4px 0 0;box-shadow:0 3px 10px rgba(15,29,58,.25)}
+.mclose svg{width:17px;height:17px}
+.mclose:hover{background:var(--navy2)}
+.mclose:focus-visible{outline:2px solid var(--oro);outline-offset:2px}
+.club-head{padding-right:40px}
+.gol-pend{font-size:12.5px;color:#8a6d0c;background:#fff8e6;border:1px solid #f0e0a6;border-radius:10px;padding:9px 11px;margin-top:8px}
 </style>
 </head>
 <body>
-<div class="statusbar-bg"></div>
 
-<main id="scroller">
 <header>
   <div class="wrap hdr">
     <img id="logoImg" class="logo" src="Logo_app.png" alt="Escudo Boca" onerror="logoFallback()">
@@ -278,15 +289,16 @@ html.no-ios .fab{bottom:calc(92px + max(env(safe-area-inset-bottom),12px))}
       <path d="M50 4 L94 20 V58 C94 84 74 100 50 106 C26 100 6 84 6 58 V20 Z" fill="#16294e" stroke="#f6b51e" stroke-width="5"/>
       <rect x="6" y="45" width="88" height="19" fill="#f6b51e"/>
       <text x="50" y="38" text-anchor="middle" fill="#f6b51e" font-size="15" font-weight="700" font-family="Oswald,sans-serif">CABJ</text>
-      <text x="50" y="60" text-anchor="middle" fill="#16294e" font-size="13" font-weight="700">★★★</text>
+      <g fill="#16294e"><circle cx="38" cy="54.5" r="3.2"/><circle cx="50" cy="54.5" r="3.2"/><circle cx="62" cy="54.5" r="3.2"/></g>
     </svg>
     <div class="title">
       <h1>SOY <span>BOSTERO</span></h1>
       <p>Mi registro de partidos en la cancha</p>
     </div>
-    <button id="installBtn" onclick="instalarApp()" style="display:none;margin-left:auto;background:#f6b51e;color:#16294e;border:none;border-radius:10px;padding:9px 12px;font-weight:700;font-size:13px;cursor:pointer">⬇ Instalar</button>
+    <button id="installBtn" onclick="instalarApp()" style="display:none;margin-left:auto;background:#f6b51e;color:#16294e;border:none;border-radius:10px;padding:9px 12px;font-weight:700;font-size:13px;cursor:pointer"><svg style="width:16px;height:16px;margin-right:5px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg>Instalar</button>
   </div>
 </header>
+<main id="scroller">
 
 <div class="wrap">
 
@@ -327,13 +339,13 @@ html.no-ios .fab{bottom:calc(92px + max(env(safe-area-inset-bottom),12px))}
     <div class="tbl-wrap">
       <table>
         <thead><tr>
-          <th onclick="ordenar('fechaSort')">Fecha<span class="arr">↕</span></th>
-          <th onclick="ordenar('anio')">Año<span class="arr">↕</span></th>
-          <th onclick="ordenar('cancha')">Cancha<span class="arr">↕</span></th>
-          <th onclick="ordenar('rival')">Rival<span class="arr">↕</span></th>
-          <th onclick="ordenar('torneo')">Torneo<span class="arr">↕</span></th>
-          <th onclick="ordenar('instancia')">Instancia<span class="arr">↕</span></th>
-          <th onclick="ordenar('tecnico')">Técnico<span class="arr">↕</span></th>
+          <th data-col="fechaSort" onclick="ordenar('fechaSort')">Fecha<svg class="arr" viewBox="0 0 12 16" aria-hidden="true"><path class="up" d="M6 2l4 5H2z"/><path class="dn" d="M6 14l4-5H2z"/></svg></th>
+          <th data-col="anio" onclick="ordenar('anio')">Año<svg class="arr" viewBox="0 0 12 16" aria-hidden="true"><path class="up" d="M6 2l4 5H2z"/><path class="dn" d="M6 14l4-5H2z"/></svg></th>
+          <th data-col="cancha" onclick="ordenar('cancha')">Cancha<svg class="arr" viewBox="0 0 12 16" aria-hidden="true"><path class="up" d="M6 2l4 5H2z"/><path class="dn" d="M6 14l4-5H2z"/></svg></th>
+          <th data-col="rival" onclick="ordenar('rival')">Rival<svg class="arr" viewBox="0 0 12 16" aria-hidden="true"><path class="up" d="M6 2l4 5H2z"/><path class="dn" d="M6 14l4-5H2z"/></svg></th>
+          <th data-col="torneo" onclick="ordenar('torneo')">Torneo<svg class="arr" viewBox="0 0 12 16" aria-hidden="true"><path class="up" d="M6 2l4 5H2z"/><path class="dn" d="M6 14l4-5H2z"/></svg></th>
+          <th data-col="instancia" onclick="ordenar('instancia')">Instancia<svg class="arr" viewBox="0 0 12 16" aria-hidden="true"><path class="up" d="M6 2l4 5H2z"/><path class="dn" d="M6 14l4-5H2z"/></svg></th>
+          <th data-col="tecnico" onclick="ordenar('tecnico')">Técnico<svg class="arr" viewBox="0 0 12 16" aria-hidden="true"><path class="up" d="M6 2l4 5H2z"/><path class="dn" d="M6 14l4-5H2z"/></svg></th>
           <th>Resultado</th><th></th>
         </tr></thead>
         <tbody id="cuerpoP"></tbody>
@@ -366,23 +378,12 @@ html.no-ios .fab{bottom:calc(92px + max(env(safe-area-inset-bottom),12px))}
     </div>
 
     <div class="dcard">
-      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h6"/></svg></div>
-      <div class="tx"><b>Importar Excel</b><span>Levantá un .xlsx con la hoja Partidos (columna Goleadores opcional).</span></div>
-      <button class="btn sm" onclick="document.getElementById('fileXls').click()">Importar</button>
-    </div>
-
-    <div class="dcard">
       <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/></svg></div>
       <div class="tx"><b>Exportar a Excel</b><span>Bajá tus datos a .xlsx (Partidos + ranking de Goleadores).</span></div>
       <button class="btn sm" onclick="exportarXls()">Exportar</button>
     </div>
 
-    <div class="note" style="margin-top:6px">
-      <b>Tu app arranca vacía.</b><br>
-      Cargá tus partidos desde el botón (+) e indicá quién hizo los goles; la pestaña Goles se arma sola. Hacé un <b>Backup</b> cada tanto para no perder nada.
-    </div>
 
-    <input type="file" id="fileXls" accept=".xlsx,.xls" class="hide" onchange="importarXls(event)">
     <input type="file" id="fileJson" accept=".json,application/json" class="hide" onchange="restaurar(event)">
   </div>
 </div>
@@ -410,8 +411,8 @@ html.no-ios .fab{bottom:calc(92px + max(env(safe-area-inset-bottom),12px))}
       <div><label>Torneo</label><div class="ac"><input type="text" id="mTorneo" autocomplete="off"><div class="ac-list"></div></div></div>
       <div><label>Instancia</label><div class="ac"><input type="text" id="mInstancia" autocomplete="off"><div class="ac-list"></div></div></div>
       <div><label>Técnico</label><div class="ac"><input type="text" id="mTecnico" autocomplete="off"><div class="ac-list"></div></div></div>
-      <div><label>Goles a favor</label><div class="stepper"><button type="button" onclick="stepBtn(this,-1)">−</button><input type="number" id="mGf" min="0" inputmode="numeric" value="0" oninput="if(this.value<0||this.value==='')this.value=0;syncGolesHint()"><button type="button" onclick="stepBtn(this,1)">+</button></div></div>
-      <div><label>Goles en contra</label><div class="stepper"><button type="button" onclick="stepBtn(this,-1)">−</button><input type="number" id="mGc" min="0" inputmode="numeric" value="0" oninput="if(this.value<0||this.value==='')this.value=0"><button type="button" onclick="stepBtn(this,1)">+</button></div></div>
+      <div><label>Goles a favor</label><div class="stepper"><button type="button" aria-label="Restar" onclick="stepBtn(this,-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg></button><input type="number" id="mGf" min="0" inputmode="numeric" value="0" oninput="if(this.value<0||this.value==='')this.value=0;syncGolesHint()"><button type="button" aria-label="Sumar" onclick="stepBtn(this,1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+      <div><label>Goles en contra</label><div class="stepper"><button type="button" aria-label="Restar" onclick="stepBtn(this,-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg></button><input type="number" id="mGc" min="0" inputmode="numeric" value="0" oninput="if(this.value<0||this.value==='')this.value=0"><button type="button" aria-label="Sumar" onclick="stepBtn(this,1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
       <div class="full"><label>Resultado manual (solo si fue por penales)</label><select id="mR"><option value="">Automático (según goles)</option><option value="G">Ganado</option><option value="E">Empatado</option><option value="P">Perdido</option></select></div>
       <div class="full"><label>Nota</label><input type="text" id="mNota" placeholder="Ganó por penales 4-2"></div>
       <div class="full anot-sec">
@@ -432,6 +433,7 @@ html.no-ios .fab{bottom:calc(92px + max(env(safe-area-inset-bottom),12px))}
 <!-- MODAL CLUB (historial contra un rival) -->
 <div class="modal-bg" id="modalClub">
   <div class="modal">
+    <div class="mclose-wrap"><button class="mclose" onclick="cerrarModal('modalClub')" aria-label="Cerrar" title="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
     <div class="club-head">
       <div id="clubEsc"></div>
       <div style="flex:1;min-width:0">
@@ -439,32 +441,13 @@ html.no-ios .fab{bottom:calc(92px + max(env(safe-area-inset-bottom),12px))}
         <p id="clubSub"></p>
       </div>
     </div>
-
-    <div class="esc-edit hide" id="escEdit">
-      <div class="fila">
-        <input type="text" id="escQuery" placeholder="Nombre del club para buscar">
-        <button class="btn sm" onclick="buscarEscudoManual()">Buscar</button>
-      </div>
-      <div class="esc-res" id="escRes"></div>
-      <div class="fila" style="margin-top:10px">
-        <button class="btn sm" onclick="document.getElementById('fileEsc').click()">Subir imagen</button>
-        <button class="btn sm ghost danger" onclick="quitarEscudo()">Sin escudo</button>
-      </div>
-      <input type="file" id="fileEsc" accept="image/*" class="hide" onchange="subirEscudo(event)">
-    </div>
-
     <div id="clubCuerpo"></div>
-
-    <div class="modal-foot">
-      <button class="btn ghost" onclick="toggleEscEdit()">Cambiar escudo</button>
-      <button class="btn primary" style="margin-left:auto" onclick="cerrarModal('modalClub')">Cerrar</button>
-    </div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
-<button class="fab" id="fab" onclick="abrirAlta()" aria-label="Cargar partido" title="Cargar partido">+</button>
+<button class="fab" id="fab" onclick="abrirAlta()" aria-label="Cargar partido" title="Cargar partido"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
@@ -585,6 +568,7 @@ function renderPartidos(){
     return true;
   });
   lista.sort((a,b)=>{let va=a[ordenCol],vb=b[ordenCol];if(typeof va==="string"){va=va.toLowerCase();vb=(vb||"").toLowerCase();}return va<vb?-ordenDir:va>vb?ordenDir:0;});
+  marcarOrden();
   const tb=document.getElementById("cuerpoP");
   if(!lista.length)tb.innerHTML='<tr><td colspan="9" class="empty">'+(partidos.length?'No hay partidos con esos filtros.':'Todavía no cargaste partidos. Tocá "+ Cargar partido".')+'</td></tr>';
   else tb.innerHTML=lista.map(m=>{
@@ -592,12 +576,13 @@ function renderPartidos(){
     return`<tr ondblclick="abrirEdicion(${m._i})" style="cursor:pointer" title="${(m.nota||'').replace(/"/g,'&quot;')}">
       <td>${m.fecha}</td><td>${m.anio}</td><td>${m.cancha}</td><td><span class="rival-cell" role="button" tabindex="0" data-rival="${escAttr(m.rival)}" onclick="event.stopPropagation();abrirClub(this.dataset.rival)" onkeydown="if(event.key==='Enter')abrirClub(this.dataset.rival)">${escudoHTML(m.rival,22)}<b>${escHTML(m.rival)}</b></span></td><td>${m.torneo}</td><td>${m.instancia}</td><td>${m.tecnico}</td>
       <td><span class="res-badge res-${m._res}">${marc}</span></td>
-      <td><button class="btn ghost sm" onclick="event.stopPropagation();abrirEdicion(${m._i})">✎</button></td></tr>`;
+      <td><button class="btn ghost sm" aria-label="Editar" title="Editar" onclick="event.stopPropagation();abrirEdicion(${m._i})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></button></td></tr>`;
   }).join("");
   const s=stats(lista.map(m=>partidos[m._i]));
   document.getElementById("contadorP").textContent=`${lista.length} partidos · ${s.g}G ${s.e}E ${s.p}P · ${s.efe}% efectividad`;
 }
 function ordenar(c){if(ordenCol===c)ordenDir*=-1;else{ordenCol=c;ordenDir=1;}renderPartidos();}
+function marcarOrden(){document.querySelectorAll("#partidos th[data-col]").forEach(th=>{const on=th.dataset.col===ordenCol;th.classList.toggle("asc",on&&ordenDir===1);th.classList.toggle("desc",on&&ordenDir===-1);});}
 function renderGoles(){
   const lista=goleadoresAgg();
   const max=lista.length?lista[0].goles:1;
@@ -640,8 +625,8 @@ function addAnotRow(nombre,goles){
   const row=document.createElement("div");row.className="anot-row";
   row.innerHTML=`
     <div class="ac" style="flex:1"><input type="text" class="anot-nombre" placeholder="Jugador (o GEC)" autocomplete="off"><div class="ac-list"></div></div>
-    <div class="stepper sm"><button type="button" onclick="stepBtn(this,-1)">−</button><input type="number" class="anot-goles" min="1" inputmode="numeric" value="${goles||1}"><button type="button" onclick="stepBtn(this,1)">+</button></div>
-    <button type="button" class="anot-del" title="Quitar" onclick="this.closest('.anot-row').remove();syncGolesHint()">×</button>`;
+    <div class="stepper sm"><button type="button" aria-label="Restar" onclick="stepBtn(this,-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg></button><input type="number" class="anot-goles" min="1" inputmode="numeric" value="${goles||1}"><button type="button" aria-label="Sumar" onclick="stepBtn(this,1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>
+    <button type="button" class="anot-del" title="Quitar" aria-label="Quitar" onclick="this.closest('.anot-row').remove();syncGolesHint()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>`;
   cont.appendChild(row);
   const inp=row.querySelector(".anot-nombre");inp.value=nombre||"";
   setupAC(inp,uniqNombres);
@@ -703,47 +688,7 @@ function guardarPartido(){
 }
 function borrarPartido(){if(editIdx<0)return;if(confirm("¿Borrar este partido?")){partidos.splice(editIdx,1);guardar();cerrarModal("modalP");refrescar();toast("Partido borrado");}}
 
-/* ============================================================ IMPORT / EXPORT EXCEL ============================================================ */
-function parseAnot(s){
-  if(!s)return[];
-  return String(s).split(/[;,]/).map(x=>x.trim()).filter(Boolean).map(x=>{
-    const m=x.match(/^(.*?)[:\-]\s*(\d+)$/);
-    return m?{nombre:m[1].trim(),goles:parseInt(m[2])||1}:{nombre:x,goles:1};
-  });
-}
-function fmtFecha(v){if(typeof v==="number"){const d=new Date(Math.round((v-25569)*86400*1000));return`${String(d.getUTCDate()).padStart(2,"0")}/${String(d.getUTCMonth()+1).padStart(2,"0")}/${d.getUTCFullYear()}`;}return String(v).trim();}
-function parseMarcador(s){
-  s=String(s);const pens=[...s.matchAll(/\((\d+)\)/g)].map(m=>+m[1]);
-  const reg=s.replace(/\([^)]*\)/g,"").split("-").map(x=>parseInt(x.trim(),10));
-  let gf=reg[0]||0,ga=reg[1]||0,r=null,nota=null;
-  if(pens.length>=2){nota=`Penales (${pens[0]}-${pens[1]}) · planilla: ${s.trim()}`;if(gf===ga)r=pens[0]>pens[1]?"G":"E";}
-  return{gf,ga,r,nota};
-}
-function importarXls(ev){
-  const file=ev.target.files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=e=>{
-    try{
-      const wb=XLSX.read(new Uint8Array(e.target.result),{type:"array"});
-      let nP=[];
-      wb.SheetNames.forEach(sn=>{
-        const rows=XLSX.utils.sheet_to_json(wb.Sheets[sn],{defval:""});if(!rows.length)return;
-        const cols=Object.keys(rows[0]).map(norm);
-        if(cols.includes("rival")){
-          rows.forEach(row=>{const o={};Object.keys(row).forEach(k=>o[norm(k)]=row[k]);if(!String(o.rival).trim())return;
-            const mk=parseMarcador(o.resultado||o.marcador||"0-0");
-            const m={fecha:fmtFecha(o.fecha),anio:parseInt(o.ano||o.anio)||(+(String(fmtFecha(o.fecha)).split("/")[2])||0),cancha:String(o.cancha||"").trim(),rival:String(o.rival).trim(),torneo:String(o.torneo||"").trim(),instancia:String(o.instancia||"").trim(),tecnico:String(o.tecnico||"").trim(),gf:mk.gf,ga:mk.ga};
-            if(mk.r)m.r=mk.r;if(mk.nota)m.nota=mk.nota;
-            const anot=parseAnot(o.goleadores||o.goleador||"");if(anot.length)m.anotadores=anot;
-            nP.push(m);});
-        }
-      });
-      if(!nP.length){toast("No encontré una hoja con columna Rival");return;}
-      partidos=nP;guardar();refrescar();toast(`Importado: ${nP.length} partidos`);
-    }catch(err){console.error(err);toast("Error leyendo el Excel");}
-  };
-  reader.readAsArrayBuffer(file);ev.target.value="";
-}
+/* ============================================================ EXPORTAR EXCEL ============================================================ */
 function exportarXls(){
   const dP=partidos.map(m=>({Fecha:m.fecha,"Año":m.anio,Cancha:m.cancha,Resultado:m.r?`${m.gf}-${m.ga} (pen.)`:`${m.gf}-${m.ga}`,Rival:m.rival,Torneo:m.torneo,Instancia:m.instancia,"Técnico":m.tecnico,GF:m.gf,GC:m.ga,Goleadores:(m.anotadores||[]).map(a=>`${a.nombre}:${a.goles}`).join("; "),Resultado_GEP:resultadoDe(m),Nota:m.nota||""}));
   const dG=goleadoresAgg().map(g=>({Jugador:g.nombre,Goles:g.goles}));
@@ -990,7 +935,6 @@ function partidosDe(k){
 }
 function abrirClub(nombre){
   clubActual={k:norm(nombre),nombre};
-  document.getElementById("escEdit").classList.add("hide");
   pintarCabeceraClub();pintarCuerpoClub();
   document.getElementById("modalClub").classList.add("on");
 }
@@ -1034,69 +978,27 @@ function pintarCuerpoClub(){
   // Goleadores de Boca contra este rival
   const gm={};lista.forEach(m=>(m.anotadores||[]).forEach(a=>{const kk=norm(a.nombre);if(!kk)return;(gm[kk]=gm[kk]||{nombre:a.nombre,goles:0}).goles+=(+a.goles||0);}));
   const gl=Object.values(gm).sort((a,b)=>b.goles-a.goles||a.nombre.localeCompare(b.nombre,"es"));
-  if(gl.length)h+=`<div class="club-sub">Goleadores contra ${escHTML(clubActual.nombre)}</div>`+gl.slice(0,6).map(g=>`<div class="gol-row"><div class="gol-name">${escHTML(g.nombre)}</div><div class="gol-num">${g.goles}</div></div>`).join("");
+  // Goles sin goleador = goles a favor de estos partidos que no tienen a nadie asignado
+  const asignados=gl.reduce((t,g)=>t+g.goles,0);
+  const sinGol=lista.filter(m=>m.gf>0&&!(m.anotadores||[]).length);
+  const faltan=Math.max(0,s.gf-asignados);
+  if(gl.length||faltan){
+    h+=`<div class="club-sub">Goleadores contra ${escHTML(clubActual.nombre)}</div>`;
+    h+=gl.map(g=>`<div class="gol-row"><div class="gol-name">${escHTML(g.nombre)}</div><div class="gol-num">${g.goles}</div></div>`).join("");
+    if(faltan)h+=`<div class="gol-pend">${faltan===1?"Hay 1 gol":`Hay ${faltan} goles`} sin goleador cargado`+
+      (sinGol.length?` (${sinGol.length===1?"1 partido":sinGol.length+" partidos"} sin goleadores)`:"")+`. Tocá el partido abajo para cargarlos.</div>`;
+  }
 
   // Todos los partidos
   h+=`<div class="club-sub">Partidos</div>`+(lista.length?lista.map(m=>{
     const marc=m.r?`${m.gf}-${m.ga} <span style="font-size:10px;opacity:.75">(pen.)</span>`:`${m.gf}-${m.ga}`;
     const det=[m.torneo,m.instancia,m.cancha].filter(Boolean).map(escHTML).join(" · ");
     return `<button class="cp-row" onclick="cerrarModal('modalClub');abrirEdicion(${m._i})" title="Editar partido">
-      <div class="cp-main"><b>${escHTML(m.fecha)}</b><span>${det}</span>${m.nota?`<span>${escHTML(m.nota)}</span>`:""}</div>
+      <div class="cp-main"><b>${escHTML(m.fecha)}</b><span>${det}</span>${(m.anotadores||[]).length?`<span>Goles: ${m.anotadores.map(a=>escHTML(a.nombre)+(a.goles>1?` (${a.goles})`:"")).join(", ")}</span>`:""}${m.nota?`<span>${escHTML(m.nota)}</span>`:""}</div>
       <span class="res-badge res-${m._res}">${marc}</span></button>`;
   }).join(""):'<div class="empty">Sin partidos</div>');
 
   document.getElementById("clubCuerpo").innerHTML=h;
-}
-
-/* ---- Editor de escudo (desde la ficha) ---- */
-function toggleEscEdit(){
-  const ed=document.getElementById("escEdit");
-  ed.classList.toggle("hide");
-  if(!ed.classList.contains("hide")){
-    const q=document.getElementById("escQuery");
-    q.value=ALIAS_CLUBES[clubActual.k]||clubActual.nombre;
-    document.getElementById("escRes").innerHTML="";
-    q.focus();
-  }
-}
-let escCandidatos=[];
-async function buscarEscudoManual(){
-  const q=document.getElementById("escQuery").value.trim(),box=document.getElementById("escRes");
-  if(!q)return;
-  box.innerHTML='<div class="dl-hint">Buscando…</div>';
-  try{
-    escCandidatos=await buscarEquipos(q);
-    box.innerHTML=escCandidatos.length?escCandidatos.map((t,i)=>`
-      <button onclick="elegirEscudo(${i})"><img class="esc" src="${escAttr(urlLiviana(t.url))}" alt="" onerror="this.src='${escAttr(t.url)}'">
-      <span><b>${escHTML(t.nombre)}</b><small>${escHTML([t.pais,t.liga].filter(Boolean).join(" · "))}</small></span></button>`).join("")
-      :'<div class="dl-hint">No encontré nada. Probá con el nombre completo (ej. "Velez Sarsfield") o subí una imagen.</div>';
-  }catch(err){
-    box.innerHTML='<div class="dl-hint">No pude conectarme a la base de escudos. Revisá la conexión o subí una imagen.</div>';
-  }
-}
-function setEscudoActual(obj,msg){
-  escudos[clubActual.k]=obj;guardarEsc();
-  document.getElementById("escEdit").classList.add("hide");
-  repintarEscudos();toast(msg);
-}
-function elegirEscudo(i){const t=escCandidatos[i];if(t)setEscudoActual({url:t.url,fuente:"manual",equipo:t.nombre},"Escudo actualizado");}
-function quitarEscudo(){setEscudoActual({url:null,fuente:"manual"},"Escudo quitado");}
-/* Subir imagen propia: la achicamos a 128 px y la guardamos adentro de la app */
-function subirEscudo(ev){
-  const f=ev.target.files[0];ev.target.value="";if(!f)return;
-  const rd=new FileReader();
-  rd.onload=e=>{
-    const img=new Image();
-    img.onload=()=>{
-      const L=128,c=document.createElement("canvas");c.width=L;c.height=L;
-      const sc=Math.min(L/img.width,L/img.height),w=img.width*sc,hh=img.height*sc;
-      c.getContext("2d").drawImage(img,(L-w)/2,(L-hh)/2,w,hh);
-      setEscudoActual({url:c.toDataURL("image/png"),fuente:"manual"},"Escudo cargado");
-    };
-    img.onerror=()=>toast("No pude leer esa imagen");
-    img.src=e.target.result;
-  };
-  rd.readAsDataURL(f);
 }
 
 /* ============================================================ UI ============================================================ */
@@ -1121,6 +1023,9 @@ setupAC(document.getElementById("mTorneo"),()=>uniq(partidos.map(m=>m.torneo)));
 setupAC(document.getElementById("mInstancia"),()=>uniq(partidos.map(m=>m.instancia)));
 setupAC(document.getElementById("mTecnico"),()=>uniq(partidos.map(m=>m.tecnico)));
 
+/* Alto real del header fijo -> --hdrH (el #scroller arranca justo debajo) */
+(function(){const h=document.querySelector("header");const set=()=>document.documentElement.style.setProperty("--hdrH",h.offsetHeight+"px");set();
+  if(window.ResizeObserver)new ResizeObserver(set).observe(h);else window.addEventListener("resize",set);})();
 cargar();refrescar();
 </script>
 
@@ -1201,7 +1106,7 @@ if ("serviceWorker" in navigator) {
       '<div class="upd-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg></div>' +
       '<div class="upd-tx"><b>Versión nueva</b><span>Ya está lista</span></div>' +
       '<button class="upd-btn" id="updBtn">Actualizar</button>' +
-      '<button class="upd-x" aria-label="Más tarde" title="Más tarde">×</button>';
+      '<button class="upd-x" aria-label="Más tarde" title="Más tarde"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>';
     t.querySelector("#updBtn").onclick = aplicarUpdate;
     t.querySelector(".upd-x").onclick = () => t.remove(); // vuelve a aparecer la próxima vez que abras la app
     document.body.appendChild(t);
