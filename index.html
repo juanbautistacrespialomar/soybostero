@@ -47,13 +47,14 @@
    - overflow-x:hidden en todos lados: la página no se puede mover para los costados.
      Las tablas anchas scrollean adentro de su propia caja (.tbl-wrap / div con overflow). */
 html,body{overflow:hidden;overscroll-behavior:none}
-body{font-family:var(--body);background:var(--bg);color:var(--txt);line-height:1.45;-webkit-font-smoothing:antialiased;touch-action:manipulation;
-  height:100vh;height:100dvh;padding-top:env(safe-area-inset-top);display:flex;flex-direction:column;position:relative}
-/* App instalada en iPhone: 100dvh queda corto; el JS del final mide el alto real (--saH) */
-html.sa body{height:var(--saH,100vh)}
-#scroller{flex:1 1 auto;min-height:0;width:100%;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
-  padding-bottom:calc(env(safe-area-inset-bottom) + 100px)}
-html.no-ios #scroller{padding-bottom:calc(max(env(safe-area-inset-bottom),12px) + 100px)}
+html,body{height:100%}
+body{font-family:var(--body);background:var(--bg);color:var(--txt);line-height:1.45;-webkit-font-smoothing:antialiased;touch-action:manipulation}
+/* #scroller va FIJO contra los bordes reales de la pantalla: arriba arranca justo debajo de la
+   hora/batería y abajo llega hasta el borde. No depende de calcular el alto de la pantalla con
+   JS (ese cálculo era el que fallaba en iPhone y mandaba la barra por debajo del borde). */
+#scroller{position:fixed;top:env(safe-area-inset-top);left:0;right:0;bottom:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+  padding-bottom:calc(env(safe-area-inset-bottom) + 110px)}
+html.no-ios #scroller{padding-bottom:calc(max(env(safe-area-inset-bottom),12px) + 110px)}
 .wrap{max-width:920px;margin:0 auto;padding:0 16px}
 .hide{display:none!important}
 
@@ -166,11 +167,11 @@ select:focus,input:focus{outline:none;border-color:var(--oro)}
 
 /* Barra flotante estilo isla (igual que Tu Contador): .bnav es transparente y da el aire
    alrededor; la píldora azul con vidrio esmerilado es .bnav-inner. */
-.bnav{position:absolute;left:0;right:0;bottom:0;z-index:50;background:transparent;pointer-events:none;padding:0 14px calc(env(safe-area-inset-bottom) + 14px)}
-html.no-ios .bnav{padding-bottom:calc(max(env(safe-area-inset-bottom),12px) + 14px)}
+.bnav{position:fixed;left:0;right:0;bottom:0;z-index:50;background:transparent;pointer-events:none;padding:0 14px calc(env(safe-area-inset-bottom) + 10px)}
+html.no-ios .bnav{padding-bottom:calc(max(env(safe-area-inset-bottom),12px) + 10px)}
 .bnav-inner{max-width:440px;margin:0 auto;display:flex;position:relative;pointer-events:auto;
   background:rgba(22,41,78,.9);-webkit-backdrop-filter:blur(22px) saturate(1.5);backdrop-filter:blur(22px) saturate(1.5);
-  border:1px solid rgba(246,181,30,.22);border-radius:26px;box-shadow:0 6px 20px rgba(15,29,58,.32);padding:6px 8px}
+  border:1px solid rgba(246,181,30,.22);border-radius:28px;box-shadow:0 8px 24px rgba(15,29,58,.35);padding:8px 8px 7px}
 .tab{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0 2px;background:none;border:none;cursor:pointer;color:#93a0bf;font:inherit;transition:color .2s}
 .tab span{display:block;font-size:11.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .tab svg{width:54px;height:30px;padding:5px 17px;box-sizing:border-box;border-radius:999px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:background .2s}
@@ -182,12 +183,28 @@ html.no-ios .bnav{padding-bottom:calc(max(env(safe-area-inset-bottom),12px) + 14
 @media (prefers-reduced-motion:reduce){.tab svg{animation:none !important}}
 
 .empty{text-align:center;padding:38px;color:var(--txt3)}
-.fab{position:absolute;right:18px;bottom:calc(92px + env(safe-area-inset-bottom));width:58px;height:58px;border-radius:50%;background:var(--oro);color:var(--navy);border:none;font-family:var(--disp);font-size:38px;font-weight:600;line-height:0;cursor:pointer;box-shadow:0 6px 18px rgba(15,29,58,.4);display:flex;align-items:center;justify-content:center;z-index:60;padding-bottom:5px}
+.fab{position:fixed;right:18px;bottom:calc(92px + env(safe-area-inset-bottom));width:58px;height:58px;border-radius:50%;background:var(--oro);color:var(--navy);border:none;font-family:var(--disp);font-size:38px;font-weight:600;line-height:0;cursor:pointer;box-shadow:0 6px 18px rgba(15,29,58,.4);display:flex;align-items:center;justify-content:center;z-index:60;padding-bottom:5px}
 .fab:active{transform:scale(.94)}
 html.no-ios .fab{bottom:calc(92px + max(env(safe-area-inset-bottom),12px))}
 .dl-hint{font-size:11.5px;color:var(--txt3);margin:-2px 0 4px}
 .toast{position:fixed;bottom:calc(96px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:var(--navy);color:var(--oro);padding:11px 20px;border-radius:11px;font-weight:700;font-size:13.5px;z-index:200;opacity:0;transition:.3s;pointer-events:none;border:1px solid var(--oro)}
 .toast.on{opacity:1}
+
+/* CARTEL "VERSIÓN NUEVA": arriba, debajo de la hora, como una notificación */
+.upd{position:fixed;left:12px;right:12px;top:calc(env(safe-area-inset-top) + 10px);z-index:300;max-width:440px;margin:0 auto;
+  display:flex;align-items:center;gap:12px;background:var(--navy);color:#fff;border:1px solid rgba(246,181,30,.35);
+  border-radius:18px;padding:12px 12px 12px 14px;box-shadow:0 12px 30px rgba(15,29,58,.35);animation:updin .35s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes updin{from{transform:translateY(-140%);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.upd{animation:none}}
+.upd-ic{width:38px;height:38px;border-radius:12px;background:rgba(246,181,30,.16);color:var(--oro);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.upd-ic svg{width:20px;height:20px}
+.upd-tx{flex:1;min-width:0;line-height:1.25}
+.upd-tx b{display:block;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.upd-tx span{display:block;font-size:12.5px;color:#aeb9d2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.upd-btn{background:var(--oro);color:var(--navy);border:none;border-radius:11px;padding:10px 14px;font-family:var(--body);font-weight:700;font-size:13.5px;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.upd-btn:disabled{opacity:.7}
+.upd-x{background:none;border:none;color:#93a0bf;font-size:22px;line-height:1;width:30px;height:30px;cursor:pointer;flex-shrink:0;margin-left:-4px}
+.upd-btn:focus-visible,.upd-x:focus-visible{outline:2px solid var(--oro);outline-offset:2px}
 
 /* ESCUDOS */
 .esc{width:22px;height:22px;object-fit:contain;flex-shrink:0;display:inline-block;vertical-align:middle}
@@ -1168,49 +1185,18 @@ if ("serviceWorker" in navigator) {
     if (document.getElementById("updateToast")) return; // no duplicar
     const t = document.createElement("div");
     t.id = "updateToast";
-    t.style.cssText = "position:fixed;left:50%;transform:translateX(-50%);" +
-      "bottom:calc(96px + env(safe-area-inset-bottom));z-index:9999;background:#16294e;" +
-      "color:#fff;border:1.5px solid #f6b51e;border-radius:14px;padding:12px 14px;" +
-      "display:flex;align-items:center;gap:12px;box-shadow:0 10px 30px rgba(0,0,0,.35);" +
-      "font-size:14px;max-width:92%";
-    const txt = document.createElement("span");
-    txt.textContent = "⚡ Hay una nueva versión";
-    const b = document.createElement("button");
-    b.id = "updBtn";
-    b.textContent = "Actualizar";
-    b.style.cssText = "background:#f6b51e;color:#16294e;border:none;border-radius:9px;" +
-      "padding:8px 14px;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap";
-    b.onclick = aplicarUpdate;
-    t.appendChild(txt);
-    t.appendChild(b);
+    t.className = "upd";
+    t.setAttribute("role", "status");
+    t.innerHTML =
+      '<div class="upd-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg></div>' +
+      '<div class="upd-tx"><b>Versión nueva</b><span>Ya está lista</span></div>' +
+      '<button class="upd-btn" id="updBtn">Actualizar</button>' +
+      '<button class="upd-x" aria-label="Más tarde" title="Más tarde">×</button>';
+    t.querySelector("#updBtn").onclick = aplicarUpdate;
+    t.querySelector(".upd-x").onclick = () => t.remove(); // vuelve a aparecer la próxima vez que abras la app
     document.body.appendChild(t);
   }
 }
-</script>
-<script>
-/* ===== Alto real de la pantalla en iPhone con la app instalada (solo iOS) =====
-   Mismo parche que Tu Contador: en iOS instalado, 100dvh queda corto y la barra flota.
-   En Android NO se aplica (ahí screen.height incluye barras del sistema y lo rompería). */
-(function(){
-  var sa=(window.navigator.standalone===true)||(window.matchMedia&&matchMedia("(display-mode: standalone)").matches);
-  var isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
-  if(!(sa&&isIOS))return;
-  document.documentElement.classList.add("sa");
-  var maxSaH=0;
-  function setH(){
-    var probe=document.createElement("div");
-    probe.style.cssText="position:fixed;top:0;left:0;width:0;visibility:hidden;height:env(safe-area-inset-top)";
-    document.body.appendChild(probe);
-    var top=Math.round(probe.getBoundingClientRect().height);probe.remove();
-    var real=(window.screen&&window.screen.height?window.screen.height:window.innerHeight)-top;
-    var h=Math.max(window.innerHeight,real)+6;
-    if(h>maxSaH)maxSaH=h; // nunca achicar: evita que la barra "rebote"
-    document.documentElement.style.setProperty("--saH",maxSaH+"px");
-  }
-  setH();[60,200,500,1000].forEach(function(t){setTimeout(setH,t);});
-  window.addEventListener("resize",setH);
-  window.addEventListener("orientationchange",function(){maxSaH=0;setTimeout(setH,300);});
-})();
 </script>
 </body>
 </html>
