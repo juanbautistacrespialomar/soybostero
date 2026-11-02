@@ -281,6 +281,7 @@ html.no-ios .fab{bottom:calc(92px + max(env(safe-area-inset-bottom),12px))}
     <div class="tbl-wrap"><table><thead><tr><th>Técnico</th><th>PJ</th><th>G</th><th>E</th><th>P</th><th>GF</th><th>GC</th><th>Efectividad</th></tr></thead><tbody id="porTecnico"></tbody></table></div>
     <div class="section-title">Por rival</div>
     <div class="card" id="porRival"></div>
+    <div class="dl-hint hide" id="progEsc" style="margin-top:8px"></div>
   </div>
 
   <!-- ===== PARTIDOS ===== -->
@@ -816,9 +817,7 @@ function escError(img){
 }
 
 async function buscarEquipos(q){
-  const r=await fetch(SDB+"searchteams.php?t="+encodeURIComponent(q));
-  if(!r.ok)throw new Error("HTTP "+r.status);
-  const d=await r.json();
+  const d=await fetchAPI(SDB+"searchteams.php?t="+encodeURIComponent(q));
   return (d.teams||[])
     .filter(t=>(t.strSport||"")==="Soccer")
     .map(t=>({nombre:t.strTeam,pais:t.strCountry||"",liga:t.strLeague||"",url:t.strBadge||t.strTeamBadge||""}))
@@ -827,45 +826,103 @@ async function buscarEquipos(q){
 /* Elige el escudo automático: prioriza clubes argentinos. Si el nombre está
    en el diccionario y no aparece uno argentino, mejor no poner nada que poner
    el de otro club (ej.: "Racing" -> Racing de Montevideo). */
+/* ---------- PASO 1: la liga argentina entera en UNA sola consulta ----------
+   Antes se buscaba club por club, de a uno cada 2,2 s (límite de la API gratis: 30 por
+   minuto). Con 30 rivales eran más de 1 minuto. Ahora se baja la lista de equipos de la
+   Liga Profesional de una vez y se cruzan los nombres acá adentro, sin pedir nada más.
+   La lista se guarda 30 días en el celu. */
+const LIGA_KEY="bostero_liga_ar",LIGA_DIAS=30;
+async function equiposLigaAR(){
+  try{
+    const c=JSON.parse(store.get(LIGA_KEY)||"null");
+    if(c&&Array.isArray(c.equipos)&&c.equipos.length&&Date.now()-c.ts<LIGA_DIAS*864e5)return c.equipos;
+  }catch(e){}
+  const r=await fetchAPI(SDB+"search_all_teams.php?l="+encodeURIComponent("Argentinian Primera Division"));
+  const equipos=(r.teams||[]).filter(t=>t.strBadge||t.strTeamBadge).map(t=>({
+    nombre:t.strTeam,pais:t.strCountry||"Argentina",liga:t.strLeague||"",url:t.strBadge||t.strTeamBadge,
+    claves:[t.strTeam,t.strTeamShort,...String(t.strTeamAlternate||"").split(",")].map(x=>norm(x||"")).filter(Boolean)
+  }));
+  if(equipos.length)store.set(LIGA_KEY,JSON.stringify({ts:Date.now(),equipos}));
+  return equipos;
+}
+/* Cruza un rival contra la lista de la liga. Primero coincidencia exacta (nombre o alias);
+   si no, "empieza con" quedándose con el nombre más corto, para que "Independiente" no
+   termine con el escudo de Independiente Rivadavia. */
+function matchLiga(nombre,equipos){
+  const k=norm(nombre),alias=ALIAS_CLUBES[k]?norm(ALIAS_CLUBES[k]):null;
+  const buscados=[k,alias].filter(Boolean);
+  let t=equipos.find(e=>e.claves.some(c=>buscados.includes(c)));
+  if(t)return t;
+  const cand=equipos.filter(e=>e.claves.some(c=>buscados.some(b=>b.length>=4&&(c.startsWith(b+" ")||b.startsWith(c+" ")))));
+  return cand.sort((x,y)=>x.nombre.length-y.nombre.length)[0]||null;
+}
+
+/* ---------- PASO 2: los que no estén en la liga (copas, ascenso) van uno por uno ---------- */
+async function fetchAPI(url){
+  const r=await fetch(url);
+  if(r.status===429){const e=new Error("429");e.limite=true;throw e;}
+  if(!r.ok)throw new Error("HTTP "+r.status);
+  return r.json();
+}
 async function autoEscudo(nombre){
   const k=norm(nombre),alias=ALIAS_CLUBES[k];
-  const consultas=[...new Set([alias,nombre].filter(Boolean))];
-  for(const q of consultas){
-    const res=await buscarEquipos(q);
-    const ar=res.find(t=>norm(t.pais)==="argentina");
-    if(ar)return ar;
-    if(!alias&&res.length)return res[0]; // rival sin alias (ej. copas internacionales)
-    if(consultas.length>1)await sleep(2200);
-  }
+  const res=await buscarEquipos(alias||nombre); // una sola consulta por club
+  const ar=res.find(t=>norm(t.pais)==="argentina");
+  if(ar)return ar;
+  if(!alias&&res.length)return res[0]; // rival sin alias (ej. copas internacionales)
   return null;
 }
 
-let colaEsc=[],procesandoEsc=false;
-function pedirEscudosFaltantes(){
-  const vistos=new Set(colaEsc.map(x=>x.k));
-  partidos.forEach(p=>{
-    const k=norm(p.rival);
-    if(k&&!escudos[k]&&!vistos.has(k)){vistos.add(k);colaEsc.push({k,nombre:p.rival});}
-  });
-  procesarColaEsc();
-}
+let colaEsc=[],procesandoEsc=false,escProg={hechos:0,total:0};
+function pedirEscudosFaltantes(){ procesarColaEsc(); }
 async function procesarColaEsc(){
   if(procesandoEsc||!navigator.onLine)return;
   procesandoEsc=true;
-  while(colaEsc.length){
-    const {k,nombre}=colaEsc.shift();
-    if(escudos[k])continue;
+  try{
+    // Rivales sin escudo, ordenados por partidos jugados: primero los que más ves.
+    // También se reintentan una vez los que antes no se encontraron (fuente "none" sin "v2").
+    const gs=gruposRival().filter(g=>{const e=escudos[g.k];return !e||(e.fuente==="none"&&!e.v2);});
+    if(!gs.length)return;
+
+    // PASO 1: liga entera, una consulta
+    let pendientes=gs;
     try{
-      const t=await autoEscudo(nombre);
-      escudos[k]=t?{url:t.url,fuente:"auto",equipo:t.nombre}:{url:null,fuente:"none"};
+      const liga=await equiposLigaAR();
+      pendientes=[];
+      gs.forEach(g=>{
+        const t=matchLiga(g.nombre,liga);
+        if(t)escudos[g.k]={url:t.url,fuente:"auto",equipo:t.nombre};
+        else pendientes.push(g);
+      });
       guardarEsc();repintarEscudos();
-    }catch(err){
-      console.warn("No pude buscar escudos:",err);
-      colaEsc=[];break; // sin red o API caída: se reintenta la próxima vez que se abra la app
+    }catch(err){console.warn("No pude bajar la liga:",err);}
+
+    // PASO 2: el resto, de a uno (1 cada 2,1 s = dentro del límite de 30 por minuto)
+    escProg={hechos:0,total:pendientes.length};renderProgEsc();
+    for(let i=0;i<pendientes.length;i++){
+      const g=pendientes[i];
+      if(escudos[g.k]&&escudos[g.k].fuente!=="none")continue;
+      try{
+        const t=await autoEscudo(g.nombre);
+        escudos[g.k]=t?{url:t.url,fuente:"auto",equipo:t.nombre}:{url:null,fuente:"none",v2:true};
+        guardarEsc();repintarEscudos();
+      }catch(err){
+        if(err.limite){await sleep(30000);i--;continue;} // límite: espera medio minuto y reintenta ESE mismo
+        console.warn("No pude buscar escudos:",err);break; // sin red: sigue la próxima vez
+      }
+      escProg.hechos=i+1;renderProgEsc();
+      if(i<pendientes.length-1)await sleep(2100);
     }
-    await sleep(2200);
+  }finally{
+    procesandoEsc=false;escProg={hechos:0,total:0};renderProgEsc();
   }
-  procesandoEsc=false;
+}
+/* Cartelito "Buscando escudos… 3 de 8" abajo de "Por rival" mientras trabaja el paso 2 */
+function renderProgEsc(){
+  const el=document.getElementById("progEsc");if(!el)return;
+  const {hechos,total}=escProg;
+  el.textContent=total?`Buscando escudos… ${hechos} de ${total}`:"";
+  el.classList.toggle("hide",!total);
 }
 window.addEventListener("online",procesarColaEsc);
 
