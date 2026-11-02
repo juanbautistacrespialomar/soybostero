@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<!-- Igual que Tu Contador: "black-translucent" hace que la app sea dueña de la franja de la
+     hora/batería. Con el modo por defecto, iOS 26 le pone su propio vidrio borroso a esa franja
+     (y un poco más abajo), que era el difuminado de arriba. La hora pasa a verse en BLANCO,
+     por eso abajo hay una franja azul fija (.statusbar-bg) para que siempre se lea. -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Soy Bostero</title>
 <script>try{(function(){var i=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);document.documentElement.classList.add(i?"ios":"no-ios");})();}catch(e){}</script>
 <meta name="theme-color" content="#16294e">
@@ -52,6 +58,9 @@ body{font-family:var(--body);background:var(--bg);color:var(--txt);line-height:1
 /* #scroller va FIJO contra los bordes reales de la pantalla: arriba arranca justo debajo de la
    hora/batería y abajo llega hasta el borde. No depende de calcular el alto de la pantalla con
    JS (ese cálculo era el que fallaba en iPhone y mandaba la barra por debajo del borde). */
+/* Franja fija del alto EXACTO de la zona de la hora (en celus sin isla mide 0). Siempre azul
+   Boca: el texto blanco de iOS se lee bien y empalma con el header. */
+.statusbar-bg{position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top);background:var(--navy);z-index:55;pointer-events:none}
 #scroller{position:fixed;top:env(safe-area-inset-top);left:0;right:0;bottom:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
   padding-bottom:calc(env(safe-area-inset-bottom) + 110px)}
 html.no-ios #scroller{padding-bottom:calc(max(env(safe-area-inset-bottom),12px) + 110px)}
@@ -259,6 +268,7 @@ html.no-ios .fab{bottom:calc(92px + max(env(safe-area-inset-bottom),12px))}
 </style>
 </head>
 <body>
+<div class="statusbar-bg"></div>
 
 <main id="scroller">
 <header>
