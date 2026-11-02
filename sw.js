@@ -3,7 +3,11 @@
    - Resto de assets: cache-first.
    Para forzar actualización limpia, subí el número de versión del cache. */
 
-const CACHE = "soy-bostero-v4";
+const CACHE = "soy-bostero-v5";
+// Caché APARTE para las imágenes de los escudos. No lleva número de versión a propósito:
+// así, cuando subís una versión nueva de la app (y cambia CACHE), los escudos ya bajados
+// NO se borran y no hay que volver a descargarlos.
+const ESC_CACHE = "soy-bostero-escudos";
 const ASSETS = [
   "./",
   "./index.html",
@@ -30,7 +34,7 @@ self.addEventListener("message", e => {
 self.addEventListener("activate", e => {
   e.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+      .then(keys => Promise.all(keys.filter(k => k !== CACHE && k !== ESC_CACHE).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
@@ -57,11 +61,14 @@ self.addEventListener("fetch", e => {
     return;
   }
 
+  // Imágenes de escudos -> a su caché permanente; el resto de los archivos -> caché de la versión
+  const destino = url.hostname.endsWith("thesportsdb.com") ? ESC_CACHE : CACHE;
+
   e.respondWith(
     caches.match(req).then(cached =>
       cached || fetch(req).then(res => {
         const copy = res.clone();
-        caches.open(CACHE).then(c => c.put(req, copy));
+        caches.open(destino).then(c => c.put(req, copy));
         return res;
       }).catch(() => cached)
     )
