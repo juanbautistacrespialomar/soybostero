@@ -110,6 +110,23 @@ header{position:fixed;top:0;left:0;right:0;z-index:40;background:var(--navy);pad
 .grid2>*,.frm>*,.kpis>*{min-width:0}
 @media(max-width:760px){.grid2{grid-template-columns:minmax(0,1fr)}}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+/* RESUMEN: 4 tarjetas iguales (Por año / torneo / técnico / rival) */
+.res-stack{display:flex;flex-direction:column;gap:14px;margin-top:18px}
+.res{padding:16px 12px 12px}
+.res .section-title{margin:0 4px 12px}
+/* Tablas compactas: entran en el ancho del celu sin scroll lateral. Los nombres largos
+   (técnicos, torneos) bajan de renglón en vez de estirar la tabla. Si algún día no entra
+   (pantalla muy angosta), recién ahí aparece el scroll, solo dentro de la tarjeta. */
+.res-tbl{overflow-x:auto}
+.res-tbl table{font-size:13px}
+.res-tbl th,.res-tbl td{padding:9px 4px;text-align:center}
+.res-tbl th{font-size:10.5px;letter-spacing:.3px;cursor:default}
+.res-tbl th:hover{background:var(--navy)}
+.res-tbl th:first-child,.res-tbl td:first-child{text-align:left;padding-left:10px}
+.res-tbl td:first-child{white-space:normal;line-height:1.25;min-width:70px}
+.res-tbl th:last-child,.res-tbl td:last-child{text-align:right;padding-right:10px}
+.res-tbl th:first-child{border-radius:9px 0 0 9px}.res-tbl th:last-child{border-radius:0 9px 9px 0}
+@media(max-width:360px){.res{padding:14px 8px 10px}.res-tbl table{font-size:12px}.res-tbl th,.res-tbl td{padding:8px 3px}.res-tbl td:first-child{min-width:60px}}
 
 .tbl-wrap{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:auto}
 table{width:100%;border-collapse:collapse;font-size:13.5px}
@@ -137,6 +154,11 @@ select{-webkit-appearance:none;appearance:none;padding-right:32px;cursor:pointer
 
 .gol-row{display:flex;align-items:center;gap:11px;padding:9px 0;border-top:1px solid var(--line)}
 .gol-row:first-child{border-top:none}
+button.gol-row{width:100%;background:none;border-left:none;border-right:none;border-bottom:none;font:inherit;color:inherit;text-align:left;cursor:pointer}
+button.gol-row:first-child{border-top:none}
+button.gol-row:hover{background:#f6f8fc}
+button.gol-row:focus-visible{outline:2px solid var(--oro);outline-offset:2px}
+.gol-chev{width:14px;height:14px;color:var(--txt3);flex-shrink:0}
 .gol-pos{width:24px;text-align:right;font-family:var(--disp);font-weight:600;color:var(--txt3);font-size:15px}
 .gol-name{flex:1;font-size:14px;font-weight:500}
 .gol-bar{height:9px;background:var(--navy2);border-radius:5px;min-width:4px}
@@ -277,6 +299,10 @@ html.no-ios .fab{bottom:calc(92px + max(env(safe-area-inset-bottom),12px))}
 .mclose:hover{background:var(--navy2)}
 .mclose:focus-visible{outline:2px solid var(--oro);outline-offset:2px}
 .club-head{padding-right:40px}
+/* FICHA DEL JUGADOR */
+.jug-av{width:64px;height:64px;border-radius:50%;background:var(--navy);color:var(--oro);display:flex;align-items:center;justify-content:center;font-family:var(--disp);font-weight:700;font-size:24px;flex-shrink:0}
+.cp-row .esc,.cp-row .esc-mono{flex-shrink:0}
+.cp-gol{font-family:var(--disp);font-weight:600;font-size:14px;color:var(--navy);white-space:nowrap}
 .gol-pend{font-size:12.5px;color:#8a6d0c;background:#fff8e6;border:1px solid #f0e0a6;border-radius:10px;padding:9px 11px;margin-top:8px}
 </style>
 </head>
@@ -306,20 +332,27 @@ html.no-ios .fab{bottom:calc(92px + max(env(safe-area-inset-bottom),12px))}
   <div id="resumen" class="screen">
     <div class="formbar" id="formbar"></div>
     <div class="kpis" id="kpis"></div>
-    <div class="grid2" style="margin-top:18px">
-      <div class="card">
-        <div class="section-title">Por año</div>
-        <div style="overflow:auto"><table><thead><tr><th>Año</th><th>PJ</th><th>G</th><th>E</th><th>P</th><th>GF</th><th>GC</th><th>Efec.</th></tr></thead><tbody id="porAnio"></tbody></table></div>
+    <!-- Las 4 secciones con el mismo formato: tarjeta blanca con el título adentro -->
+    <div class="res-stack">
+      <div class="grid2">
+        <div class="card res">
+          <div class="section-title">Por año</div>
+          <div class="res-tbl"><table><thead><tr><th>Año</th><th>PJ</th><th>G</th><th>E</th><th>P</th><th>GF</th><th>GC</th><th>Efec.</th></tr></thead><tbody id="porAnio"></tbody></table></div>
+        </div>
+        <div class="card res">
+          <div class="section-title">Por torneo</div>
+          <div class="res-tbl"><table><thead><tr><th>Torneo</th><th>PJ</th><th>G</th><th>E</th><th>P</th><th>Efec.</th></tr></thead><tbody id="porTorneo"></tbody></table></div>
+        </div>
       </div>
-      <div class="card">
-        <div class="section-title">Por torneo</div>
-        <div style="overflow:auto"><table><thead><tr><th>Torneo</th><th>PJ</th><th>G</th><th>E</th><th>P</th><th>Efec.</th></tr></thead><tbody id="porTorneo"></tbody></table></div>
+      <div class="card res">
+        <div class="section-title">Por técnico</div>
+        <div class="res-tbl"><table><thead><tr><th>Técnico</th><th>PJ</th><th>G</th><th>E</th><th>P</th><th>GF</th><th>GC</th><th>Efec.</th></tr></thead><tbody id="porTecnico"></tbody></table></div>
+      </div>
+      <div class="card res">
+        <div class="section-title">Por rival</div>
+        <div id="porRival"></div>
       </div>
     </div>
-    <div class="section-title">Por técnico</div>
-    <div class="tbl-wrap"><table><thead><tr><th>Técnico</th><th>PJ</th><th>G</th><th>E</th><th>P</th><th>GF</th><th>GC</th><th>Efectividad</th></tr></thead><tbody id="porTecnico"></tbody></table></div>
-    <div class="section-title">Por rival</div>
-    <div class="card" id="porRival"></div>
     <div class="dl-hint hide" id="progEsc" style="margin-top:8px"></div>
   </div>
 
@@ -442,6 +475,21 @@ html.no-ios .fab{bottom:calc(92px + max(env(safe-area-inset-bottom),12px))}
       </div>
     </div>
     <div id="clubCuerpo"></div>
+  </div>
+</div>
+
+<!-- MODAL JUGADOR (partidos en los que hizo goles) -->
+<div class="modal-bg" id="modalJug">
+  <div class="modal">
+    <div class="mclose-wrap"><button class="mclose" onclick="cerrarModal('modalJug')" aria-label="Cerrar" title="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="club-head">
+      <div class="jug-av" id="jugAv"></div>
+      <div style="flex:1;min-width:0">
+        <h3 id="jugNombre"></h3>
+        <p id="jugSub"></p>
+      </div>
+    </div>
+    <div id="jugCuerpo"></div>
   </div>
 </div>
 
@@ -589,10 +637,10 @@ function renderGoles(){
   const total=lista.reduce((s,g)=>s+g.goles,0);
   document.getElementById("totalGoles").textContent=`${lista.length} goleadores · ${total} goles`;
   document.getElementById("listaGol").innerHTML=lista.length?lista.map((g,i)=>`
-    <div class="gol-row">
-      <div class="gol-pos">${i+1}</div><div class="gol-name">${g.nombre}</div>
-      <div class="gol-bar ${g.goles===max?'top':''}" style="width:${Math.max(4,(g.goles/max)*170)}px"></div>
-      <div class="gol-num">${g.goles}</div></div>`).join(""):'<div class="empty">Todavía no hay goleadores. Se cargan al indicar quién hizo los goles en cada partido.</div>';
+    <button class="gol-row" data-jug="${escAttr(g.nombre)}" onclick="abrirJugador(this.dataset.jug)">
+      <div class="gol-pos">${i+1}</div><div class="gol-name">${escHTML(g.nombre)}</div>
+      <div class="gol-bar ${g.goles===max?'top':''}" style="width:${Math.max(4,(g.goles/max)*150)}px"></div>
+      <div class="gol-num">${g.goles}</div><svg class="gol-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>`).join(""):'<div class="empty">Todavía no hay goleadores. Se cargan al indicar quién hizo los goles en cada partido.</div>';
 }
 
 /* ============================================================ AUTOCOMPLETE ============================================================ */
@@ -984,7 +1032,7 @@ function pintarCuerpoClub(){
   const faltan=Math.max(0,s.gf-asignados);
   if(gl.length||faltan){
     h+=`<div class="club-sub">Goleadores contra ${escHTML(clubActual.nombre)}</div>`;
-    h+=gl.map(g=>`<div class="gol-row"><div class="gol-name">${escHTML(g.nombre)}</div><div class="gol-num">${g.goles}</div></div>`).join("");
+    h+=gl.map(g=>`<button class="gol-row" data-jug="${escAttr(g.nombre)}" onclick="cerrarModal('modalClub');abrirJugador(this.dataset.jug)"><div class="gol-name">${escHTML(g.nombre)}</div><div class="gol-num">${g.goles}</div><svg class="gol-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>`).join("");
     if(faltan)h+=`<div class="gol-pend">${faltan===1?"Hay 1 gol":`Hay ${faltan} goles`} sin goleador cargado`+
       (sinGol.length?` (${sinGol.length===1?"1 partido":sinGol.length+" partidos"} sin goleadores)`:"")+`. Tocá el partido abajo para cargarlos.</div>`;
   }
@@ -999,6 +1047,64 @@ function pintarCuerpoClub(){
   }).join(""):'<div class="empty">Sin partidos</div>');
 
   document.getElementById("clubCuerpo").innerHTML=h;
+}
+
+/* ============================================================ FICHA DEL JUGADOR ============================================================
+   Junta todos los partidos donde el jugador figura en "anotadores" (sin distinguir
+   mayúsculas ni acentos, igual que el ranking). Los goles que vienen de la lista
+   histórica de la planilla no tienen partido asociado: se informan aparte. */
+function inicialesJug(n){const w=String(n).trim().split(/\s+/).filter(Boolean);return ((w[0]||"?")[0]+(w.length>1?w[w.length-1][0]:"")).toUpperCase();}
+function abrirJugador(nombre){
+  const k=norm(nombre);
+  const lista=partidos.map((m,i)=>({...m,_i:i,_fs:fechaSort(m.fecha),_res:resultadoDe(m)}))
+    .map(m=>({...m,_g:(m.anotadores||[]).filter(a=>norm(a.nombre)===k).reduce((t,a)=>t+(+a.goles||0),0)}))
+    .filter(m=>m._g>0).sort((a,b)=>a._fs<b._fs?1:a._fs>b._fs?-1:0);
+  const enPartidos=lista.reduce((t,m)=>t+m._g,0);
+  const hist=(golHist||[]).filter(a=>norm(a.nombre)===k).reduce((t,a)=>t+(+a.goles||0),0);
+  const total=enPartidos+hist,s=stats(lista);
+  const esGEC=k==="gec";
+
+  document.getElementById("jugAv").textContent=esGEC?"GEC":inicialesJug(nombre);
+  document.getElementById("jugAv").style.fontSize=esGEC?"18px":"";
+  document.getElementById("jugNombre").textContent=esGEC?"Goles en contra":nombre;
+  const anios=lista.map(m=>m.anio).filter(Boolean);
+  document.getElementById("jugSub").textContent=`${total} ${total===1?"gol":"goles"}`+
+    (lista.length?` en ${lista.length} ${lista.length===1?"partido":"partidos"}`:"")+
+    (anios.length?` · ${Math.min(...anios)===Math.max(...anios)?Math.min(...anios):Math.min(...anios)+" a "+Math.max(...anios)}`:"");
+
+  const mejor=lista.reduce((mx,m)=>Math.max(mx,m._g),0);
+  let h=`<div class="mini-kpis">
+    <div><b>${total}</b><span>Goles</span></div>
+    <div><b>${lista.length}</b><span>Partidos con gol</span></div>
+    <div><b>${mejor}</b><span>Más en un partido</span></div>
+    <div class="efe"><b>${s.efe}%</b><span>Efectividad</span></div>
+  </div>`;
+  if(lista.length)h+=`<div class="dl-hint" style="margin-top:8px">Cuando ${esGEC?"hubo gol en contra":"hizo gol"}: <b style="color:var(--gana-t)">${s.g} G</b> · <b style="color:var(--empata-t)">${s.e} E</b> · <b style="color:var(--pierde-t)">${s.p} P</b></div>`;
+
+  // A quién le hizo goles
+  const pr={};lista.forEach(m=>{const rk=norm(m.rival);(pr[rk]=pr[rk]||{nombre:m.rival,goles:0}).goles+=m._g;});
+  const rivs=Object.values(pr).sort((a,b)=>b.goles-a.goles||a.nombre.localeCompare(b.nombre,"es"));
+  if(rivs.length>1)h+=`<div class="club-sub">Goles por rival</div>`+rivs.map(r=>`
+    <button class="riv-row" data-rival="${escAttr(r.nombre)}" onclick="cerrarModal('modalJug');abrirClub(this.dataset.rival)">
+      ${escudoHTML(r.nombre,26)}<span class="riv-name">${escHTML(r.nombre)}</span><span class="riv-efe">${r.goles}</span>
+    </button>`).join("");
+
+  // Partidos
+  h+=`<div class="club-sub">Partidos</div>`+(lista.length?lista.map(m=>{
+    const marc=m.r?`${m.gf}-${m.ga} <span style="font-size:10px;opacity:.75">(pen.)</span>`:`${m.gf}-${m.ga}`;
+    const det=[m.fecha,m.torneo,m.instancia].filter(Boolean).map(escHTML).join(" · ");
+    return `<button class="cp-row" onclick="cerrarModal('modalJug');abrirEdicion(${m._i})" title="Editar partido">
+      ${escudoHTML(m.rival,30)}
+      <div class="cp-main"><b>${escHTML(m.rival)}</b><span>${det}</span></div>
+      <span class="cp-gol">${m._g>1?m._g+" goles":"1 gol"}</span>
+      <span class="res-badge res-${m._res}">${marc}</span></button>`;
+  }).join(""):'<div class="empty">Sus goles no están asignados a ningún partido.</div>');
+
+  if(hist)h+=`<div class="gol-pend">${hist===1?"1 gol viene":`${hist} goles vienen`} de la lista histórica de tu planilla, sin partido asignado.</div>`;
+
+  document.getElementById("jugCuerpo").innerHTML=h;
+  document.querySelector("#modalJug .modal").scrollTop=0;
+  document.getElementById("modalJug").classList.add("on");
 }
 
 /* ============================================================ UI ============================================================ */
