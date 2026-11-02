@@ -41,6 +41,22 @@ Son **dos logos distintos**: `Logo.png` es el ícono de la app (afuera) y
   propia) que cuentan a favor.
 - **Datos:** Backup (.json), Restaurar y Exportar Excel.
 
+## Momentos (lo viví en la cancha)
+
+Pestaña que se arma sola con los partidos cargados: títulos que viste (finales
+ganadas), Superclásicos, récords (mayor goleada, partido con más goles, racha sin
+perder, victorias seguidas, primer y último partido), definiciones por penales
+(color según la tanda: verde ganada, rojo perdida) y canchas donde fuiste.
+Tocando un partido o récord se abre la ficha del rival.
+
+## Penales
+
+Al cargar o editar un partido: casilla **Hubo definición por penales** + penales
+de Boca y del rival. Si empató en los 90': ganó la tanda = G, la perdió = E. Si no
+empató, manda el marcador del partido. Se muestra como "0-0 (4-2 pen.)" en toda la
+app y en el Excel. Los backups viejos con notas tipo "0 (4) - 0 (2)" se convierten
+solos al restaurarlos.
+
 ## Escudos y ficha por rival
 
 - Los escudos de los rivales se buscan solos en TheSportsDB (API gratuita,

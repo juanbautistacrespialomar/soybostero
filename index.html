@@ -138,6 +138,7 @@ th .arr path{opacity:.35}
 th.asc .arr .up,th.desc .arr .dn{opacity:1}
 td{padding:10px 12px;border-top:1px solid var(--line);white-space:nowrap;color:var(--txt)}
 tbody tr:hover{background:#f6f8fc}
+.res-badge .pen,.pen{font-size:10.5px;font-weight:600;opacity:.8}
 .res-badge{display:inline-block;min-width:48px;text-align:center;padding:3px 9px;border-radius:7px;font-weight:700;font-size:12.5px}
 .res-G{background:var(--gana-b);color:var(--gana-t);border:1px solid var(--gana-bd)}
 .res-E{background:var(--empata-b);color:var(--empata-t);border:1px solid var(--empata-bd)}
@@ -183,6 +184,8 @@ button.gol-row:focus-visible{outline:2px solid var(--oro);outline-offset:2px}
 .frm .full{grid-column:1/-1}
 .frm label{display:block;font-size:11.5px;color:var(--txt2);margin-bottom:4px;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
 .frm input,.frm select{width:100%}
+.frm .chk{display:flex;align-items:center;gap:9px;font-size:13.5px;text-transform:none;letter-spacing:0;color:var(--txt);font-weight:500;cursor:pointer}
+.frm .chk input{width:20px;height:20px;accent-color:var(--navy)}
 .modal-foot{display:flex;align-items:center;gap:8px;margin-top:18px}
 
 /* AUTOCOMPLETE (desplegable propio) */
@@ -292,6 +295,32 @@ html.no-ios .fab{bottom:calc(92px + max(env(safe-area-inset-bottom),12px))}
 .club-dest div{border:1px solid var(--line);border-radius:10px;padding:9px 11px;font-size:12.5px;color:var(--txt2)}
 .club-dest b{display:block;font-size:14px;color:var(--txt)}
 
+/* MOMENTOS */
+.mom-hero{display:flex;gap:14px;align-items:flex-start;background:var(--navy);color:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px}
+.mom-hero-ic{width:48px;height:48px;border-radius:14px;background:rgba(246,181,30,.16);color:var(--oro);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mom-hero-ic svg{width:26px;height:26px}
+.mom-hero-tx{min-width:0}
+.mom-hero-tx span{display:block;font-size:12.5px;color:#aeb9d2}
+.mom-hero-tx b{display:block;font-family:var(--disp);font-size:22px;font-weight:700;color:var(--oro);text-transform:uppercase;letter-spacing:.3px;margin-top:4px;line-height:1.1}
+.mom-hero-tx em{display:block;font-style:normal;font-size:13px;color:#dfe5f1;margin-top:3px}
+.mom-sec{margin-bottom:14px}
+.mom-big{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;margin:0 4px 8px}
+.mom-big b{font-family:var(--disp);font-size:34px;font-weight:700;color:var(--navy);line-height:1}
+.mom-big span{font-size:13.5px;color:var(--txt2)}
+.mom-row{display:flex;align-items:center;gap:10px;width:100%;padding:9px 4px;border:none;border-top:1px solid var(--line);background:none;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.mom-row:hover{background:#f6f8fc}
+.mom-row-tx{flex:1;min-width:0}
+.mom-row-tx b{display:block;font-size:14px}
+.mom-row-tx span{display:block;font-size:12px;color:var(--txt2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mom-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
+.mom-rec{background:#f4f6fa;border:none;border-radius:11px;padding:11px 12px;text-align:left;font:inherit;color:inherit;display:block}
+button.mom-rec{cursor:pointer}
+button.mom-rec:hover{background:#eceff5}
+.mom-rec .lbl{display:block;font-size:11.5px;color:var(--txt2);font-weight:500}
+.mom-rec b{display:block;font-family:var(--disp);font-size:24px;font-weight:700;color:var(--navy);line-height:1.15;margin:2px 0}
+.mom-rec span:not(.lbl){display:block;font-size:12px;color:var(--txt2);line-height:1.3}
+.mom-row:focus-visible,.mom-rec:focus-visible{outline:2px solid var(--oro);outline-offset:2px}
+
 /* CRUZ PARA CERRAR LA FICHA (azul y oro, como el botón principal) */
 .mclose-wrap{position:sticky;top:0;height:0;z-index:5;display:flex;justify-content:flex-end}
 .mclose{width:36px;height:36px;border-radius:50%;border:none;background:var(--navy);color:var(--oro);display:flex;align-items:center;justify-content:center;cursor:pointer;margin:-6px -4px 0 0;box-shadow:0 3px 10px rgba(15,29,58,.25)}
@@ -394,6 +423,12 @@ html.no-ios .fab{bottom:calc(92px + max(env(safe-area-inset-bottom),12px))}
     <p style="font-size:12.5px;color:var(--txt2);margin-top:12px">Se calcula solo desde los goleadores que cargás en cada partido. <b>GEC</b> = goles en contra del rival (en propia) que cuentan a tu favor.</p>
   </div>
 
+  <!-- ===== MOMENTOS (lo viví en la cancha) ===== -->
+  <div id="momentos" class="screen hide">
+    <div class="scr-head"><div class="scr-title">Lo viví en la cancha</div></div>
+    <div id="momCuerpo"></div>
+  </div>
+
   <!-- ===== DATOS ===== -->
   <div id="datos" class="screen hide">
     <div class="scr-title" style="margin-bottom:16px">Datos y respaldo</div>
@@ -428,6 +463,7 @@ html.no-ios .fab{bottom:calc(92px + max(env(safe-area-inset-bottom),12px))}
   <button class="tab on" data-tab="resumen" onclick="tab('resumen')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/></svg><span>Resumen</span></button>
   <button class="tab" data-tab="partidos" onclick="tab('partidos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7l4 3-1.5 5h-5L8 10z"/></svg><span>Partidos</span></button>
   <button class="tab" data-tab="goleadores" onclick="tab('goleadores')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg><span>Goles</span></button>
+  <button class="tab" data-tab="momentos" onclick="tab('momentos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.8z"/></svg><span>Momentos</span></button>
   <button class="tab" data-tab="datos" onclick="tab('datos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/><circle cx="9" cy="7" r="2" fill="currentColor"/><circle cx="15" cy="12" r="2" fill="currentColor"/><circle cx="8" cy="17" r="2" fill="currentColor"/></svg><span>Datos</span></button>
   </div>
 </nav>
@@ -446,7 +482,14 @@ html.no-ios .fab{bottom:calc(92px + max(env(safe-area-inset-bottom),12px))}
       <div><label>Técnico</label><div class="ac"><input type="text" id="mTecnico" autocomplete="off"><div class="ac-list"></div></div></div>
       <div><label>Goles a favor</label><div class="stepper"><button type="button" aria-label="Restar" onclick="stepBtn(this,-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg></button><input type="number" id="mGf" min="0" inputmode="numeric" value="0" oninput="if(this.value<0||this.value==='')this.value=0;syncGolesHint()"><button type="button" aria-label="Sumar" onclick="stepBtn(this,1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
       <div><label>Goles en contra</label><div class="stepper"><button type="button" aria-label="Restar" onclick="stepBtn(this,-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg></button><input type="number" id="mGc" min="0" inputmode="numeric" value="0" oninput="if(this.value<0||this.value==='')this.value=0"><button type="button" aria-label="Sumar" onclick="stepBtn(this,1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
-      <div class="full"><label>Resultado manual (solo si fue por penales)</label><select id="mR"><option value="">Automático (según goles)</option><option value="G">Ganado</option><option value="E">Empatado</option><option value="P">Perdido</option></select></div>
+      <div class="full"><label class="chk"><input type="checkbox" id="mPenOn" onchange="togglePen()"> <span>Hubo definición por penales</span></label></div>
+      <div class="full hide" id="penBox">
+        <div class="frm">
+          <div><label>Penales Boca</label><div class="stepper"><button type="button" aria-label="Restar" onclick="stepBtn(this,-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg></button><input type="number" id="mPenB" min="0" inputmode="numeric" value="0"><button type="button" aria-label="Sumar" onclick="stepBtn(this,1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+          <div><label>Penales rival</label><div class="stepper"><button type="button" aria-label="Restar" onclick="stepBtn(this,-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg></button><input type="number" id="mPenR" min="0" inputmode="numeric" value="0"><button type="button" aria-label="Sumar" onclick="stepBtn(this,1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+        </div>
+        <p class="dl-hint" style="margin-top:8px">Si empató en los 90', cuenta como ganado si ganó la tanda y como empatado si la perdió.</p>
+      </div>
       <div class="full"><label>Nota</label><input type="text" id="mNota" placeholder="Ganó por penales 4-2"></div>
       <div class="full anot-sec">
         <label>Goleadores del partido</label>
@@ -538,7 +581,22 @@ let partidos=[],golHist=[],ordenCol="fechaSort",ordenDir=-1,editIdx=-1;
 
 function norm(s){return String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();}
 function fechaSort(f){const p=String(f).split("/");return p.length===3?p[2]+p[1].padStart(2,"0")+p[0].padStart(2,"0"):"0";}
-function resultadoDe(m){if(m.r)return m.r;if(m.gf>m.ga)return"G";if(m.gf<m.ga)return"P";return"E";}
+/* Resultado G/E/P. Si empató en los 90' y hubo penales: ganó la tanda = G, la perdió = E
+   (el mismo criterio de tu planilla). Si no empató (ej. ganó 2-1 pero quedó afuera por el
+   global), manda el marcador del partido. "r" es el resultado manual viejo, por compatibilidad. */
+function resultadoDe(m){
+  if(m.pen&&+m.gf===+m.ga)return +m.pen.b>+m.pen.r?"G":"E";
+  if(m.r)return m.r;
+  if(+m.gf>+m.ga)return"G";if(+m.gf<+m.ga)return"P";return"E";
+}
+/* Marcador para mostrar: "0-0 (4-2 pen.)" */
+function marcadorHTML(m){
+  const base=`${m.gf}-${m.ga}`;
+  if(m.pen)return base+` <span class="pen">(${m.pen.b}-${m.pen.r} pen.)</span>`;
+  if(m.r)return base+` <span class="pen">(pen.)</span>`;
+  return base;
+}
+function marcadorTxt(m){return `${m.gf}-${m.ga}`+(m.pen?` (${m.pen.b}-${m.pen.r} pen.)`:m.r?" (pen.)":"");}
 function nf(n,d){return Number(n).toLocaleString("es-AR",{minimumFractionDigits:d||0,maximumFractionDigits:d||0});}
 function aISO(ddmm){const p=String(ddmm).split("/");return p.length===3?`${p[2]}-${p[1].padStart(2,"0")}-${p[0].padStart(2,"0")}`:"";}
 function aDDMM(iso){const p=String(iso).split("-");return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:String(iso);}
@@ -551,6 +609,18 @@ function cargar(){
   golHist=g?JSON.parse(g):JSON.parse(JSON.stringify(SEMILLA_GOLEADORES));
   if(p===null||g===null)guardar(); // persistimos la semilla la primera vez (o si faltaba una de las dos)
   try{escudos=JSON.parse(store.get(ESC_KEY)||"{}")||{};}catch(e){escudos={};}
+  if(migrarPenales())guardar();
+}
+/* Partidos cargados antes de existir el campo de penales: si la nota tiene el formato de
+   la planilla ("2 (4) - 2 (5)"), se pasan solos a m.pen. */
+function migrarPenales(){
+  let n=0;
+  partidos.forEach(m=>{
+    if(m.pen)return;
+    const x=String(m.nota||"").match(/\d+\s*\((\d+)\)\s*-\s*\d+\s*\((\d+)\)/);
+    if(x){m.pen={b:+x[1],r:+x[2]};delete m.r;n++;}
+  });
+  return n;
 }
 function guardar(){store.set("bostero_partidos",JSON.stringify(partidos));store.set("bostero_golhist",JSON.stringify(golHist));}
 
@@ -620,7 +690,7 @@ function renderPartidos(){
   const tb=document.getElementById("cuerpoP");
   if(!lista.length)tb.innerHTML='<tr><td colspan="9" class="empty">'+(partidos.length?'No hay partidos con esos filtros.':'Todavía no cargaste partidos. Tocá "+ Cargar partido".')+'</td></tr>';
   else tb.innerHTML=lista.map(m=>{
-    const marc=m.r?`${m.gf}-${m.ga} <span style="color:var(--txt3);font-size:11px">(pen.)</span>`:`${m.gf}-${m.ga}`;
+    const marc=marcadorHTML(m);
     return`<tr ondblclick="abrirEdicion(${m._i})" style="cursor:pointer" title="${(m.nota||'').replace(/"/g,'&quot;')}">
       <td>${m.fecha}</td><td>${m.anio}</td><td>${m.cancha}</td><td><span class="rival-cell" role="button" tabindex="0" data-rival="${escAttr(m.rival)}" onclick="event.stopPropagation();abrirClub(this.dataset.rival)" onkeydown="if(event.key==='Enter')abrirClub(this.dataset.rival)">${escudoHTML(m.rival,22)}<b>${escHTML(m.rival)}</b></span></td><td>${m.torneo}</td><td>${m.instancia}</td><td>${m.tecnico}</td>
       <td><span class="res-badge res-${m._res}">${marc}</span></td>
@@ -696,7 +766,7 @@ function abrirAlta(){
   document.getElementById("btnBorrarP").classList.add("hide");
   document.getElementById("mFecha").value="";
   document.getElementById("mRival").value="";document.getElementById("mTecnico").value="";document.getElementById("mNota").value="";
-  document.getElementById("mGf").value="0";document.getElementById("mGc").value="0";document.getElementById("mR").value="";
+  document.getElementById("mGf").value="0";document.getElementById("mGc").value="0";setPen(null);
   document.getElementById("mCancha").value="La Bombonera";document.getElementById("mTorneo").value="Primera División";document.getElementById("mInstancia").value="Fecha";
   document.getElementById("anotadores").innerHTML="";syncGolesHint();
   document.getElementById("modalP").classList.add("on");
@@ -709,7 +779,7 @@ function abrirEdicion(i){
   document.getElementById("mCancha").value=m.cancha;document.getElementById("mRival").value=m.rival;
   document.getElementById("mTorneo").value=m.torneo;document.getElementById("mInstancia").value=m.instancia;
   document.getElementById("mTecnico").value=m.tecnico;document.getElementById("mGf").value=m.gf;document.getElementById("mGc").value=m.ga;
-  document.getElementById("mR").value=m.r||"";document.getElementById("mNota").value=m.nota||"";
+  setPen(m.pen||null);document.getElementById("mNota").value=m.nota||"";
   document.getElementById("anotadores").innerHTML="";
   (m.anotadores||[]).forEach(a=>addAnotRow(a.nombre,a.goles));
   syncGolesHint();
@@ -723,7 +793,7 @@ function guardarPartido(){
     cancha:document.getElementById("mCancha").value.trim()||"La Bombonera",rival,
     torneo:document.getElementById("mTorneo").value.trim()||"Primera División",instancia:document.getElementById("mInstancia").value.trim()||"Fecha",
     tecnico:document.getElementById("mTecnico").value.trim(),gf:parseInt(document.getElementById("mGf").value)||0,ga:parseInt(document.getElementById("mGc").value)||0};
-  const r=document.getElementById("mR").value;if(r)m.r=r;
+  if(document.getElementById("mPenOn").checked)m.pen={b:parseInt(document.getElementById("mPenB").value)||0,r:parseInt(document.getElementById("mPenR").value)||0};
   const nota=document.getElementById("mNota").value.trim();if(nota)m.nota=nota;
   const anot=[];
   document.querySelectorAll("#anotadores .anot-row").forEach(row=>{
@@ -734,11 +804,17 @@ function guardarPartido(){
   if(editIdx>=0)partidos[editIdx]=m;else partidos.push(m);
   guardar();cerrarModal("modalP");refrescar();toast(editIdx>=0?"Partido actualizado":"¡Partido cargado! Dale Boca");
 }
+function setPen(p){
+  document.getElementById("mPenOn").checked=!!p;
+  document.getElementById("mPenB").value=p?p.b:0;document.getElementById("mPenR").value=p?p.r:0;
+  togglePen();
+}
+function togglePen(){document.getElementById("penBox").classList.toggle("hide",!document.getElementById("mPenOn").checked);}
 function borrarPartido(){if(editIdx<0)return;if(confirm("¿Borrar este partido?")){partidos.splice(editIdx,1);guardar();cerrarModal("modalP");refrescar();toast("Partido borrado");}}
 
 /* ============================================================ EXPORTAR EXCEL ============================================================ */
 function exportarXls(){
-  const dP=partidos.map(m=>({Fecha:m.fecha,"Año":m.anio,Cancha:m.cancha,Resultado:m.r?`${m.gf}-${m.ga} (pen.)`:`${m.gf}-${m.ga}`,Rival:m.rival,Torneo:m.torneo,Instancia:m.instancia,"Técnico":m.tecnico,GF:m.gf,GC:m.ga,Goleadores:(m.anotadores||[]).map(a=>`${a.nombre}:${a.goles}`).join("; "),Resultado_GEP:resultadoDe(m),Nota:m.nota||""}));
+  const dP=partidos.map(m=>({Fecha:m.fecha,"Año":m.anio,Cancha:m.cancha,Resultado:marcadorTxt(m),Penales:m.pen?`${m.pen.b}-${m.pen.r}`:"",Rival:m.rival,Torneo:m.torneo,Instancia:m.instancia,"Técnico":m.tecnico,GF:m.gf,GC:m.ga,Goleadores:(m.anotadores||[]).map(a=>`${a.nombre}:${a.goles}`).join("; "),Resultado_GEP:resultadoDe(m),Nota:m.nota||""}));
   const dG=goleadoresAgg().map(g=>({Jugador:g.nombre,Goles:g.goles}));
   const wb=XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(dP),"Partidos");
@@ -762,7 +838,7 @@ function restaurar(ev){
       const d=JSON.parse(e.target.result);
       if(!Array.isArray(d.partidos)){toast("El archivo no parece un backup válido");return;}
       if(!confirm("Esto reemplaza TODOS los datos actuales por los del backup. ¿Seguir?"))return;
-      partidos=d.partidos;if(Array.isArray(d.golHist))golHist=d.golHist;if(d.escudos&&typeof d.escudos==="object"){escudos=d.escudos;guardarEsc();}guardar();refrescar();toast(`Restaurado: ${partidos.length} partidos`);
+      partidos=d.partidos;migrarPenales();if(Array.isArray(d.golHist))golHist=d.golHist;if(d.escudos&&typeof d.escudos==="object"){escudos=d.escudos;guardarEsc();}guardar();refrescar();toast(`Restaurado: ${partidos.length} partidos`);
     }catch(err){toast("No pude leer el backup");}
   };
   r.readAsText(file);ev.target.value="";
@@ -949,7 +1025,7 @@ window.addEventListener("online",procesarColaEsc);
 let repintarPend=false;
 function repintarEscudos(){
   if(repintarPend)return;repintarPend=true;
-  requestAnimationFrame(()=>{repintarPend=false;renderPartidos();renderRivales();if(clubActual)pintarCabeceraClub();});
+  requestAnimationFrame(()=>{repintarPend=false;renderPartidos();renderRivales();renderMomentos();if(clubActual)pintarCabeceraClub();});
 }
 
 /* ============================================================ POR RIVAL (Resumen) ============================================================ */
@@ -1039,7 +1115,7 @@ function pintarCuerpoClub(){
 
   // Todos los partidos
   h+=`<div class="club-sub">Partidos</div>`+(lista.length?lista.map(m=>{
-    const marc=m.r?`${m.gf}-${m.ga} <span style="font-size:10px;opacity:.75">(pen.)</span>`:`${m.gf}-${m.ga}`;
+    const marc=marcadorHTML(m);
     const det=[m.torneo,m.instancia,m.cancha].filter(Boolean).map(escHTML).join(" · ");
     return `<button class="cp-row" onclick="cerrarModal('modalClub');abrirEdicion(${m._i})" title="Editar partido">
       <div class="cp-main"><b>${escHTML(m.fecha)}</b><span>${det}</span>${(m.anotadores||[]).length?`<span>Goles: ${m.anotadores.map(a=>escHTML(a.nombre)+(a.goles>1?` (${a.goles})`:"")).join(", ")}</span>`:""}${m.nota?`<span>${escHTML(m.nota)}</span>`:""}</div>
@@ -1091,7 +1167,7 @@ function abrirJugador(nombre){
 
   // Partidos
   h+=`<div class="club-sub">Partidos</div>`+(lista.length?lista.map(m=>{
-    const marc=m.r?`${m.gf}-${m.ga} <span style="font-size:10px;opacity:.75">(pen.)</span>`:`${m.gf}-${m.ga}`;
+    const marc=marcadorHTML(m);
     const det=[m.fecha,m.torneo,m.instancia].filter(Boolean).map(escHTML).join(" · ");
     return `<button class="cp-row" onclick="cerrarModal('modalJug');abrirEdicion(${m._i})" title="Editar partido">
       ${escudoHTML(m.rival,30)}
@@ -1107,17 +1183,84 @@ function abrirJugador(nombre){
   document.getElementById("modalJug").classList.add("on");
 }
 
+/* ============================================================ MOMENTOS ============================================================
+   Todo se calcula con los partidos cargados: títulos (finales ganadas), Superclásicos, récords,
+   rachas, penales y canchas. Tocando una tarjeta de partido se abre la ficha del rival. */
+function renderMomentos(){
+  const cont=document.getElementById("momCuerpo");if(!cont)return;
+  if(!partidos.length){cont.innerHTML='<div class="card empty">Cuando cargues partidos, acá aparecen tus momentos en la cancha.</div>';return;}
+  const L=partidos.map((m,i)=>({...m,_i:i,_fs:fechaSort(m.fecha),_res:resultadoDe(m)})).sort((a,b)=>a._fs<b._fs?-1:a._fs>b._fs?1:0);
+  const esc=(m)=>escHTML(m.rival);
+  const fila=(m,extra)=>`<button class="mom-row" data-rival="${escAttr(m.rival)}" onclick="abrirClub(this.dataset.rival)">${escudoHTML(m.rival,28)}<span class="mom-row-tx"><b>${esc(m)}</b><span>${escHTML(m.fecha)}${extra?" · "+extra:""}</span></span><span class="res-badge res-${m._res}">${marcadorHTML(m)}</span></button>`;
+  let h="";
+
+  // 1) Títulos que viste: finales ganadas
+  const titulos=L.filter(m=>/^final$/i.test(String(m.instancia).trim())&&m._res==="G");
+  if(titulos.length)h+=`<div class="mom-hero">
+      <div class="mom-hero-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg></div>
+      <div class="mom-hero-tx"><span>${titulos.length===1?"Viste a Boca salir campeón":`Viste a Boca salir campeón ${titulos.length} veces`}</span>
+      ${titulos.map(m=>`<b>${escHTML(m.torneo)} ${m.anio}</b><em>Final ${m.gf}-${m.ga} a ${esc(m)} · ${escHTML(m.cancha||"")}</em>`).join("")}</div>
+    </div>`;
+
+  // 2) Superclásicos
+  const sc=L.filter(m=>["river","river plate"].includes(norm(m.rival)));
+  if(sc.length){const s=stats(sc);
+    h+=`<div class="card res mom-sec"><div class="section-title">Superclásicos</div>
+      <div class="mom-big"><b>${s.g}</b><span>${s.g===1?"ganado":"ganados"} de ${s.pj}</span>${s.e?`<span>· ${s.e} ${s.e===1?"empate":"empates"}</span>`:""}${s.p?`<span>· ${s.p} ${s.p===1?"derrota":"derrotas"}</span>`:""}</div>
+      ${sc.slice().reverse().map(m=>fila(m,escHTML(m.torneo))).join("")}</div>`;}
+
+  // 3) Récords
+  const ganados=L.filter(m=>+m.gf>+m.ga);
+  const goleada=ganados.slice().sort((a,b)=>(b.gf-b.ga)-(a.gf-a.ga)||b.gf-a.gf||(a._fs<b._fs?1:-1))[0];
+  const masGoles=L.slice().sort((a,b)=>(+b.gf+ +b.ga)-(+a.gf+ +a.ga)||(a._fs<b._fs?1:-1))[0];
+  const racha=(ok)=>{let best=null,cur=[];L.forEach(m=>{if(ok(m)){cur.push(m);if(!best||cur.length>best.length)best=cur.slice();}else cur=[];});return best;};
+  const invicto=racha(m=>m._res!=="P"), victorias=racha(m=>m._res==="G");
+  const rec=(lbl,val,det,m)=>`<${m?`button data-rival="${escAttr(m.rival)}" onclick="abrirClub(this.dataset.rival)"`:"div"} class="mom-rec"><span class="lbl">${lbl}</span><b>${val}</b><span>${det}</span></${m?"button":"div"}>`;
+  h+=`<div class="card res mom-sec"><div class="section-title">Récords</div><div class="mom-grid">`;
+  if(goleada)h+=rec("Mayor goleada",`${goleada.gf}-${goleada.ga}`,`a ${esc(goleada)} · ${escHTML(goleada.fecha)}`,goleada);
+  if(masGoles&&(+masGoles.gf+ +masGoles.ga)>0)h+=rec("Partido con más goles",`${masGoles.gf}-${masGoles.ga}`,`con ${esc(masGoles)} · ${+masGoles.gf+ +masGoles.ga} goles`,masGoles);
+  if(invicto)h+=rec("Racha sin perder",`${invicto.length}`,`partidos · ${escHTML(invicto[0].fecha)} al ${escHTML(invicto[invicto.length-1].fecha)}`);
+  if(victorias)h+=rec("Victorias seguidas",`${victorias.length}`,`partidos · ${escHTML(victorias[0].fecha)} al ${escHTML(victorias[victorias.length-1].fecha)}`);
+  h+=rec("Primer partido",escHTML(L[0].fecha),`${esc(L[0])} ${L[0].gf}-${L[0].ga}`,L[0]);
+  const ult=L[L.length-1];h+=rec("Último partido",escHTML(ult.fecha),`${esc(ult)} ${ult.gf}-${ult.ga}`,ult);
+  h+=`</div></div>`;
+
+  // 4) Penales
+  const pens=L.filter(m=>m.pen);
+  if(pens.length){const gan=pens.filter(m=>+m.pen.b>+m.pen.r).length;
+    h+=`<div class="card res mom-sec"><div class="section-title">Definiciones por penales</div>
+      <div class="mom-big"><b>${gan}</b><span>${gan===1?"ganada":"ganadas"} de ${pens.length}</span></div>
+      ${pens.slice().reverse().map(m=>{
+        // Acá el color es el de la TANDA (verde ganada, rojo perdida), no el del partido:
+        // Alianza se ganó 2-1 en los 90' pero los penales se perdieron.
+        const gano=+m.pen.b>+m.pen.r;
+        return `<button class="mom-row" data-rival="${escAttr(m.rival)}" onclick="abrirClub(this.dataset.rival)">${escudoHTML(m.rival,28)}
+          <span class="mom-row-tx"><b>${esc(m)}</b><span>${escHTML(m.fecha)} · ${escHTML(m.torneo)} · ${m.gf}-${m.ga} en los 90'</span></span>
+          <span class="res-badge res-${gano?"G":"P"}">${m.pen.b}-${m.pen.r} <span class="pen">pen.</span></span></button>`;
+      }).join("")}</div>`;}
+
+  // 5) Canchas y copas
+  const can={};L.forEach(m=>{const c=String(m.cancha||"").trim();if(c)can[c]=(can[c]||0)+1;});
+  const canL=Object.entries(can).sort((a,b)=>b[1]-a[1]);
+  const inter=L.filter(m=>/libertadores|sudamericana|mundial/i.test(m.torneo||"")).length;
+  h+=`<div class="card res mom-sec"><div class="section-title">Dónde lo viviste</div>
+    ${canL.map(([c,n])=>`<div class="gol-row"><div class="gol-name">${escHTML(c)}</div><div class="gol-num">${n}</div></div>`).join("")}
+    ${inter?`<p class="dl-hint" style="margin-top:10px">${inter} ${inter===1?"partido":"partidos"} de copa internacional.</p>`:""}</div>`;
+
+  cont.innerHTML=h;
+}
+
 /* ============================================================ UI ============================================================ */
 function tab(t){
   document.querySelectorAll(".bnav .tab").forEach(b=>{const on=b.dataset.tab===t;b.classList.toggle("on",on);if(on)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
   const _ic=document.querySelector(".bnav .tab.on svg");
   if(_ic){ _ic.style.animation="none"; void _ic.offsetWidth; _ic.style.animation="tabpop .35s ease"; }
-  ["resumen","partidos","goleadores","datos"].forEach(id=>document.getElementById(id).classList.toggle("hide",id!==t));
+  ["resumen","partidos","goleadores","momentos","datos"].forEach(id=>document.getElementById(id).classList.toggle("hide",id!==t));
   document.getElementById("fab").style.display=(t==="resumen")?"flex":"none";
   document.getElementById("scroller").scrollTop=0;
 }
 function cerrarModal(id){document.getElementById(id).classList.remove("on");}
-function refrescar(){renderDash();llenarFiltros();renderPartidos();renderGoles();renderRivales();pedirEscudosFaltantes();}
+function refrescar(){renderDash();llenarFiltros();renderPartidos();renderGoles();renderRivales();renderMomentos();pedirEscudosFaltantes();}
 let toastTimer;
 function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("on");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("on"),2600);}
 document.querySelectorAll(".modal-bg").forEach(bg=>bg.addEventListener("click",e=>{if(e.target===bg)bg.classList.remove("on");}));

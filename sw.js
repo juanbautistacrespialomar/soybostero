@@ -3,7 +3,7 @@
    - Resto de assets: cache-first.
    Para forzar actualización limpia, subí el número de versión del cache. */
 
-const CACHE = "soy-bostero-v10";
+const CACHE = "soy-bostero-v11";
 // Caché APARTE para las imágenes de los escudos. No lleva número de versión a propósito:
 // así, cuando subís una versión nueva de la app (y cambia CACHE), los escudos ya bajados
 // NO se borran y no hay que volver a descargarlos.
