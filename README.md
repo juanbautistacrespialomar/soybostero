@@ -41,6 +41,21 @@ Son **dos logos distintos**: `Logo.png` es el ícono de la app (afuera) y
   propia) que cuentan a favor.
 - **Datos:** Backup (.json), Restaurar, Importar Excel y Exportar Excel.
 
+## Escudos y ficha por rival
+
+- Los escudos de los rivales se buscan solos en TheSportsDB (API gratuita,
+  de a uno cada ~2 s) y quedan guardados en el dispositivo. Prioriza clubes
+  argentinos; el diccionario `ALIAS_CLUBES` en `index.html` traduce nombres
+  cortos ("River", "Velez") al nombre con el que figuran en la base.
+- Si no aparece o aparece mal: abrí la ficha del club → **Cambiar escudo**
+  → buscalo por nombre, **Subir imagen** propia, o **Sin escudo**. Lo que
+  elegís a mano nunca se pisa.
+- Tocando un rival (en **Resumen → Por rival** o en la tabla de **Partidos**)
+  se abre su ficha: G/E/P, efectividad, goles, últimos resultados, mayor
+  victoria, peor derrota, goleadores contra ese rival y todos los partidos
+  (tocando uno se edita).
+- Los escudos viajan en el **Backup** (.json).
+
 ## Buscadores anti-duplicados
 
 Al cargar un partido o un goleador, los campos Rival, Torneo, Instancia,

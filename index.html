@@ -161,6 +161,57 @@ select:focus,input:focus{outline:none;border-color:var(--oro)}
 .dl-hint{font-size:11.5px;color:var(--txt3);margin:-2px 0 4px}
 .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--navy);color:var(--oro);padding:11px 20px;border-radius:11px;font-weight:700;font-size:13.5px;z-index:200;opacity:0;transition:.3s;pointer-events:none;border:1px solid var(--oro)}
 .toast.on{opacity:1}
+
+/* ESCUDOS */
+.esc{width:22px;height:22px;object-fit:contain;flex-shrink:0;display:inline-block;vertical-align:middle}
+.esc-mono{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;background:#e3e8f2;color:var(--navy);font-family:var(--disp);font-weight:600;flex-shrink:0;vertical-align:middle;line-height:1;letter-spacing:.3px}
+.rival-cell{display:inline-flex;align-items:center;gap:8px;cursor:pointer;border-radius:6px}
+.rival-cell:hover b{text-decoration:underline;text-decoration-color:var(--oro);text-underline-offset:3px}
+
+/* LISTA "POR RIVAL" */
+.riv-row{display:flex;align-items:center;gap:11px;width:100%;padding:10px 4px;border:none;border-top:1px solid var(--line);background:none;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.riv-row:first-child{border-top:none}
+.riv-row:hover{background:#f6f8fc}
+.riv-row:focus-visible,.rival-cell:focus-visible,.cp-row:focus-visible{outline:2px solid var(--oro);outline-offset:2px}
+.riv-name{flex:1;font-size:14px;font-weight:500;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.riv-rec{font-size:12.5px;color:var(--txt2);white-space:nowrap}
+.riv-rec .g{color:var(--gana-t);font-weight:700}.riv-rec .e{color:var(--empata-t);font-weight:700}.riv-rec .p{color:var(--pierde-t);font-weight:700}
+.riv-efe{font-family:var(--disp);font-weight:600;font-size:15px;color:var(--navy);width:46px;text-align:right}
+.riv-more{margin-top:8px}
+
+/* FICHA DEL CLUB */
+.club-head{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.club-head .esc,.club-head .esc-mono{width:64px;height:64px}
+.club-head h3{margin:0}
+.club-head p{font-size:12.5px;color:var(--txt2);margin-top:3px}
+.mini-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.mini-kpis div{background:#f4f6fa;border-radius:10px;padding:8px 6px;text-align:center}
+.mini-kpis b{display:block;font-family:var(--disp);font-size:22px;font-weight:700;color:var(--navy);line-height:1.1}
+.mini-kpis span{font-size:11px;color:var(--txt2);line-height:1.2;display:block}
+.mini-kpis .g b{color:var(--gana-t)}.mini-kpis .e b{color:var(--empata-t)}.mini-kpis .p b{color:var(--pierde-t)}
+.mini-kpis .efe{background:var(--navy)}.mini-kpis .efe b{color:var(--oro)}.mini-kpis .efe span{color:#aeb9d2}
+.racha{display:flex;gap:5px;flex-wrap:wrap}
+.racha span{width:26px;height:26px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.club-sub{font-family:var(--disp);font-size:15px;font-weight:600;color:var(--navy);margin:18px 0 8px}
+.cp-row{display:flex;align-items:center;gap:10px;width:100%;padding:9px 2px;border:none;border-top:1px solid var(--line);background:none;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.cp-row:first-child{border-top:none}
+.cp-row:hover{background:#f6f8fc}
+.cp-main{flex:1;min-width:0}
+.cp-main b{font-size:13.5px;display:block}
+.cp-main span{font-size:12px;color:var(--txt2);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.club-dest{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.club-dest div{border:1px solid var(--line);border-radius:10px;padding:9px 11px;font-size:12.5px;color:var(--txt2)}
+.club-dest b{display:block;font-size:14px;color:var(--txt)}
+
+/* EDITOR DE ESCUDO */
+.esc-edit{background:#f4f6fa;border-radius:12px;padding:12px;margin-bottom:14px}
+.esc-edit .fila{display:flex;gap:8px;flex-wrap:wrap}
+.esc-edit input[type=text]{flex:1;min-width:150px}
+.esc-res{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.esc-res button{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:var(--card);cursor:pointer;text-align:left;font:inherit;color:inherit}
+.esc-res button:hover{border-color:var(--oro)}
+.esc-res .esc{width:32px;height:32px}
+.esc-res small{display:block;color:var(--txt3);font-size:11.5px}
 </style>
 </head>
 <body>
@@ -200,6 +251,8 @@ select:focus,input:focus{outline:none;border-color:var(--oro)}
     </div>
     <div class="section-title">Por técnico</div>
     <div class="tbl-wrap"><table><thead><tr><th>Técnico</th><th>PJ</th><th>G</th><th>E</th><th>P</th><th>GF</th><th>GC</th><th>Efectividad</th></tr></thead><tbody id="porTecnico"></tbody></table></div>
+    <div class="section-title">Por rival</div>
+    <div class="card" id="porRival" style="margin-bottom:70px"></div>
   </div>
 
   <!-- ===== PARTIDOS ===== -->
@@ -318,6 +371,39 @@ select:focus,input:focus{outline:none;border-color:var(--oro)}
   </div>
 </div>
 
+<!-- MODAL CLUB (historial contra un rival) -->
+<div class="modal-bg" id="modalClub">
+  <div class="modal">
+    <div class="club-head">
+      <div id="clubEsc"></div>
+      <div style="flex:1;min-width:0">
+        <h3 id="clubNombre"></h3>
+        <p id="clubSub"></p>
+      </div>
+    </div>
+
+    <div class="esc-edit hide" id="escEdit">
+      <div class="fila">
+        <input type="text" id="escQuery" placeholder="Nombre del club para buscar">
+        <button class="btn sm" onclick="buscarEscudoManual()">Buscar</button>
+      </div>
+      <div class="esc-res" id="escRes"></div>
+      <div class="fila" style="margin-top:10px">
+        <button class="btn sm" onclick="document.getElementById('fileEsc').click()">Subir imagen</button>
+        <button class="btn sm ghost danger" onclick="quitarEscudo()">Sin escudo</button>
+      </div>
+      <input type="file" id="fileEsc" accept="image/*" class="hide" onchange="subirEscudo(event)">
+    </div>
+
+    <div id="clubCuerpo"></div>
+
+    <div class="modal-foot">
+      <button class="btn ghost" onclick="toggleEscEdit()">Cambiar escudo</button>
+      <button class="btn primary" style="margin-left:auto" onclick="cerrarModal('modalClub')">Cerrar</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <button class="fab" id="fab" onclick="abrirAlta()" aria-label="Cargar partido" title="Cargar partido">+</button>
@@ -375,6 +461,7 @@ function cargar(){
   partidos=p?JSON.parse(p):JSON.parse(JSON.stringify(SEMILLA_PARTIDOS));
   golHist=g?JSON.parse(g):JSON.parse(JSON.stringify(SEMILLA_GOLEADORES));
   if(p===null||g===null)guardar(); // persistimos la semilla la primera vez (o si faltaba una de las dos)
+  try{escudos=JSON.parse(store.get(ESC_KEY)||"{}")||{};}catch(e){escudos={};}
 }
 function guardar(){store.set("bostero_partidos",JSON.stringify(partidos));store.set("bostero_golhist",JSON.stringify(golHist));}
 
@@ -445,7 +532,7 @@ function renderPartidos(){
   else tb.innerHTML=lista.map(m=>{
     const marc=m.r?`${m.gf}-${m.ga} <span style="color:var(--txt3);font-size:11px">(pen.)</span>`:`${m.gf}-${m.ga}`;
     return`<tr ondblclick="abrirEdicion(${m._i})" style="cursor:pointer" title="${(m.nota||'').replace(/"/g,'&quot;')}">
-      <td>${m.fecha}</td><td>${m.anio}</td><td>${m.cancha}</td><td><b>${m.rival}</b></td><td>${m.torneo}</td><td>${m.instancia}</td><td>${m.tecnico}</td>
+      <td>${m.fecha}</td><td>${m.anio}</td><td>${m.cancha}</td><td><span class="rival-cell" role="button" tabindex="0" data-rival="${escAttr(m.rival)}" onclick="event.stopPropagation();abrirClub(this.dataset.rival)" onkeydown="if(event.key==='Enter')abrirClub(this.dataset.rival)">${escudoHTML(m.rival,22)}<b>${escHTML(m.rival)}</b></span></td><td>${m.torneo}</td><td>${m.instancia}</td><td>${m.tecnico}</td>
       <td><span class="res-badge res-${m._res}">${marc}</span></td>
       <td><button class="btn ghost sm" onclick="event.stopPropagation();abrirEdicion(${m._i})">✎</button></td></tr>`;
   }).join("");
@@ -610,7 +697,7 @@ function exportarXls(){
 
 /* ============================================================ BACKUP / RESTAURAR ============================================================ */
 function backup(){
-  const data={app:"soy-bostero",version:3,exportado:new Date().toISOString(),partidos,golHist};
+  const data={app:"soy-bostero",version:4,exportado:new Date().toISOString(),partidos,golHist,escudos};
   const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
   const a=document.createElement("a");const f=new Date().toISOString().slice(0,10);
   a.href=URL.createObjectURL(blob);a.download=`soy-bostero-backup-${f}.json`;a.click();URL.revokeObjectURL(a.href);
@@ -624,10 +711,278 @@ function restaurar(ev){
       const d=JSON.parse(e.target.result);
       if(!Array.isArray(d.partidos)){toast("El archivo no parece un backup válido");return;}
       if(!confirm("Esto reemplaza TODOS los datos actuales por los del backup. ¿Seguir?"))return;
-      partidos=d.partidos;if(Array.isArray(d.golHist))golHist=d.golHist;guardar();refrescar();toast(`Restaurado: ${partidos.length} partidos`);
+      partidos=d.partidos;if(Array.isArray(d.golHist))golHist=d.golHist;if(d.escudos&&typeof d.escudos==="object"){escudos=d.escudos;guardarEsc();}guardar();refrescar();toast(`Restaurado: ${partidos.length} partidos`);
     }catch(err){toast("No pude leer el backup");}
   };
   r.readAsText(file);ev.target.value="";
+}
+
+/* ============================================================ ESCUDOS ============================================================
+   - Se guardan en localStorage ("bostero_escudos"), uno por rival, con la
+     clave normalizada (norm) para que "River" y "river" compartan escudo.
+   - Formato: { url, fuente:"auto"|"manual"|"none", equipo }
+       auto   = lo encontró solo en TheSportsDB
+       manual = lo elegiste/subiste vos (nunca se pisa)
+       none   = se buscó y no apareció (no se vuelve a buscar solo)
+   - La búsqueda automática va de a una cada ~2,2 s para no pasar el límite
+     de la API gratuita (30 consultas por minuto).
+   ================================================================================================================================= */
+const ESC_KEY="bostero_escudos";
+const SDB="https://www.thesportsdb.com/api/v1/json/123/";
+let escudos={};
+
+/* Cómo se llama cada club en TheSportsDB. La clave es el nombre como lo
+   cargás vos, en minúscula y sin acentos. Si un escudo no aparece solo,
+   podés sumar una línea acá o elegirlo a mano desde la ficha del club. */
+const ALIAS_CLUBES={
+  "river":"River Plate","river plate":"River Plate",
+  "racing":"Racing Club","racing club":"Racing Club",
+  "independiente":"Independiente",
+  "san lorenzo":"San Lorenzo","huracan":"Huracan",
+  "estudiantes":"Estudiantes","estudiantes lp":"Estudiantes","estudiantes de la plata":"Estudiantes",
+  "gimnasia":"Gimnasia La Plata","gimnasia lp":"Gimnasia La Plata","gimnasia y esgrima la plata":"Gimnasia La Plata",
+  "velez":"Velez Sarsfield","velez sarsfield":"Velez Sarsfield",
+  "newells":"Newells Old Boys","newell's":"Newells Old Boys","newell's old boys":"Newells Old Boys",
+  "central":"Rosario Central","rosario central":"Rosario Central",
+  "lanus":"Lanus","banfield":"Banfield","talleres":"Talleres","belgrano":"Belgrano",
+  "argentinos":"Argentinos Juniors","argentinos juniors":"Argentinos Juniors",
+  "defensa":"Defensa y Justicia","defensa y justicia":"Defensa y Justicia",
+  "godoy cruz":"Godoy Cruz","colon":"Colon","union":"Union Santa Fe","union de santa fe":"Union Santa Fe",
+  "tucuman":"Atletico Tucuman","atletico tucuman":"Atletico Tucuman",
+  "tigre":"Tigre","platense":"Platense","sarmiento":"Sarmiento","central cordoba":"Central Cordoba",
+  "arsenal":"Arsenal de Sarandi","arsenal de sarandi":"Arsenal de Sarandi",
+  "barracas":"Barracas Central","barracas central":"Barracas Central",
+  "instituto":"Instituto","riestra":"Deportivo Riestra","deportivo riestra":"Deportivo Riestra",
+  "aldosivi":"Aldosivi","independiente rivadavia":"Independiente Rivadavia",
+  "san martin de san juan":"San Martin San Juan","san martin sj":"San Martin San Juan"
+};
+
+function escHTML(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function escAttr(s){return escHTML(s).replace(/"/g,"&quot;");}
+function guardarEsc(){store.set(ESC_KEY,JSON.stringify(escudos));}
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+
+/* Iniciales para cuando no hay escudo: "San Lorenzo" -> "SL" */
+function iniciales(nombre){
+  const stop=["de","del","la","las","los","y","club","ca","atletico","deportivo"];
+  let w=norm(nombre).split(/\s+/).filter(x=>x&&!stop.includes(x));
+  if(!w.length)w=norm(nombre).split(/\s+/).filter(Boolean);
+  return (w.length>1?w[0][0]+w[1][0]:(w[0]||"?").slice(0,2)).toUpperCase();
+}
+function monoHTML(nombre,size){
+  return `<span class="esc-mono" style="width:${size}px;height:${size}px;font-size:${Math.round(size*.42)}px" aria-hidden="true">${escHTML(iniciales(nombre))}</span>`;
+}
+/* TheSportsDB sirve versiones livianas agregando "/small" a la URL */
+function urlLiviana(u){return /thesportsdb\.com\/images/.test(u)?u+"/small":u;}
+function escudoHTML(nombre,size){
+  const e=escudos[norm(nombre)];
+  if(!e||!e.url)return monoHTML(nombre,size);
+  return `<img class="esc" style="width:${size}px;height:${size}px" src="${escAttr(urlLiviana(e.url))}" data-raw="${escAttr(e.url)}" data-nombre="${escAttr(nombre)}" data-size="${size}" alt="" loading="lazy" onerror="escError(this)">`;
+}
+/* Si falla la versión liviana probamos la original; si falla también, iniciales */
+function escError(img){
+  if(img.src!==img.dataset.raw&&!img.dataset.retry){img.dataset.retry="1";img.src=img.dataset.raw;return;}
+  img.outerHTML=monoHTML(img.dataset.nombre,+img.dataset.size||22);
+}
+
+async function buscarEquipos(q){
+  const r=await fetch(SDB+"searchteams.php?t="+encodeURIComponent(q));
+  if(!r.ok)throw new Error("HTTP "+r.status);
+  const d=await r.json();
+  return (d.teams||[])
+    .filter(t=>(t.strSport||"")==="Soccer")
+    .map(t=>({nombre:t.strTeam,pais:t.strCountry||"",liga:t.strLeague||"",url:t.strBadge||t.strTeamBadge||""}))
+    .filter(t=>t.url);
+}
+/* Elige el escudo automático: prioriza clubes argentinos. Si el nombre está
+   en el diccionario y no aparece uno argentino, mejor no poner nada que poner
+   el de otro club (ej.: "Racing" -> Racing de Montevideo). */
+async function autoEscudo(nombre){
+  const k=norm(nombre),alias=ALIAS_CLUBES[k];
+  const consultas=[...new Set([alias,nombre].filter(Boolean))];
+  for(const q of consultas){
+    const res=await buscarEquipos(q);
+    const ar=res.find(t=>norm(t.pais)==="argentina");
+    if(ar)return ar;
+    if(!alias&&res.length)return res[0]; // rival sin alias (ej. copas internacionales)
+    if(consultas.length>1)await sleep(2200);
+  }
+  return null;
+}
+
+let colaEsc=[],procesandoEsc=false;
+function pedirEscudosFaltantes(){
+  const vistos=new Set(colaEsc.map(x=>x.k));
+  partidos.forEach(p=>{
+    const k=norm(p.rival);
+    if(k&&!escudos[k]&&!vistos.has(k)){vistos.add(k);colaEsc.push({k,nombre:p.rival});}
+  });
+  procesarColaEsc();
+}
+async function procesarColaEsc(){
+  if(procesandoEsc||!navigator.onLine)return;
+  procesandoEsc=true;
+  while(colaEsc.length){
+    const {k,nombre}=colaEsc.shift();
+    if(escudos[k])continue;
+    try{
+      const t=await autoEscudo(nombre);
+      escudos[k]=t?{url:t.url,fuente:"auto",equipo:t.nombre}:{url:null,fuente:"none"};
+      guardarEsc();repintarEscudos();
+    }catch(err){
+      console.warn("No pude buscar escudos:",err);
+      colaEsc=[];break; // sin red o API caída: se reintenta la próxima vez que se abra la app
+    }
+    await sleep(2200);
+  }
+  procesandoEsc=false;
+}
+window.addEventListener("online",procesarColaEsc);
+
+let repintarPend=false;
+function repintarEscudos(){
+  if(repintarPend)return;repintarPend=true;
+  requestAnimationFrame(()=>{repintarPend=false;renderPartidos();renderRivales();if(clubActual)pintarCabeceraClub();});
+}
+
+/* ============================================================ POR RIVAL (Resumen) ============================================================ */
+let verTodosRivales=false;
+function gruposRival(){
+  const map={};
+  partidos.forEach((m,i)=>{const k=norm(m.rival);if(!k)return;(map[k]=map[k]||{k,nombre:m.rival,lista:[]}).lista.push({...m,_i:i});});
+  return Object.values(map).map(g=>({...g,s:stats(g.lista)}))
+    .sort((a,b)=>b.s.pj-a.s.pj||b.s.efe-a.s.efe||a.nombre.localeCompare(b.nombre,"es"));
+}
+function renderRivales(){
+  const cont=document.getElementById("porRival");if(!cont)return;
+  const gs=gruposRival();
+  if(!gs.length){cont.innerHTML='<div class="empty">Sin datos</div>';return;}
+  const TOPE=10,mostrar=verTodosRivales?gs:gs.slice(0,TOPE);
+  cont.innerHTML=mostrar.map(g=>`
+    <button class="riv-row" data-rival="${escAttr(g.nombre)}" onclick="abrirClub(this.dataset.rival)">
+      ${escudoHTML(g.nombre,30)}
+      <span class="riv-name">${escHTML(g.nombre)}</span>
+      <span class="riv-rec">${g.s.pj} PJ · <span class="g">${g.s.g}</span>-<span class="e">${g.s.e}</span>-<span class="p">${g.s.p}</span></span>
+      <span class="riv-efe">${g.s.efe}%</span>
+    </button>`).join("")+
+    (gs.length>TOPE?`<button class="btn sm ghost riv-more" onclick="verTodosRivales=!verTodosRivales;renderRivales()">${verTodosRivales?"Ver menos":`Ver los ${gs.length} rivales`}</button>`:"");
+}
+
+/* ============================================================ FICHA DEL CLUB ============================================================ */
+let clubActual=null;
+function partidosDe(k){
+  return partidos.map((m,i)=>({...m,_i:i,_fs:fechaSort(m.fecha),_res:resultadoDe(m)}))
+    .filter(m=>norm(m.rival)===k).sort((a,b)=>a._fs<b._fs?1:a._fs>b._fs?-1:0); // más nuevo primero
+}
+function abrirClub(nombre){
+  clubActual={k:norm(nombre),nombre};
+  document.getElementById("escEdit").classList.add("hide");
+  pintarCabeceraClub();pintarCuerpoClub();
+  document.getElementById("modalClub").classList.add("on");
+}
+function pintarCabeceraClub(){
+  const {k,nombre}=clubActual,lista=partidosDe(k);
+  document.getElementById("clubEsc").innerHTML=escudoHTML(nombre,64);
+  document.getElementById("clubNombre").textContent=nombre;
+  const anios=lista.map(m=>m.anio).filter(Boolean);
+  const desde=anios.length?Math.min(...anios):null;
+  document.getElementById("clubSub").textContent=lista.length
+    ?`${lista.length} ${lista.length===1?"partido":"partidos"} en la cancha`+(desde?` · desde ${desde}`:"")
+    :"Sin partidos cargados";
+}
+function pintarCuerpoClub(){
+  const {k}=clubActual,lista=partidosDe(k),s=stats(lista);
+  let h=`<div class="mini-kpis">
+    <div class="g"><b>${s.g}</b><span>Ganados</span></div>
+    <div class="e"><b>${s.e}</b><span>Empatados</span></div>
+    <div class="p"><b>${s.p}</b><span>Perdidos</span></div>
+    <div class="efe"><b>${s.efe}%</b><span>Efectividad</span></div>
+    <div><b>${s.gf}</b><span>A favor</span></div>
+    <div><b>${s.gc}</b><span>En contra</span></div>
+    <div><b>${s.dif>0?"+":""}${s.dif}</b><span>Diferencia</span></div>
+    <div><b>${nf(s.prom,1)}</b><span>Prom. goles</span></div>
+  </div>`;
+
+  // Barra G/E/P (misma que el resumen general)
+  h+=`<div class="formbar">`+[["g",s.g,"G"],["e",s.e,"E"],["p",s.p,"P"]].filter(x=>x[1]>0).map(([c,n,l])=>`<div class="${c}" style="flex:${n}">${l} ${n}</div>`).join("")+`</div>`;
+
+  // Últimos resultados, de más viejo a más nuevo (el último a la derecha)
+  const ult=lista.slice(0,10).reverse();
+  if(ult.length>1)h+=`<div class="club-sub">Últimos ${ult.length}</div><div class="racha">${ult.map(m=>`<span class="res-${m._res}" title="${escAttr(m.fecha)} ${m.gf}-${m.ga}">${m._res}</span>`).join("")}</div>`;
+
+  // Mejor victoria / peor derrota (por diferencia de gol; desempata la de más goles a favor)
+  const gan=lista.filter(m=>m._res==="G"&&m.gf>m.ga).sort((a,b)=>(b.gf-b.ga)-(a.gf-a.ga)||b.gf-a.gf)[0];
+  const per=lista.filter(m=>m._res==="P"&&m.ga>m.gf).sort((a,b)=>(b.ga-b.gf)-(a.ga-a.gf)||b.ga-a.ga)[0];
+  if(gan||per)h+=`<div class="club-sub">Destacados</div><div class="club-dest">
+    <div>Mayor victoria<b>${gan?`${gan.gf}-${gan.ga}`:"—"}</b>${gan?escHTML(gan.fecha):""}</div>
+    <div>Peor derrota<b>${per?`${per.gf}-${per.ga}`:"—"}</b>${per?escHTML(per.fecha):""}</div></div>`;
+
+  // Goleadores de Boca contra este rival
+  const gm={};lista.forEach(m=>(m.anotadores||[]).forEach(a=>{const kk=norm(a.nombre);if(!kk)return;(gm[kk]=gm[kk]||{nombre:a.nombre,goles:0}).goles+=(+a.goles||0);}));
+  const gl=Object.values(gm).sort((a,b)=>b.goles-a.goles||a.nombre.localeCompare(b.nombre,"es"));
+  if(gl.length)h+=`<div class="club-sub">Goleadores contra ${escHTML(clubActual.nombre)}</div>`+gl.slice(0,6).map(g=>`<div class="gol-row"><div class="gol-name">${escHTML(g.nombre)}</div><div class="gol-num">${g.goles}</div></div>`).join("");
+
+  // Todos los partidos
+  h+=`<div class="club-sub">Partidos</div>`+(lista.length?lista.map(m=>{
+    const marc=m.r?`${m.gf}-${m.ga} <span style="font-size:10px;opacity:.75">(pen.)</span>`:`${m.gf}-${m.ga}`;
+    const det=[m.torneo,m.instancia,m.cancha].filter(Boolean).map(escHTML).join(" · ");
+    return `<button class="cp-row" onclick="cerrarModal('modalClub');abrirEdicion(${m._i})" title="Editar partido">
+      <div class="cp-main"><b>${escHTML(m.fecha)}</b><span>${det}</span>${m.nota?`<span>${escHTML(m.nota)}</span>`:""}</div>
+      <span class="res-badge res-${m._res}">${marc}</span></button>`;
+  }).join(""):'<div class="empty">Sin partidos</div>');
+
+  document.getElementById("clubCuerpo").innerHTML=h;
+}
+
+/* ---- Editor de escudo (desde la ficha) ---- */
+function toggleEscEdit(){
+  const ed=document.getElementById("escEdit");
+  ed.classList.toggle("hide");
+  if(!ed.classList.contains("hide")){
+    const q=document.getElementById("escQuery");
+    q.value=ALIAS_CLUBES[clubActual.k]||clubActual.nombre;
+    document.getElementById("escRes").innerHTML="";
+    q.focus();
+  }
+}
+let escCandidatos=[];
+async function buscarEscudoManual(){
+  const q=document.getElementById("escQuery").value.trim(),box=document.getElementById("escRes");
+  if(!q)return;
+  box.innerHTML='<div class="dl-hint">Buscando…</div>';
+  try{
+    escCandidatos=await buscarEquipos(q);
+    box.innerHTML=escCandidatos.length?escCandidatos.map((t,i)=>`
+      <button onclick="elegirEscudo(${i})"><img class="esc" src="${escAttr(urlLiviana(t.url))}" alt="" onerror="this.src='${escAttr(t.url)}'">
+      <span><b>${escHTML(t.nombre)}</b><small>${escHTML([t.pais,t.liga].filter(Boolean).join(" · "))}</small></span></button>`).join("")
+      :'<div class="dl-hint">No encontré nada. Probá con el nombre completo (ej. "Velez Sarsfield") o subí una imagen.</div>';
+  }catch(err){
+    box.innerHTML='<div class="dl-hint">No pude conectarme a la base de escudos. Revisá la conexión o subí una imagen.</div>';
+  }
+}
+function setEscudoActual(obj,msg){
+  escudos[clubActual.k]=obj;guardarEsc();
+  document.getElementById("escEdit").classList.add("hide");
+  repintarEscudos();toast(msg);
+}
+function elegirEscudo(i){const t=escCandidatos[i];if(t)setEscudoActual({url:t.url,fuente:"manual",equipo:t.nombre},"Escudo actualizado");}
+function quitarEscudo(){setEscudoActual({url:null,fuente:"manual"},"Escudo quitado");}
+/* Subir imagen propia: la achicamos a 128 px y la guardamos adentro de la app */
+function subirEscudo(ev){
+  const f=ev.target.files[0];ev.target.value="";if(!f)return;
+  const rd=new FileReader();
+  rd.onload=e=>{
+    const img=new Image();
+    img.onload=()=>{
+      const L=128,c=document.createElement("canvas");c.width=L;c.height=L;
+      const sc=Math.min(L/img.width,L/img.height),w=img.width*sc,hh=img.height*sc;
+      c.getContext("2d").drawImage(img,(L-w)/2,(L-hh)/2,w,hh);
+      setEscudoActual({url:c.toDataURL("image/png"),fuente:"manual"},"Escudo cargado");
+    };
+    img.onerror=()=>toast("No pude leer esa imagen");
+    img.src=e.target.result;
+  };
+  rd.readAsDataURL(f);
 }
 
 /* ============================================================ UI ============================================================ */
@@ -642,7 +997,7 @@ function tab(t){
   window.scrollTo(0,0);
 }
 function cerrarModal(id){document.getElementById(id).classList.remove("on");}
-function refrescar(){renderDash();llenarFiltros();renderPartidos();renderGoles();}
+function refrescar(){renderDash();llenarFiltros();renderPartidos();renderGoles();renderRivales();pedirEscudosFaltantes();}
 let toastTimer;
 function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("on");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("on"),2600);}
 document.querySelectorAll(".modal-bg").forEach(bg=>bg.addEventListener("click",e=>{if(e.target===bg)bg.classList.remove("on");}));

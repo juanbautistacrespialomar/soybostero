@@ -3,7 +3,7 @@
    - Resto de assets: cache-first.
    Para forzar actualización limpia, subí el número de versión del cache. */
 
-const CACHE = "soy-bostero-v1";
+const CACHE = "soy-bostero-v2";
 const ASSETS = [
   "./",
   "./index.html",
@@ -38,6 +38,11 @@ self.addEventListener("activate", e => {
 self.addEventListener("fetch", e => {
   const req = e.request;
   if (req.method !== "GET") return;
+
+  // Búsquedas de escudos (API de TheSportsDB): siempre a la red, nunca al caché.
+  // Las IMÁGENES de los escudos sí se cachean (más abajo) para verlas sin internet.
+  const url = new URL(req.url);
+  if (url.hostname.endsWith("thesportsdb.com") && url.pathname.startsWith("/api/")) return;
 
   if (req.mode === "navigate") {
     e.respondWith(
