@@ -866,8 +866,8 @@ const ALIAS_CLUBES={
   "racing":"Racing Club","racing club":"Racing Club",
   "independiente":"Independiente",
   "san lorenzo":"San Lorenzo","huracan":"Huracan",
-  "estudiantes":"Estudiantes","estudiantes lp":"Estudiantes","estudiantes de la plata":"Estudiantes",
-  "gimnasia":"Gimnasia La Plata","gimnasia lp":"Gimnasia La Plata","gimnasia y esgrima la plata":"Gimnasia La Plata",
+  "estudiantes":"Estudiantes de La Plata","estudiantes lp":"Estudiantes de La Plata","estudiantes de la plata":"Estudiantes de La Plata",
+  "gimnasia":"Gimnasia y Esgrima de La Plata","gimnasia lp":"Gimnasia y Esgrima de La Plata","gimnasia y esgrima la plata":"Gimnasia y Esgrima de La Plata",
   "velez":"Velez Sarsfield","velez sarsfield":"Velez Sarsfield",
   "newells":"Newells Old Boys","newell's":"Newells Old Boys","newell's old boys":"Newells Old Boys",
   "central":"Rosario Central","rosario central":"Rosario Central",
@@ -969,6 +969,9 @@ async function autoEscudo(nombre){
   return null;
 }
 
+/* Subir este número hace que la app vuelva a buscar UNA vez los escudos que había
+   dado por no encontrados (por ej. después de corregir un nombre en ALIAS_CLUBES). */
+const ESC_REINTENTO=3;
 let colaEsc=[],procesandoEsc=false,escProg={hechos:0,total:0};
 function pedirEscudosFaltantes(){ procesarColaEsc(); }
 async function procesarColaEsc(){
@@ -976,8 +979,8 @@ async function procesarColaEsc(){
   procesandoEsc=true;
   try{
     // Rivales sin escudo, ordenados por partidos jugados: primero los que más ves.
-    // También se reintentan una vez los que antes no se encontraron (fuente "none" sin "v2").
-    const gs=gruposRival().filter(g=>{const e=escudos[g.k];return !e||(e.fuente==="none"&&!e.v2);});
+    // También se reintentan una vez los que antes no se encontraron (ver ESC_REINTENTO).
+    const gs=gruposRival().filter(g=>{const e=escudos[g.k];return !e||(e.fuente==="none"&&e.v!==ESC_REINTENTO);});
     if(!gs.length)return;
 
     // PASO 1: liga entera, una consulta
@@ -1000,7 +1003,7 @@ async function procesarColaEsc(){
       if(escudos[g.k]&&escudos[g.k].fuente!=="none")continue;
       try{
         const t=await autoEscudo(g.nombre);
-        escudos[g.k]=t?{url:t.url,fuente:"auto",equipo:t.nombre}:{url:null,fuente:"none",v2:true};
+        escudos[g.k]=t?{url:t.url,fuente:"auto",equipo:t.nombre}:{url:null,fuente:"none",v:ESC_REINTENTO};
         guardarEsc();repintarEscudos();
       }catch(err){
         if(err.limite){await sleep(30000);i--;continue;} // límite: espera medio minuto y reintenta ESE mismo
