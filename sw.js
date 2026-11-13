@@ -1,76 +1,79 @@
-/* Service Worker — Soy Bostero
-   - HTML / navegación: network-first (siempre la última versión deployada si hay red; cache solo offline).
-   - Resto de assets: cache-first.
-   Para forzar actualización limpia, subí el número de versión del cache. */
+// Service worker de Tu Profe.
+// UPDATE CON AVISO (no automático):
+//   - En install NO llamamos skipWaiting: la versión nueva queda "waiting".
+//   - El cliente detecta esa versión esperando y muestra el botón "Actualizar".
+//   - Al tocarlo, el cliente manda SKIP_WAITING -> se activa -> controllerchange -> recarga.
+// La primera instalación (sin versión previa) se activa sola igual (no hay nada que esperar).
+// Network-first: siempre trae lo último si hay internet; cache = respaldo offline.
+//
+// Para publicar: subí el número de CACHE (v23 -> v24 -> ...).
 
-const CACHE = "soy-bostero-v12";
-// Caché APARTE para las imágenes de los escudos. No lleva número de versión a propósito:
-// así, cuando subís una versión nueva de la app (y cambia CACHE), los escudos ya bajados
-// NO se borran y no hay que volver a descargarlos.
-const ESC_CACHE = "soy-bostero-escudos";
-const ASSETS = [
-  "./",
-  "./index.html",
-  "./manifest.json",
-  "./boca-icon-192.png",
-  "./boca-icon-512.png",
-  "./boca-icon-maskable.png",
-  "./Logo_app.png"
-];
+const CACHE = "tuprofe-v97";
+// Caché SEPARADO para las miniaturas de YouTube. Persiste entre versiones (no se
+// borra al actualizar), así lo que el alumno vio con internet lo sigue viendo offline.
+const THUMBS = "tuprofe-thumbs";
+// v85: las letras (carpeta fonts/) van guardadas con la app, así se ven bien sin conexión.
+const SHELL = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png", "./fonts/inter.woff2", "./fonts/anton.woff2"];
 
-self.addEventListener("install", e => {
-  e.waitUntil(
-    caches.open(CACHE).then(c => c.addAll(ASSETS))
-    // OJO: ya NO llamamos skipWaiting() acá.
-    // La versión nueva queda "en espera" hasta que el usuario toque "Actualizar".
-  );
+self.addEventListener("install", (e) => {
+  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)));
+  // Sin skipWaiting: la versión nueva espera a que el usuario toque "Actualizar".
 });
 
-// El cliente (la app) nos avisa que el usuario quiere la versión nueva ya
-self.addEventListener("message", e => {
+self.addEventListener("message", (e) => {
   if (e.data && e.data.type === "SKIP_WAITING") self.skipWaiting();
 });
 
-self.addEventListener("activate", e => {
+self.addEventListener("activate", (e) => {
   e.waitUntil(
-    caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k !== CACHE && k !== ESC_CACHE).map(k => caches.delete(k))))
-      .then(() => self.clients.claim())
+    caches.keys().then((keys) =>
+      // Borramos versiones viejas del shell, pero PRESERVAMOS el caché de miniaturas.
+      Promise.all(keys.filter((k) => k !== CACHE && k !== THUMBS).map((k) => caches.delete(k)))
+    )
   );
+  self.clients.claim();
 });
 
-self.addEventListener("fetch", e => {
-  const req = e.request;
-  if (req.method !== "GET") return;
+// ¿Es una miniatura de YouTube? (la imagen del ejercicio, no el video)
+function esMiniatura(url) {
+  return url.hostname === "img.youtube.com" || url.hostname === "i.ytimg.com";
+}
 
-  // Búsquedas de escudos (API de TheSportsDB): siempre a la red, nunca al caché.
-  // Las IMÁGENES de los escudos sí se cachean (más abajo) para verlas sin internet.
-  const url = new URL(req.url);
-  if (url.hostname.endsWith("thesportsdb.com") && url.pathname.startsWith("/api/")) return;
+self.addEventListener("fetch", (e) => {
+  const url = new URL(e.request.url);
+  if (url.hostname.endsWith("workers.dev")) return; // API siempre a la red
 
-  if (req.mode === "navigate") {
+  // Miniaturas: cache-first con guardado. La primera vez que se ven CON internet
+  // quedan guardadas; después se muestran aunque no haya conexión.
+  // (El video reproducible en sí NO se puede cachear: es un stream protegido de YouTube.)
+  if (esMiniatura(url)) {
     e.respondWith(
-      fetch(req)
-        .then(res => {
-          const copy = res.clone();
-          caches.open(CACHE).then(c => c.put(req, copy));
-          return res;
-        })
-        .catch(() => caches.match(req).then(r => r || caches.match("./index.html")))
+      caches.match(e.request).then((cached) => {
+        if (cached) return cached;
+        return fetch(e.request)
+          .then((res) => {
+            const copia = res.clone();
+            caches.open(THUMBS).then((c) => c.put(e.request, copia));
+            return res;
+          })
+          .catch(() => cached || Response.error());  // sin red y sin caché: el <img> queda vacío, no rompe
+      })
     );
     return;
   }
 
-  // Imágenes de escudos -> a su caché permanente; el resto de los archivos -> caché de la versión
-  const destino = url.hostname.endsWith("thesportsdb.com") ? ESC_CACHE : CACHE;
-
-  e.respondWith(
-    caches.match(req).then(cached =>
-      cached || fetch(req).then(res => {
-        const copy = res.clone();
-        caches.open(destino).then(c => c.put(req, copy));
-        return res;
-      }).catch(() => cached)
-    )
-  );
+  const esDoc = e.request.mode === "navigate" || e.request.destination === "document";
+  if (esDoc) {
+    e.respondWith(
+      fetch(e.request)
+        .then((res) => {
+          const copia = res.clone();
+          caches.open(CACHE).then((c) => c.put(e.request, copia));
+          return res;
+        })
+        .catch(() => caches.match(e.request).then((r) => r || caches.match("./index.html")))
+    );
+    return;
+  }
+  e.respondWith(caches.match(e.request).then((r) => r || fetch(e.request)));
 });
