@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- tuprofe · v98 -->
+<!-- tuprofe · v99 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
@@ -1167,7 +1167,6 @@
     <div class="hi">Panel de admin<b id="admin-nombre">Admin</b></div>
     <div style="display:flex;gap:8px;align-items:center">
       <button class="rol-pill" id="admin-a-alumno" style="display:none" title="Pasar a tu cuenta de alumno"><svg viewBox="0 0 24 24"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg>Alumno</button>
-      <div class="icon-btn" id="admin-clave" title="Cambiar contraseña"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M10.8 12.2L20 3M17 6l2 2M15 8l2 2"/></svg></div>
       <div class="icon-btn" id="admin-salir" title="Salir"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg></div>
     </div>
   </div>
@@ -3830,7 +3829,6 @@
   }
   let adminYoId = null;
   $("profe-admin").onclick = cargarAdmin;   // (oculto: el admin ya no usa la vista de profe)
-  $("admin-clave").onclick = () => abrirCambioPass(false);
   $("admin-a-alumno").onclick = cambiarRol;
   $("alumno-a-admin").onclick = cambiarRol;
 
@@ -4638,7 +4636,7 @@
         </div>
         <button class="pf2-row peligro" id="pf-salir"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg><span class="tx">Cerrar sesión</span></button>
       </div>
-      <div class="pf2-ver">Tu Profe · v98</div>`;
+      <div class="pf2-ver">Tu Profe · v99</div>`;
     // Objetivo: un toque y queda guardado.
     cont.querySelectorAll("[data-obj]").forEach((b) => (b.onclick = async () => {
       const nuevo = b.dataset.obj === objActual ? null : b.dataset.obj;   // tocar el elegido lo desmarca
