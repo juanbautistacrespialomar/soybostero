@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- tuprofe · v97 -->
+<!-- tuprofe · v98 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
@@ -100,7 +100,14 @@
   #profe-main, #profe-rutina { display: flex; flex-direction: column; flex: 1; min-height: 0; }
   #profe-main { position: relative; }
   #profe-main > .body { padding-bottom: calc(118px + env(safe-area-inset-bottom)); }
-  .app-header { flex-shrink: 0; z-index: 5; background: var(--bg); display: flex; align-items: center; justify-content: space-between; padding: calc(14px + env(safe-area-inset-top)) 18px 14px; border-bottom: 1px solid var(--border); }
+  /* HEADER FIJO arriba de todo, color sólido, cubriendo también la franja de la hora
+     (mismo arreglo que Soy Bostero). iOS 26 le pone un vidrio borroso a la franja de la
+     hora y un poco más abajo, SALVO que ahí haya un elemento FIJO de color sólido: en ese
+     caso toma su color y no difumina nada. Por eso el header es position: fixed.
+     Alto fijo (franja de la hora + 69px) para que todas las vistas midan igual, y lo que
+     viene justo después del header arranca con ese mismo margen (no queda nada tapado). */
+  .app-header { position: fixed; top: 0; left: 0; right: 0; max-width: 560px; margin: 0 auto; height: calc(env(safe-area-inset-top) + 69px); z-index: 25; background: var(--bg); display: flex; align-items: center; justify-content: space-between; padding: calc(14px + env(safe-area-inset-top)) 18px 14px; border-bottom: 1px solid var(--border); }
+  .app-header + * { margin-top: calc(env(safe-area-inset-top) + 69px); }
   .app-header .hi { font-size: 13px; color: var(--muted); }
   .app-header .hi b { display: block; color: var(--text); font-size: 18px; font-weight: 600; margin-top: 1px; }
   .app-header .title { font-size: 18px; font-weight: 600; }
@@ -354,13 +361,6 @@
   .pf2-desc { display: none; gap: 8px; padding: 0 14px 14px; border-bottom: 1px solid var(--border); }
   .pf2-desc.on { display: flex; }
   .pf2-desc button { flex: 1; height: 40px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
-  /* ===== iOS 26: franja de la hora sin "vidrio" (mismo arreglo que Soy Bostero) =====
-     iOS 26 le pone un vidrio borroso a la franja de la hora/batería y un poco más abajo, y eso
-     difuminaba el "Hola" del header. SALVO que arriba de todo haya un elemento FIJO de color
-     sólido: ahí toma ese color y no difumina nada. Este techo es ese elemento: fijo, del color
-     del fondo, del alto exacto de la franja de la hora (donde el header ya está vacío), así que
-     no tapa nada. En Android/compu la franja mide 0 y no existe. */
-  #techo-ios { position: fixed; top: 0; left: 0; right: 0; height: env(safe-area-inset-top, 0px); background: var(--bg); z-index: 39; pointer-events: none; }
   /* ===== PERFIL del alumno ===== */
   .pf2-hero { display: flex; align-items: center; gap: 16px; padding: 6px 0 18px; }
   .pf2-hero .pf-avatar-wrap { margin: 0; flex: 0 0 auto; }
@@ -1006,7 +1006,6 @@
 </style>
 </head>
 <body>
-<div id="techo-ios" aria-hidden="true"></div>
 <div class="statusbar-bg"></div>
 
 <!-- ============ AUTH ============ -->
@@ -4639,7 +4638,7 @@
         </div>
         <button class="pf2-row peligro" id="pf-salir"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg><span class="tx">Cerrar sesión</span></button>
       </div>
-      <div class="pf2-ver">Tu Profe · v97</div>`;
+      <div class="pf2-ver">Tu Profe · v98</div>`;
     // Objetivo: un toque y queda guardado.
     cont.querySelectorAll("[data-obj]").forEach((b) => (b.onclick = async () => {
       const nuevo = b.dataset.obj === objActual ? null : b.dataset.obj;   // tocar el elegido lo desmarca
