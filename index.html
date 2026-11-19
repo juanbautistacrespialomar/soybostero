@@ -333,6 +333,126 @@ button.mom-rec:hover{background:#eceff5}
 .cp-row .esc,.cp-row .esc-mono{flex-shrink:0}
 .cp-gol{font-family:var(--disp);font-weight:600;font-size:14px;color:var(--navy);white-space:nowrap}
 .gol-pend{font-size:12.5px;color:#8a6d0c;background:#fff8e6;border:1px solid #f0e0a6;border-radius:10px;padding:9px 11px;margin-top:8px}
+
+/* =====================================================================
+   REDISEÑO nov 2026 — mismos colores y fuentes; cambia jerarquía y detalle
+   ===================================================================== */
+:root{
+  --sh:0 0 0 1px rgba(22,41,78,.06),0 1px 2px rgba(22,41,78,.05),0 4px 14px rgba(22,41,78,.05);
+  --sh-h:0 0 0 1px rgba(22,41,78,.08),0 4px 10px rgba(22,41,78,.07),0 14px 30px rgba(22,41,78,.09);
+  --ease:cubic-bezier(.2,0,0,1); --ease-out:cubic-bezier(.16,1,.3,1);
+}
+.card,.tbl-wrap,.dcard{border:0;box-shadow:var(--sh)}
+.btn{transition:background-color .15s,border-color .15s,transform .12s var(--ease)}
+.btn:active,.fab:active{transform:scale(.96)}
+.fab{transition:transform .12s var(--ease)}
+.gol-num,.riv-efe,.mini-kpis b,.mom-big b,.mom-rec b,td,.res-badge,.st b,.hr-rec b,.ring-tx b,.tk-score,.pl-date b,.pod b{font-variant-numeric:tabular-nums}
+h1,.scr-title,.section-title{text-wrap:balance}
+.dl-hint,.note,.cp-main span{text-wrap:pretty}
+.riv-row,.cp-row,.mom-row,button.gol-row{transition:background-color .15s}
+.res-badge{border:0;box-shadow:inset 0 0 0 1px currentColor;box-shadow:none}
+.res-G{background:var(--gana-b)} .res-E{background:var(--empata-b)} .res-P{background:var(--pierde-b)}
+
+/* ---------- HERO del Resumen ---------- */
+.hero-res{position:relative;overflow:hidden;border-radius:20px;padding:20px 18px 16px;color:#fff;
+  background:radial-gradient(120% 90% at 100% 0%,rgba(246,181,30,.18),transparent 55%),linear-gradient(160deg,var(--navy2),var(--navy-d));
+  box-shadow:0 10px 30px rgba(15,29,58,.28)}
+.hr-top{position:relative;z-index:1;display:flex;align-items:center;gap:18px}
+.ring{position:relative;width:128px;height:128px;flex:none}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .bg{fill:none;stroke:rgba(255,255,255,.1);stroke-width:11}
+.ring .fg{fill:none;stroke:var(--oro);stroke-width:11;stroke-linecap:round;transition:stroke-dashoffset 1.1s var(--ease-out)}
+.ring-tx{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-tx b{font-family:var(--disp);font-size:36px;font-weight:700;color:var(--oro);line-height:1}
+.ring-tx span{font-size:10.5px;color:#aeb9d2;text-transform:uppercase;letter-spacing:.6px;margin-top:3px;font-weight:700}
+.hr-rec{flex:1;min-width:0;display:grid;gap:9px}
+.hr-rec div{display:flex;align-items:baseline;gap:8px}
+.hr-rec b{font-family:var(--disp);font-size:30px;font-weight:700;line-height:1;min-width:38px}
+.hr-rec span{font-size:12.5px;color:#c6cfe2}
+.hr-rec .g b{color:#7fd6a2}.hr-rec .e b{color:var(--oro2)}.hr-rec .p b{color:#ff9b9b}
+.hr-bar{position:relative;z-index:1;display:flex;gap:3px;height:6px;margin:18px 0 10px}
+.hr-bar i{border-radius:3px;transform-origin:left;animation:barra .9s var(--ease-out) both}
+.hr-bar .g{background:#5fbf86}.hr-bar .e{background:var(--oro)}.hr-bar .p{background:#e46a6a}
+.hr-bar .e{animation-delay:.08s}.hr-bar .p{animation-delay:.16s}
+@keyframes barra{from{transform:scaleX(0)}}
+.hr-foot{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12px;color:#aeb9d2}
+.hr-ult{display:flex;gap:4px}
+.hr-ult span{width:20px;height:20px;border-radius:6px;display:grid;place-items:center;font-size:10.5px;font-weight:700}
+.hr-ult .res-G{background:#5fbf86;color:#0f2a1b}.hr-ult .res-E{background:var(--oro);color:#3a2e02}.hr-ult .res-P{background:#e46a6a;color:#3b0c0c}
+
+/* ---------- Fila de números ---------- */
+.stats-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:12px;background:var(--card);border-radius:16px;box-shadow:var(--sh);padding:12px 4px}
+.st{text-align:center;padding:2px 4px;border-left:1px solid var(--line)}
+.st:first-child{border-left:0}
+.st b{display:block;font-family:var(--disp);font-size:24px;font-weight:700;color:var(--navy);line-height:1.05}
+.st span{display:block;font-size:10.5px;color:var(--txt3);font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-top:3px}
+.st em{display:block;font-style:normal;font-size:10.5px;color:var(--txt2);margin-top:1px}
+
+/* ---------- Entrada: último partido ---------- */
+.ticket{--n:16px;margin-top:12px;width:100%;display:flex;border:0;padding:0;background:none;font:inherit;color:inherit;text-align:left;cursor:pointer;filter:drop-shadow(0 1px 1px rgba(22,41,78,.06)) drop-shadow(0 6px 14px rgba(22,41,78,.08));transition:transform .2s var(--ease)}
+.ticket:active{transform:scale(.985)}
+.tk-main,.tk-stub{background:var(--card);
+  -webkit-mask:radial-gradient(circle var(--n) at right 0 top 0,#0000 98%,#000) top/100% 51% no-repeat,radial-gradient(circle var(--n) at right 0 bottom 0,#0000 98%,#000) bottom/100% 51% no-repeat;
+  mask:radial-gradient(circle var(--n) at right 0 top 0,#0000 98%,#000) top/100% 51% no-repeat,radial-gradient(circle var(--n) at right 0 bottom 0,#0000 98%,#000) bottom/100% 51% no-repeat}
+.tk-main{flex:1;min-width:0;border-radius:16px 0 0 16px;padding:14px 14px 13px 16px;border-right:2px dashed var(--line)}
+.tk-stub{width:84px;flex:none;border-radius:0 16px 16px 0;background:var(--oro);color:var(--navy);display:flex;flex-direction:column;align-items:center;justify-content:center;
+  -webkit-mask:radial-gradient(circle var(--n) at left 0 top 0,#0000 98%,#000) top/100% 51% no-repeat,radial-gradient(circle var(--n) at left 0 bottom 0,#0000 98%,#000) bottom/100% 51% no-repeat;
+  mask:radial-gradient(circle var(--n) at left 0 top 0,#0000 98%,#000) top/100% 51% no-repeat,radial-gradient(circle var(--n) at left 0 bottom 0,#0000 98%,#000) bottom/100% 51% no-repeat}
+.tk-stub span{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;opacity:.75}
+.tk-stub b{font-family:var(--disp);font-size:32px;font-weight:700;line-height:1;margin:2px 0}
+.tk-lbl{display:block;font-size:10.5px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.6px}
+.tk-match{display:grid;grid-template-columns:auto auto minmax(0,1fr);align-items:center;gap:10px;margin:9px 0 7px}
+.tk-team{display:flex;align-items:center;gap:7px;font-family:var(--disp);font-size:16px;font-weight:600;text-transform:uppercase;color:var(--navy);line-height:1.1;min-width:0}
+.tk-team .t{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tk-score{font-family:var(--disp);font-size:26px;font-weight:700;color:var(--navy);padding:0 4px;white-space:nowrap}
+.tk-det{display:block;font-size:12px;color:var(--txt2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tk-res{display:inline-block;margin-left:6px;vertical-align:1px;font-size:10px;padding:2px 6px}
+
+/* ---------- Partidos en celular: lista por año ---------- */
+#listaP{display:none}
+@media(max-width:760px){#partidos .tbl-wrap{display:none} #listaP{display:block}}
+.pl-year{position:sticky;top:0;z-index:2;display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:14px 4px 8px;background:var(--bg)}
+.pl-year b{font-family:var(--disp);font-size:20px;font-weight:700;color:var(--navy)}
+.pl-year span{font-size:12px;color:var(--txt2)}
+.pl-year span i{font-style:normal;font-weight:700}
+.pl-card{padding:4px 12px;border-radius:16px}
+.pl-row{display:flex;align-items:center;gap:11px;width:100%;padding:11px 0;border:0;border-top:1px solid var(--line);background:none;font:inherit;color:inherit;text-align:left;cursor:pointer}
+.pl-row:first-child{border-top:0}
+.pl-date{width:36px;flex:none;text-align:center;line-height:1}
+.pl-date b{display:block;font-family:var(--disp);font-size:20px;font-weight:700;color:var(--navy)}
+.pl-date span{display:block;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.pl-main{flex:1;min-width:0}
+.pl-main b{display:block;font-size:14.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl-main span{display:block;font-size:12px;color:var(--txt2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl-row .res-badge{flex:none}
+#partidos .filtros{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+#partidos .filtros #fBuscar{grid-column:1/-1;min-width:0;padding-left:36px;
+  background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a93a3' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") no-repeat 12px center/16px}
+#partidos .filtros select{min-width:0;width:100%}
+@media(min-width:761px){#partidos .filtros{display:flex}#partidos .filtros #fBuscar{padding-left:36px}}
+
+/* ---------- Goleadores: podio ---------- */
+.podio{display:grid;grid-template-columns:1fr 1.12fr 1fr;align-items:end;gap:8px;margin-bottom:14px}
+.pod{border:0;background:none;padding:0;font:inherit;color:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0}
+.pod-av{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:var(--card);box-shadow:var(--sh);color:var(--navy);font-family:var(--disp);font-weight:700;font-size:18px;margin-bottom:7px}
+.pod.p0 .pod-av{width:62px;height:62px;font-size:22px;background:var(--oro);color:var(--navy);box-shadow:0 0 0 4px rgba(246,181,30,.25),0 6px 16px rgba(15,29,58,.18)}
+.pod .nm{font-size:13px;font-weight:700;line-height:1.2;max-width:100%;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:31px}
+.pod .gl{font-size:11.5px;color:var(--txt2);margin:2px 0 8px}
+.pod-base{width:100%;border-radius:12px 12px 0 0;background:var(--navy);color:var(--oro);display:grid;place-items:center;font-family:var(--disp);font-weight:700;font-size:26px;transform-origin:bottom;animation:sube .7s var(--ease-out) both}
+.pod.p0 .pod-base{height:96px;background:linear-gradient(180deg,var(--navy2),var(--navy-d));font-size:34px}
+.pod.p1 .pod-base{height:70px;animation-delay:.06s}
+.pod.p2 .pod-base{height:54px;animation-delay:.12s}
+.pod.p1 .pod-base,.pod.p2 .pod-base{background:var(--navy2);color:#dfe5f1}
+@keyframes sube{from{transform:scaleY(0)}}
+.podio-wrap{background:var(--card);border-radius:18px;box-shadow:var(--sh);padding:18px 14px 0;overflow:hidden;margin-bottom:12px}
+.gol-bar{transform-origin:left;animation:barra .8s var(--ease-out) both}
+
+/* ---------- Momentos ---------- */
+.mom-hero{border-radius:20px;background:radial-gradient(120% 90% at 100% 0%,rgba(246,181,30,.2),transparent 55%),linear-gradient(160deg,var(--navy2),var(--navy-d));box-shadow:0 10px 30px rgba(15,29,58,.25)}
+.mom-rec{background:#f4f6fa;transition:background-color .15s,transform .12s var(--ease)}
+button.mom-rec:active{transform:scale(.97)}
+
+@media (prefers-reduced-motion:reduce){.hr-bar i,.pod-base,.gol-bar{animation:none}.ring .fg{transition:none}}
 </style>
 </head>
 <body>
@@ -359,8 +479,7 @@ button.mom-rec:hover{background:#eceff5}
 
   <!-- ===== RESUMEN ===== -->
   <div id="resumen" class="screen">
-    <div class="formbar" id="formbar"></div>
-    <div class="kpis" id="kpis"></div>
+    <div id="heroRes"></div>
     <!-- Las 4 secciones con el mismo formato: tarjeta blanca con el título adentro -->
     <div class="res-stack">
       <div class="grid2">
@@ -392,12 +511,13 @@ button.mom-rec:hover{background:#eceff5}
       <button class="btn primary" onclick="abrirAlta()">+ Cargar partido</button>
     </div>
     <div class="filtros">
-      <input type="text" id="fBuscar" placeholder="Buscar rival, cancha, DT..." oninput="renderPartidos()" style="min-width:190px">
+      <input type="text" id="fBuscar" placeholder="Buscar rival, cancha, DT..." oninput="renderPartidos()">
       <select id="fAnio" onchange="renderPartidos()"><option value="">Todos los años</option></select>
       <select id="fTorneo" onchange="renderPartidos()"><option value="">Todos los torneos</option></select>
-      <select id="fRes" onchange="renderPartidos()"><option value="">Todos</option><option value="G">Ganados</option><option value="E">Empatados</option><option value="P">Perdidos</option></select>
+      <select id="fRes" onchange="renderPartidos()"><option value="">Resultado</option><option value="G">Ganados</option><option value="E">Empatados</option><option value="P">Perdidos</option></select>
     </div>
     <div class="pill" id="contadorP" style="margin-bottom:11px"></div>
+    <div id="listaP"></div>
     <div class="tbl-wrap">
       <table>
         <thead><tr>
@@ -419,6 +539,7 @@ button.mom-rec:hover{background:#eceff5}
   <div id="goleadores" class="screen hide">
     <div class="scr-head"><div class="scr-title">Goleadores</div></div>
     <div class="pill" id="totalGoles" style="margin-bottom:12px"></div>
+    <div class="podio-wrap" id="podio"></div>
     <div class="card" id="listaGol"></div>
     <p style="font-size:12.5px;color:var(--txt2);margin-top:12px">Se calcula solo desde los goleadores que cargás en cada partido. <b>GEC</b> = goles en contra del rival (en propia) que cuentan a tu favor.</p>
   </div>
@@ -641,20 +762,45 @@ function goleadoresAgg(){
 }
 
 /* ============================================================ RENDER ============================================================ */
+const MESES=["ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"];
+let ringHecho=false;
 function renderDash(){
   const s=stats(partidos);
-  document.getElementById("kpis").innerHTML=`
-    <div class="kpi"><div class="lbl">Jugados</div><div class="val">${s.pj}</div></div>
-    <div class="kpi gana"><div class="lbl">Ganados</div><div class="val">${s.g}</div></div>
-    <div class="kpi empata"><div class="lbl">Empatados</div><div class="val">${s.e}</div></div>
-    <div class="kpi pierde"><div class="lbl">Perdidos</div><div class="val">${s.p}</div></div>
-    <div class="kpi"><div class="lbl">Goles a favor</div><div class="val">${s.gf}</div><div class="sub">prom. ${nf(s.prom,2)}</div></div>
-    <div class="kpi"><div class="lbl">Goles en contra</div><div class="val">${s.gc}</div><div class="sub">prom. ${nf(s.gc/(s.pj||1),2)}</div></div>
-    <div class="kpi"><div class="lbl">Diferencia</div><div class="val">${s.dif>0?"+":""}${s.dif}</div></div>
-    <div class="kpi efe"><div class="lbl">Efectividad</div><div class="val">${s.efe}%</div><div class="sub">${3*s.g+s.e} de ${3*s.pj} pts</div></div>`;
-  const fb=document.getElementById("formbar");fb.innerHTML="";
-  [["g",s.g,"G"],["e",s.e,"E"],["p",s.p,"P"]].forEach(([c,n,l])=>{if(n>0){const d=document.createElement("div");d.className=c;d.style.flex=n;d.textContent=`${l} ${n}`;fb.appendChild(d);}});
-  if(!partidos.length)fb.innerHTML='<div style="background:#eef1f7;color:var(--txt3);flex:1">Todavía no cargaste partidos</div>';
+  const L=partidos.map(m=>({...m,_fs:fechaSort(m.fecha),_res:resultadoDe(m)})).sort((a,b)=>a._fs<b._fs?1:a._fs>b._fs?-1:0);
+  const C=2*Math.PI*52, off=C*(1-s.efe/100);
+  const ult=L.slice(0,5).reverse();
+  let h=`<section class="hero-res" aria-label="Resumen general">
+    <div class="hr-top">
+      <div class="ring" role="img" aria-label="Efectividad ${s.efe}%">
+        <svg viewBox="0 0 128 128"><circle class="bg" cx="64" cy="64" r="52"/><circle class="fg" id="ringFg" cx="64" cy="64" r="52" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${ringHecho?off.toFixed(1):C.toFixed(1)}"/></svg>
+        <div class="ring-tx"><b>${s.efe}%</b><span>Efectividad</span></div>
+      </div>
+      <div class="hr-rec">
+        <div class="g"><b>${s.g}</b><span>ganados</span></div>
+        <div class="e"><b>${s.e}</b><span>empatados</span></div>
+        <div class="p"><b>${s.p}</b><span>perdidos</span></div>
+      </div>
+    </div>
+    ${s.pj?`<div class="hr-bar">${[["g",s.g],["e",s.e],["p",s.p]].filter(x=>x[1]).map(([c,n])=>`<i class="${c}" style="flex:${n}"></i>`).join("")}</div>`:`<div class="hr-bar"></div>`}
+    <div class="hr-foot"><span>${s.pj?`${3*s.g+s.e} de ${3*s.pj} puntos`:"Todavía no cargaste partidos"}</span>
+      ${ult.length?`<span class="hr-ult" aria-label="Últimos resultados">${ult.map(m=>`<span class="res-${m._res}" title="${escAttr(m.rival)} ${m.gf}-${m.ga}">${m._res}</span>`).join("")}</span>`:""}</div>
+  </section>
+  <div class="stats-row">
+    <div class="st"><b>${s.pj}</b><span>Jugados</span></div>
+    <div class="st"><b>${s.gf}</b><span>A favor</span><em>${nf(s.prom,2)} x PJ</em></div>
+    <div class="st"><b>${s.gc}</b><span>En contra</span><em>${nf(s.gc/(s.pj||1),2)} x PJ</em></div>
+    <div class="st"><b>${s.dif>0?"+":""}${s.dif}</b><span>Diferencia</span></div>
+  </div>`;
+  const u=L[0];
+  if(u){const p=u.fecha.split("/");
+    h+=`<button class="ticket" data-rival="${escAttr(u.rival)}" onclick="abrirClub(this.dataset.rival)">
+      <div class="tk-main"><span class="tk-lbl">Última vez en la cancha <span class="res-badge res-${u._res} tk-res">${{G:"Ganó",E:"Empató",P:"Perdió"}[u._res]}</span></span>
+        <div class="tk-match"><span class="tk-team"><span class="t">Boca</span></span><span class="tk-score">${u.gf} - ${u.ga}</span><span class="tk-team">${escudoHTML(u.rival,22)}<span class="t">${escHTML(u.rival)}</span></span></div>
+        <span class="tk-det">${[u.torneo,u.instancia,u.cancha].filter(Boolean).map(escHTML).join(" · ")}</span></div>
+      <div class="tk-stub"><span>${p[2]||""}</span><b>${(p[0]||"").padStart(2,"0")}</b><span>${MESES[(+p[1]||1)-1]}</span></div>
+    </button>`;}
+  document.getElementById("heroRes").innerHTML=h;
+  if(!ringHecho){ringHecho=true;requestAnimationFrame(()=>requestAnimationFrame(()=>{const f=document.getElementById("ringFg");if(f)f.style.strokeDashoffset=off.toFixed(1);}));}
   agrupar("anio","porAnio");agrupar("torneo","porTorneo");agrupar("tecnico","porTecnico");
 }
 function agrupar(campo,destino){
@@ -671,8 +817,8 @@ function agrupar(campo,destino){
 function llenarFiltros(){
   const anios=[...new Set(partidos.map(m=>m.anio))].sort((a,b)=>b-a);
   const torneos=[...new Set(partidos.map(m=>m.torneo))].sort();
-  document.getElementById("fAnio").innerHTML='<option value="">Todos los años</option>'+anios.map(a=>`<option>${a}</option>`).join("");
-  document.getElementById("fTorneo").innerHTML='<option value="">Todos los torneos</option>'+torneos.map(t=>`<option>${t}</option>`).join("");
+  document.getElementById("fAnio").innerHTML='<option value="">Año</option>'+anios.map(a=>`<option>${a}</option>`).join("");
+  document.getElementById("fTorneo").innerHTML='<option value="">Torneo</option>'+torneos.map(t=>`<option>${t}</option>`).join("");
 }
 function renderPartidos(){
   const q=document.getElementById("fBuscar").value.toLowerCase();
@@ -698,6 +844,22 @@ function renderPartidos(){
   }).join("");
   const s=stats(lista.map(m=>partidos[m._i]));
   document.getElementById("contadorP").textContent=`${lista.length} partidos · ${s.g}G ${s.e}E ${s.p}P · ${s.efe}% efectividad`;
+  renderListaP(lista);
+}
+/* Celular: lista de partidos agrupada por año (más nuevo arriba). Tocar = editar. */
+function renderListaP(lista){
+  const cont=document.getElementById("listaP");if(!cont)return;
+  if(!lista.length){cont.innerHTML='<div class="card empty">'+(partidos.length?'No hay partidos con esos filtros.':'Todavía no cargaste partidos. Tocá "+ Cargar partido".')+'</div>';return;}
+  const ord=lista.slice().sort((a,b)=>a.fechaSort<b.fechaSort?1:a.fechaSort>b.fechaSort?-1:0);
+  const grupos=[];ord.forEach(m=>{let g=grupos[grupos.length-1];if(!g||g.anio!==m.anio){g={anio:m.anio,l:[]};grupos.push(g);}g.l.push(m);});
+  cont.innerHTML=grupos.map(g=>{const st=stats(g.l.map(m=>partidos[m._i]));
+    return `<div class="pl-year"><b>${g.anio}</b><span>${st.pj} PJ · <i style="color:var(--gana-t)">${st.g}</i>-<i style="color:var(--empata-t)">${st.e}</i>-<i style="color:var(--pierde-t)">${st.p}</i> · ${st.efe}%</span></div>
+    <div class="card pl-card">${g.l.map(m=>{const p=String(m.fecha).split("/");
+      return `<button class="pl-row" onclick="abrirEdicion(${m._i})" title="Editar partido">
+        <div class="pl-date"><b>${(p[0]||"").padStart(2,"0")}</b><span>${MESES[(+p[1]||1)-1]}</span></div>
+        ${escudoHTML(m.rival,30)}
+        <div class="pl-main"><b>${escHTML(m.rival)}</b><span>${[m.torneo,m.instancia].filter(Boolean).map(escHTML).join(" · ")}</span></div>
+        <span class="res-badge res-${m._res}">${marcadorHTML(m)}</span></button>`;}).join("")}</div>`;}).join("");
 }
 function ordenar(c){if(ordenCol===c)ordenDir*=-1;else{ordenCol=c;ordenDir=1;}renderPartidos();}
 function marcarOrden(){document.querySelectorAll("#partidos th[data-col]").forEach(th=>{const on=th.dataset.col===ordenCol;th.classList.toggle("asc",on&&ordenDir===1);th.classList.toggle("desc",on&&ordenDir===-1);});}
@@ -706,6 +868,12 @@ function renderGoles(){
   const max=lista.length?lista[0].goles:1;
   const total=lista.reduce((s,g)=>s+g.goles,0);
   document.getElementById("totalGoles").textContent=`${lista.length} goleadores · ${total} goles`;
+  const pod=document.getElementById("podio");
+  if(lista.length>=3){
+    pod.style.display="";
+    pod.innerHTML=`<div class="podio">${[1,0,2].map(i=>{const g=lista[i];return `<button class="pod p${i}" data-jug="${escAttr(g.nombre)}" onclick="abrirJugador(this.dataset.jug)">
+      <div class="pod-av">${norm(g.nombre)==="gec"?"GEC":inicialesJug(g.nombre)}</div><span class="nm">${escHTML(g.nombre)}</span><span class="gl">${g.goles} ${g.goles===1?"gol":"goles"}</span><div class="pod-base">${i+1}</div></button>`;}).join("")}</div>`;
+  }else{pod.style.display="none";pod.innerHTML="";}
   document.getElementById("listaGol").innerHTML=lista.length?lista.map((g,i)=>`
     <button class="gol-row" data-jug="${escAttr(g.nombre)}" onclick="abrirJugador(this.dataset.jug)">
       <div class="gol-pos">${i+1}</div><div class="gol-name">${escHTML(g.nombre)}</div>
